@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../components/common';
 import { SEOMeta } from '../components/common/SEOMeta';
 import { Target, Coffee, Building2, Camera, Users } from 'lucide-react';
-import heroVideo from '../assets/videos/equestrian-show.mp4';
+import heroImage from '../assets/images/horses/show-jumping-1.jpg';
 import horseLessonImg from '../assets/images/services/horse-lesson.jpg';
 import privateTrainingImg from '../assets/images/services/private-training.jpg';
 import ridingSafariImg from '../assets/images/services/riding-safari.jpg';
@@ -14,19 +14,16 @@ export const HomePage = () => {
   return (
     <div>
       <SEOMeta />
-      {/* Single Hero with Video Background */}
+      {/* Single Hero with Image Background */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Video Background */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ filter: 'brightness(0.6)' }}
-        >
-          <source src={heroVideo} type="video/mp4" />
-        </video>
+        {/* Image Background */}
+        <div
+          className="absolute inset-0 w-full h-full bg-cover bg-center"
+          style={{
+            backgroundImage: `url(${heroImage})`,
+            filter: 'brightness(0.6)',
+          }}
+        />
         
         {/* Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/30 to-slate-900/60" />
