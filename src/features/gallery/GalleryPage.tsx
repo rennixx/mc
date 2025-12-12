@@ -7,7 +7,6 @@ import { Instagram, Camera } from 'lucide-react';
 import horse1 from '../../assets/images/horses/horse-1.jpg';
 import horse2 from '../../assets/images/horses/horse-2.jpg';
 import equestrianTraining from '../../assets/images/horses/equestrian-training.jpg';
-import horseJumping from '../../assets/images/horses/horse-jumping.jpg';
 import ridingTraining from '../../assets/images/horses/riding-training.jpg';
 import showJumping1 from '../../assets/images/horses/show-jumping-1.jpg';
 import showJumping2 from '../../assets/images/horses/show-jumping-2.jpg';
@@ -45,22 +44,21 @@ export const GalleryPage = () => {
     
     // Academy
     { id: 4, category: 'academy', alt: 'Professional equestrian training session', src: equestrianTraining },
-    { id: 5, category: 'academy', alt: 'Horse jumping training', src: horseJumping },
-    { id: 6, category: 'academy', alt: 'Show jumping competition', src: showJumping1 },
-    { id: 7, category: 'academy', alt: 'Show jumping in action', src: showJumping2 },
-    { id: 8, category: 'academy', alt: 'Advanced show jumping', src: showJumping3 },
-    { id: 9, category: 'academy', alt: 'Horse lesson with instructor', src: horseLesson },
-    { id: 10, category: 'academy', alt: 'Private training session', src: privateTraining },
+    { id: 5, category: 'academy', alt: 'Show jumping competition', src: showJumping1 },
+    { id: 6, category: 'academy', alt: 'Show jumping in action', src: showJumping2 },
+    { id: 7, category: 'academy', alt: 'Advanced show jumping', src: showJumping3 },
+    { id: 8, category: 'academy', alt: 'Horse lesson with instructor', src: horseLesson },
+    { id: 9, category: 'academy', alt: 'Private training session', src: privateTraining },
     
     // Lifestyle (Facilities)
-    { id: 11, category: 'lifestyle', alt: 'Premium clubhouse exterior', src: clubhouse },
-    { id: 12, category: 'lifestyle', alt: 'MAM Center entrance', src: entrance },
-    { id: 13, category: 'lifestyle', alt: 'Modern indoor arena', src: indoorArena },
-    { id: 14, category: 'lifestyle', alt: 'Outdoor riding arena', src: ridingArena },
-    { id: 15, category: 'lifestyle', alt: 'Well-maintained stable exterior', src: stableExterior },
-    { id: 16, category: 'lifestyle', alt: 'Clean stable interior', src: stableInterior },
-    { id: 17, category: 'lifestyle', alt: 'Stable facility overview', src: stableFacility },
-    { id: 18, category: 'lifestyle', alt: 'Premium horse', src: horse2 },
+    { id: 10, category: 'lifestyle', alt: 'Premium clubhouse exterior', src: clubhouse },
+    { id: 11, category: 'lifestyle', alt: 'MAM Center entrance', src: entrance },
+    { id: 12, category: 'lifestyle', alt: 'Modern indoor arena', src: indoorArena },
+    { id: 13, category: 'lifestyle', alt: 'Outdoor riding arena', src: ridingArena },
+    { id: 14, category: 'lifestyle', alt: 'Well-maintained stable exterior', src: stableExterior },
+    { id: 15, category: 'lifestyle', alt: 'Clean stable interior', src: stableInterior },
+    { id: 16, category: 'lifestyle', alt: 'Stable facility overview', src: stableFacility },
+    { id: 17, category: 'lifestyle', alt: 'Premium horse', src: horse2 },
   ];
 
   const filteredImages = activeFilter === 'all' 
