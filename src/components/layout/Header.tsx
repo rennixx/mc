@@ -25,23 +25,23 @@ export const Header = () => {
         
         {/* Desktop Navigation - Hidden on Mobile */}
         <div className={`hidden md:flex gap-4 lg:gap-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
-          <Link to="/academy" className="font-sans font-medium text-sm text-slate-700 dark:text-cream-300 hover:text-forest-600 dark:hover:text-gold-400 transition-colors relative group">
+          <Link to="/academy" className="font-sans font-medium text-base text-slate-700 dark:text-cream-300 hover:text-forest-600 dark:hover:text-gold-400 transition-colors relative group">
             {t('academy', { ns: 'nav' })}
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-forest-600 dark:bg-gold-400 group-hover:w-full transition-all duration-300"></span>
           </Link>
-          <Link to="/safari" className="font-sans font-medium text-sm text-slate-700 dark:text-cream-300 hover:text-forest-600 dark:hover:text-gold-400 transition-colors relative group">
+          <Link to="/safari" className="font-sans font-medium text-base text-slate-700 dark:text-cream-300 hover:text-forest-600 dark:hover:text-gold-400 transition-colors relative group">
             {t('safari', { ns: 'nav' })}
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-forest-600 dark:bg-gold-400 group-hover:w-full transition-all duration-300"></span>
           </Link>
-          <Link to="/contact" className="font-sans font-medium text-sm text-slate-700 dark:text-cream-300 hover:text-forest-600 dark:hover:text-gold-400 transition-colors relative group">
+          <Link to="/contact" className="font-sans font-medium text-base text-slate-700 dark:text-cream-300 hover:text-forest-600 dark:hover:text-gold-400 transition-colors relative group">
             {t('contact', { ns: 'nav' })}
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-forest-600 dark:bg-gold-400 group-hover:w-full transition-all duration-300"></span>
           </Link>
-          <Link to="/coffee" className="font-sans font-medium text-sm text-slate-700 dark:text-cream-300 hover:text-forest-600 dark:hover:text-gold-400 transition-colors relative group">
+          <Link to="/coffee" className="font-sans font-medium text-base text-slate-700 dark:text-cream-300 hover:text-forest-600 dark:hover:text-gold-400 transition-colors relative group">
             {t('coffee', { ns: 'nav' })}
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-forest-600 dark:bg-gold-400 group-hover:w-full transition-all duration-300"></span>
           </Link>
-          <Link to="/gallery" className="font-sans font-medium text-sm text-slate-700 dark:text-cream-300 hover:text-forest-600 dark:hover:text-gold-400 transition-colors relative group">
+          <Link to="/gallery" className="font-sans font-medium text-base text-slate-700 dark:text-cream-300 hover:text-forest-600 dark:hover:text-gold-400 transition-colors relative group">
             {t('gallery', { ns: 'nav' })}
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-forest-600 dark:bg-gold-400 group-hover:w-full transition-all duration-300"></span>
           </Link>
