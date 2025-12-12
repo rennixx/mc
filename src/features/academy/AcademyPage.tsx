@@ -1,14 +1,25 @@
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 import { SEOMeta } from '../../components/common/SEOMeta';
+import { WhatsAppButton } from '../../components/common/WhatsAppButton';
+import { FAQ } from '../../components/common/FAQ';
+import { BookingCalendar } from '../../components/common/BookingCalendar';
 
 export const AcademyPage = () => {
   const { t, i18n } = useTranslation('academy');
   const isRTL = i18n.language === 'ar' || i18n.language === 'ku';
+  const [selectedDate, setSelectedDate] = useState<Date>();
+  const [selectedTime, setSelectedTime] = useState<string>();
 
   const programs = ['beginner', 'intermediate', 'jumping', 'private'];
   const instructors = ['sara', 'omar', 'layla'];
   const days = ['saturday', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
   const times = ['morning', 'midday', 'afternoon', 'evening'];
+
+  const faqItems = Array.from({ length: 8 }, (_, i) => ({
+    question: t(`academy:faq.q${i + 1}.question`),
+    answer: t(`academy:faq.q${i + 1}.answer`)
+  }));
 
   // Mock schedule availability
   const schedule: Record<string, string[]> = {
@@ -199,6 +210,25 @@ export const AcademyPage = () => {
         </div>
       </section>
 
+      {/* Booking Calendar Section */}
+      <div id="booking-calendar" className="py-16 bg-gradient-to-b from-saddle-900/40 to-transparent">
+        <div className="container mx-auto px-4 max-w-3xl">
+          <BookingCalendar
+            selectedDate={selectedDate}
+            selectedTime={selectedTime}
+            onDateSelect={setSelectedDate}
+            onTimeSelect={setSelectedTime}
+          />
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <FAQ
+        title={t('faq.title')}
+        subtitle={t('faq.subtitle')}
+        items={faqItems}
+      />
+
       {/* Booking CTA */}
       <section className="py-20 bg-gradient-to-br from-saddle-600 to-saddle-800">
         <div className="max-w-4xl mx-auto px-4 text-center">
@@ -211,6 +241,7 @@ export const AcademyPage = () => {
           <div className="flex flex-wrap justify-center gap-4">
             <a
               href="tel:+9647501234567"
+              dir="ltr"
               className="px-8 py-4 bg-gold-400 hover:bg-gold-500 text-forest-900 font-sans font-semibold transition-colors"
             >
               {t('booking.ctaPrimary')}
@@ -224,6 +255,9 @@ export const AcademyPage = () => {
           </div>
         </div>
       </section>
+
+      {/* WhatsApp Button */}
+      <WhatsAppButton message="Hello! I'm interested in enrolling in riding academy programs. Can you help?" />
     </>
   );
 };

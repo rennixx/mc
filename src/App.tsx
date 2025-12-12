@@ -14,6 +14,7 @@ const LifestylePage = lazy(() => import('./pages/LifestylePage').then(m => ({ de
 const GalleryPage = lazy(() => import('./features/gallery/GalleryPage').then(m => ({ default: m.GalleryPage })));
 const CoffeePage = lazy(() => import('./pages/CoffeePage').then(m => ({ default: m.CoffeePage })));
 const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })));
+const BookingPage = lazy(() => import('./pages/BookingPage').then(m => ({ default: m.BookingPage })));
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
               <Route path="/gallery" element={<GalleryPage />} />
               <Route path="/coffee" element={<CoffeePage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/booking" element={<BookingPage />} />
             </Routes>
             </Suspense>
           </main>

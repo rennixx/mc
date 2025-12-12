@@ -82,19 +82,19 @@
 }
 
 @theme {
-  /* CUSTOM COLOR PALETTE - Rugged Luxury Design System */
+  /* CUSTOM COLOR PALETTE - Navy Blue Design System */
   
-  /* PRIMARY: Deep Forest Green (Nature) */
-  --color-forest-50: #f0f7f4;
-  --color-forest-100: #dbeee4;
-  --color-forest-200: #b8ddc9;
-  --color-forest-300: #8bc5a7;
-  --color-forest-400: #5da884;
-  --color-forest-500: #3d8b66;
-  --color-forest-600: #2d6f51;
-  --color-forest-700: #245841;
-  --color-forest-800: #1f4636;
-  --color-forest-900: #1a3a2d;
+  /* PRIMARY: Navy Blue */
+  --color-forest-50: #f0f4f8;
+  --color-forest-100: #d9e2ec;
+  --color-forest-200: #bcccdc;
+  --color-forest-300: #9fb3c8;
+  --color-forest-400: #829ab1;
+  --color-forest-500: #627d98;
+  --color-forest-600: #486581;
+  --color-forest-700: #334e68;
+  --color-forest-800: #243b53;
+  --color-forest-900: #102a43;
   
   /* PRIMARY: Warm Saddle Brown (Leather) */
   --color-saddle-50: #f9f5f0;
@@ -159,14 +159,14 @@
   --shadow-tactile: 0 2px 8px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1);
   --shadow-tactile-hover: 0 4px 12px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(0, 0, 0, 0.15);
   --shadow-tactile-pressed: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-  --shadow-luxury: 0 10px 40px rgba(45, 111, 81, 0.15);
-  --shadow-luxury-lg: 0 20px 60px rgba(45, 111, 81, 0.2);
+  --shadow-luxury: 0 10px 40px rgba(36, 59, 83, 0.15);
+  --shadow-luxury-lg: 0 20px 60px rgba(36, 59, 83, 0.2);
 }
 
 @layer base {
   body {
-    @apply bg-cream-200 dark:bg-slate-900 text-slate-800 dark:text-cream-200;
-    @apply transition-colors duration-300;
+    @apply bg-gradient-to-br from-forest-900 via-forest-800 to-forest-900 text-cream-100;
+    @apply transition-colors duration-300 min-h-screen;
   }
   
   /* Default font for all elements */
@@ -193,7 +193,12 @@
   /* Kurdish and Arabic font family - Apply to all elements */
   html[lang="ku"] *,
   html[lang="ar"] * {
-    font-family: bahij-roman, 'Noto Sans Arabic', 'Amiri', sans-serif !important;
+    font-family: bahij-roman, sans-serif !important;
+  }
+  
+  /* Force Arabic font utility class - works regardless of page language */
+  .font-arabic {
+    font-family: bahij-roman, sans-serif !important;
   }
   
   /* Specific heading styles for Kurdish and Arabic */
@@ -209,7 +214,7 @@
   html[lang="ar"] h4,
   html[lang="ar"] h5,
   html[lang="ar"] h6 {
-    font-family: bahij-roman, 'Amiri', serif !important;
+    font-family: bahij-roman, sans-serif !important;
     font-weight: bold;
   }
   
@@ -227,6 +232,29 @@
     background-color: rgb(212 175 55 / 0.3);
     color: #1a3a2d;
   }
+}
+
+/* Glassmorphism Utilities */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+}
+
+.glass-nav {
+  background: rgba(16, 42, 67, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Leather Texture Background */

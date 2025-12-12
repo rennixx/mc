@@ -12,6 +12,8 @@ import enAcademy from './locales/en/academy.json';
 import enGallery from './locales/en/gallery.json';
 import enCoffee from './locales/en/coffee.json';
 import enContact from './locales/en/contact.json';
+import enComponents from './locales/en/components.json';
+import enBooking from './locales/en/booking.json';
 
 // Arabic translations
 import arCommon from './locales/ar/common.json';
@@ -23,6 +25,8 @@ import arAcademy from './locales/ar/academy.json';
 import arGallery from './locales/ar/gallery.json';
 import arCoffee from './locales/ar/coffee.json';
 import arContact from './locales/ar/contact.json';
+import arComponents from './locales/ar/components.json';
+import arBooking from './locales/ar/booking.json';
 
 // Kurdish translations
 import kuCommon from './locales/ku/common.json';
@@ -34,6 +38,8 @@ import kuAcademy from './locales/ku/academy.json';
 import kuGallery from './locales/ku/gallery.json';
 import kuCoffee from './locales/ku/coffee.json';
 import kuContact from './locales/ku/contact.json';
+import kuComponents from './locales/ku/components.json';
+import kuBooking from './locales/ku/booking.json';
 
 const resources = {
   en: {
@@ -46,6 +52,8 @@ const resources = {
     gallery: enGallery,
     coffee: enCoffee,
     contact: enContact,
+    components: enComponents,
+    booking: enBooking,
   },
   ar: {
     common: arCommon,
@@ -57,6 +65,8 @@ const resources = {
     gallery: arGallery,
     coffee: arCoffee,
     contact: arContact,
+    components: arComponents,
+    booking: arBooking,
   },
   ku: {
     common: kuCommon,
@@ -68,6 +78,8 @@ const resources = {
     gallery: kuGallery,
     coffee: kuCoffee,
     contact: kuContact,
+    components: kuComponents,
+    booking: kuBooking,
   },
 };
 
@@ -76,7 +88,8 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    fallbackLng: 'en',
+    fallbackLng: 'ku',
+    lng: 'ku', // Set Kurdish as default language
     defaultNS: 'common',
     ns: ['common', 'nav'],
     debug: true, // Enable debug mode to see what's happening
@@ -109,7 +122,7 @@ i18n.on('languageChanged', (lng: string) => {
 });
 
 // Set initial direction on load
-const initialLang = i18n.language || 'en';
+const initialLang = i18n.language || 'ku';
 const initialDir = rtlLanguages.includes(initialLang) ? 'rtl' : 'ltr';
 document.documentElement.dir = initialDir;
 document.documentElement.lang = initialLang;

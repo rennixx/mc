@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { SEOMeta } from '../components/common/SEOMeta';
+import { WhatsAppButton } from '../components/common/WhatsAppButton';
+import { GoogleMaps } from '../components/common/GoogleMaps';
 import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 
 export const ContactPage = () => {
@@ -241,26 +243,22 @@ export const ContactPage = () => {
                   </div>
                 </div>
               </div>
-
-              {/* Map CTA */}
-              <div className="bg-gradient-to-br from-forest-800 to-forest-600 p-6 shadow-luxury text-center">
-                <MapPin className="w-12 h-12 mx-auto mb-4 text-gold-400" />
-                <h4 className="text-xl font-serif font-bold text-cream-200 mb-4">
-                  {t('map.title')}
-                </h4>
-                <a
-                  href="https://maps.google.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block px-6 py-3 bg-gold-400 text-forest-900 font-sans font-bold hover:bg-gold-300 transition-colors"
-                >
-                  {t('map.button')}
-                </a>
-              </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Google Maps Section */}
+      <section className="py-16 bg-gradient-to-b from-forest-900/40 to-transparent">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <GoogleMaps
+            embedUrl="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3225.751234567!2d43.98118538641222!3d36.191884621340066!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDExJzMwLjgiTiA0M8KwNTgnNTIuMyJF!5e0!3m2!1sen!2siq!4v1234567890"
+            title="Visit MAM Center"
+          />
+        </div>
+      </section>
+
+      <WhatsAppButton />
     </>
   );
 };

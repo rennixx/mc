@@ -2,23 +2,39 @@ import { RouteMap } from '../components/safari/RouteMap';
 import { DifficultyToggle } from '../components/safari/DifficultyToggle';
 import { WhatToBring } from '../components/safari/WhatToBring';
 import { Button } from '../components/common/Button';
+import { WhatsAppButton } from '../components/common/WhatsAppButton';
+import { FAQ } from '../components/common/FAQ';
+import { BookingCalendar } from '../components/common/BookingCalendar';
 import { SEOMeta } from '../components/common/SEOMeta';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 import { Users } from 'lucide-react';
 import safariImage from '../assets/images/services/riding-safari.jpg';
 
 export const SafariPage = () => {
   const { t } = useTranslation('safari');
+  const [selectedDate, setSelectedDate] = useState<Date>();
+  const [selectedTime, setSelectedTime] = useState<string>();
   
   const handleBooking = () => {
-    // Pre-fill contact form or open WhatsApp
-    window.location.href = 'mailto:info@mamcenter.com?subject=Safari Booking Request';
+    if (selectedDate && selectedTime) {
+      const dateStr = selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+      window.location.href = `mailto:info@mamcenter.com?subject=Safari Booking Request&body=I'd like to book a safari for ${dateStr} at ${selectedTime}`;
+    } else {
+      // Scroll to calendar
+      document.getElementById('booking-calendar')?.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const handleGroupRates = () => {
     // Open WhatsApp or phone
     window.open('https://wa.me/9647501234567?text=I%27d%20like%20to%20ask%20about%20group%20rates', '_blank');
   };
+
+  const faqItems = Array.from({ length: 8 }, (_, i) => ({
+    question: t(`safari:faq.q${i + 1}.question`),
+    answer: t(`safari:faq.q${i + 1}.answer`)
+  }));
 
   return (
     <div className="min-h-screen bg-cream-200 dark:bg-slate-900">
@@ -133,6 +149,25 @@ export const SafariPage = () => {
         </section>
       </div>
 
+      {/* Booking Calendar Section */}
+      <div id="booking-calendar" className="py-16 bg-gradient-to-b from-forest-900/40 to-transparent">
+        <div className="container mx-auto px-4 max-w-3xl">
+          <BookingCalendar
+            selectedDate={selectedDate}
+            selectedTime={selectedTime}
+            onDateSelect={setSelectedDate}
+            onTimeSelect={setSelectedTime}
+          />
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <FAQ
+        title={t('faq.title')}
+        subtitle={t('faq.subtitle')}
+        items={faqItems}
+      />
+
       {/* Sticky Mobile CTA */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-cream-200/98 dark:bg-slate-800/98 border-t border-forest-600/20 shadow-luxury z-40">
         <Button variant="action" onClick={handleBooking} className="w-full">
@@ -146,6 +181,9 @@ export const SafariPage = () => {
           {t('booking.cta.desktop')}
         </Button>
       </div>
+
+      {/* WhatsApp Button */}
+      <WhatsAppButton message="Hi! I'd like to book a horse riding safari. Can you provide more details?" />
     </div>
   );
 };

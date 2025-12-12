@@ -1,0 +1,88 @@
+{
+  "meta": {
+    "title": "احجز تجربتك - مركز مام",
+    "description": "احجز تجربة ركوب الخيل في مركز مام",
+    "keywords": "حجز، ركوب الخيل، رحلة سفاري، أكاديمية، دروس، أربيل"
+  },
+  "header": {
+    "title": "احجز تجربتك",
+    "subtitle": "أكمل حجزك في بضع خطوات بسيطة"
+  },
+  "progress": {
+    "step1": "الخدمة",
+    "step2": "التفاصيل",
+    "step3": "التاريخ والوقت"
+  },
+  "step1": {
+    "title": "ماذا تريد أن تحجز؟",
+    "services": {
+      "safari": "رحلة سفاري لركوب الخيل",
+      "academy": "أكاديمية ركوب الخيل",
+      "private": "دروس خاصة",
+      "event": "حدث خاص"
+    },
+    "errors": {
+      "selectService": "الرجاء اختيار خدمة"
+    }
+  },
+  "step2": {
+    "title": "معلوماتك",
+    "fields": {
+      "name": {
+        "label": "الاسم الكامل",
+        "placeholder": "أدخل اسمك الكامل",
+        "required": true
+      },
+      "email": {
+        "label": "عنوان البريد الإلكتروني",
+        "placeholder": "your.email@example.com",
+        "required": true
+      },
+      "phone": {
+        "label": "رقم الهاتف",
+        "placeholder": "+964 750 123 4567",
+        "required": true
+      },
+      "experienceLevel": {
+        "label": "مستوى الخبرة",
+        "options": {
+          "beginner": "مبتدئ (لم أركب من قبل)",
+          "novice": "مبتدئ (بضع مرات)",
+          "intermediate": "متوسط (مرتاح)",
+          "advanced": "متقدم (راكب خبير)"
+        }
+      },
+      "groupSize": {
+        "label": "عدد الأشخاص",
+        "person": "شخص",
+        "people": "أشخاص"
+      },
+      "specialRequests": {
+        "label": "طلبات خاصة (اختياري)",
+        "placeholder": "أي قيود غذائية، احتياجات إمكانية الوصول، أو مناسبات خاصة؟"
+      }
+    },
+    "errors": {
+      "nameRequired": "الاسم مطلوب",
+      "emailRequired": "البريد الإلكتروني مطلوب",
+      "emailInvalid": "تنسيق البريد الإلكتروني غير صالح",
+      "phoneRequired": "رقم الهاتف مطلوب"
+    }
+  },
+  "step3": {
+    "title": "اختر التاريخ والوقت",
+    "errors": {
+      "selectDateTime": "الرجاء اختيار كل من التاريخ والوقت للمتابعة"
+    }
+  },
+  "actions": {
+    "back": "رجوع",
+    "continue": "متابعة",
+    "confirmBooking": "تأكيد الحجز"
+  },
+  "success": {
+    "title": "تم تأكيد الحجز!",
+    "message": "شكراً لك، {{name}}! تم استلام طلب الحجز الخاص بك.",
+    "contact": "سنتصل بك على {{phone}} لتأكيد حجزك."
+  }
+}

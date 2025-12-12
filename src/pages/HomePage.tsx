@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Button } from '../components/common';
+import { Button, WhatsAppButton, Testimonials, StatsCounter, useDefaultStats } from '../components/common';
 import { SEOMeta } from '../components/common/SEOMeta';
 import { Target, Coffee, Building2, Camera, Users } from 'lucide-react';
 import heroImage from '../assets/images/horses/show-jumping-1.jpg';
@@ -10,6 +10,7 @@ import ridingSafariImg from '../assets/images/services/riding-safari.jpg';
 
 export const HomePage = () => {
   const { t } = useTranslation('home');
+  const stats = useDefaultStats();
 
   return (
     <div>
@@ -60,22 +61,24 @@ export const HomePage = () => {
         </div>
       </section>
 
+      {/* Statistics Counter */}
+      <StatsCounter stats={stats} />
+
       {/* Persona Selector */}
-      <section className="py-20 bg-cream-100 dark:bg-slate-900">
+      <section className="py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-serif font-bold text-center mb-4 text-forest-700 dark:text-cream-200">{t('personas.sectionTitle')}</h2>
-          <p className="text-center text-slate-600 dark:text-cream-400 mb-12 text-lg font-sans">{t('personas.sectionSubtitle')}</p>
+          <h2 className="text-4xl font-serif font-bold text-center mb-4 text-cream-100">{t('personas.sectionTitle')}</h2>
+          <p className="text-center text-cream-200 mb-12 text-lg font-sans">{t('personas.sectionSubtitle')}</p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8 max-w-7xl mx-auto">
             {/* Persona Card 1 */}
             <Link to="/academy" className="group">
-              <div className="relative overflow-hidden bg-cream-200 dark:bg-slate-700 p-10 text-center hover:shadow-luxury transition-all duration-300 hover:-translate-y-3 border-2 border-transparent hover:border-gold-500">
-                <div className="absolute inset-0 bg-leather-texture opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="glass-card rounded-2xl p-10 text-center hover:shadow-luxury transition-all duration-300 hover:-translate-y-3 hover:border-gold-400">
                 <div className="relative z-10">
-                  <Target className="w-12 h-12 mx-auto mb-4 text-gold-500" />
-                  <h3 className="text-xl font-serif font-bold mb-3 text-forest-700 dark:text-cream-200">{t('personas.cards.learner.title')}</h3>
-                  <p className="text-slate-600 dark:text-cream-400 text-sm mb-4 font-sans">{t('personas.cards.learner.description')}</p>
-                  <span className="text-gold-500 font-sans font-semibold group-hover:gap-2 inline-flex items-center gap-1 transition-all">
+                  <Target className="w-12 h-12 mx-auto mb-4 text-gold-400" />
+                  <h3 className="text-xl font-serif font-bold mb-3 text-cream-100">{t('personas.cards.learner.title')}</h3>
+                  <p className="text-cream-200 text-sm mb-4 font-sans">{t('personas.cards.learner.description')}</p>
+                  <span className="text-gold-400 font-sans font-semibold group-hover:gap-2 inline-flex items-center gap-1 transition-all">
                     <span>{t('personas.cards.learner.cta')}</span>
                     <span>→</span>
                   </span>
@@ -85,13 +88,12 @@ export const HomePage = () => {
 
             {/* Persona Card 2 */}
             <Link to="/lifestyle" className="group">
-              <div className="relative overflow-hidden bg-cream-200 dark:bg-slate-700 p-10 text-center hover:shadow-luxury transition-all duration-300 hover:-translate-y-3 border-2 border-transparent hover:border-gold-500">
-                <div className="absolute inset-0 bg-leather-texture opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="glass-card rounded-2xl p-10 text-center hover:shadow-luxury transition-all duration-300 hover:-translate-y-3 hover:border-gold-400">
                 <div className="relative z-10">
-                  <Coffee className="w-12 h-12 mx-auto mb-4 text-gold-500" />
-                  <h3 className="text-xl font-serif font-bold mb-3 text-forest-700 dark:text-cream-200">{t('personas.cards.coffee.title')}</h3>
-                  <p className="text-slate-600 dark:text-cream-400 text-sm mb-4 font-sans">{t('personas.cards.coffee.description')}</p>
-                  <span className="text-gold-500 font-sans font-semibold group-hover:gap-2 inline-flex items-center gap-1 transition-all">
+                  <Coffee className="w-12 h-12 mx-auto mb-4 text-gold-400" />
+                  <h3 className="text-xl font-serif font-bold mb-3 text-cream-100">{t('personas.cards.coffee.title')}</h3>
+                  <p className="text-cream-200 text-sm mb-4 font-sans">{t('personas.cards.coffee.description')}</p>
+                  <span className="text-gold-400 font-sans font-semibold group-hover:gap-2 inline-flex items-center gap-1 transition-all">
                     <span>{t('personas.cards.coffee.cta')}</span>
                     <span>→</span>
                   </span>
@@ -101,13 +103,12 @@ export const HomePage = () => {
 
             {/* Persona Card 3 */}
             <a href="#contact" className="group">
-              <div className="relative overflow-hidden bg-cream-200 dark:bg-slate-700 p-10 text-center hover:shadow-luxury transition-all duration-300 hover:-translate-y-3 border-2 border-transparent hover:border-gold-500">
-                <div className="absolute inset-0 bg-leather-texture opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="glass-card rounded-2xl p-10 text-center hover:shadow-luxury transition-all duration-300 hover:-translate-y-3 hover:border-gold-400">
                 <div className="relative z-10">
-                  <Building2 className="w-12 h-12 mx-auto mb-4 text-gold-500" />
-                  <h3 className="text-xl font-serif font-bold mb-3 text-forest-700 dark:text-cream-200">{t('personas.cards.venue.title')}</h3>
-                  <p className="text-slate-600 dark:text-cream-400 text-sm mb-4 font-sans">{t('personas.cards.venue.description')}</p>
-                  <span className="text-gold-500 font-sans font-semibold group-hover:gap-2 inline-flex items-center gap-1 transition-all">
+                  <Building2 className="w-12 h-12 mx-auto mb-4 text-gold-400" />
+                  <h3 className="text-xl font-serif font-bold mb-3 text-cream-100">{t('personas.cards.venue.title')}</h3>
+                  <p className="text-cream-200 text-sm mb-4 font-sans">{t('personas.cards.venue.description')}</p>
+                  <span className="text-gold-400 font-sans font-semibold group-hover:gap-2 inline-flex items-center gap-1 transition-all">
                     <span>{t('personas.cards.venue.cta')}</span>
                     <span>→</span>
                   </span>
@@ -117,13 +118,12 @@ export const HomePage = () => {
 
             {/* Persona Card 4 */}
             <Link to="/safari" className="group">
-              <div className="relative overflow-hidden bg-cream-200 dark:bg-slate-700 p-10 text-center hover:shadow-luxury transition-all duration-300 hover:-translate-y-3 border-2 border-transparent hover:border-gold-500">
-                <div className="absolute inset-0 bg-leather-texture opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="glass-card rounded-2xl p-10 text-center hover:shadow-luxury transition-all duration-300 hover:-translate-y-3 hover:border-gold-400">
                 <div className="relative z-10">
-                  <Camera className="w-12 h-12 mx-auto mb-4 text-gold-500" />
-                  <h3 className="text-xl font-serif font-bold mb-3 text-forest-700 dark:text-cream-200">{t('personas.cards.photographer.title')}</h3>
-                  <p className="text-slate-600 dark:text-cream-400 text-sm mb-4 font-sans">{t('personas.cards.photographer.description')}</p>
-                  <span className="text-gold-500 font-sans font-semibold group-hover:gap-2 inline-flex items-center gap-1 transition-all">
+                  <Camera className="w-12 h-12 mx-auto mb-4 text-gold-400" />
+                  <h3 className="text-xl font-serif font-bold mb-3 text-cream-100">{t('personas.cards.photographer.title')}</h3>
+                  <p className="text-cream-200 text-sm mb-4 font-sans">{t('personas.cards.photographer.description')}</p>
+                  <span className="text-gold-400 font-sans font-semibold group-hover:gap-2 inline-flex items-center gap-1 transition-all">
                     <span>{t('personas.cards.photographer.cta')}</span>
                     <span>→</span>
                   </span>
@@ -133,13 +133,12 @@ export const HomePage = () => {
 
             {/* Persona Card 5 */}
             <Link to="/academy?age=kids" className="group">
-              <div className="relative overflow-hidden bg-cream-200 dark:bg-slate-700 p-10 text-center hover:shadow-luxury transition-all duration-300 hover:-translate-y-3 border-2 border-transparent hover:border-gold-500">
-                <div className="absolute inset-0 bg-leather-texture opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="glass-card rounded-2xl p-10 text-center hover:shadow-luxury transition-all duration-300 hover:-translate-y-3 hover:border-gold-400">
                 <div className="relative z-10">
-                  <Users className="w-12 h-12 mx-auto mb-4 text-gold-500" />
-                  <h3 className="text-xl font-serif font-bold mb-3 text-forest-700 dark:text-cream-200">{t('personas.cards.parent.title')}</h3>
-                  <p className="text-slate-600 dark:text-cream-400 text-sm mb-4 font-sans">{t('personas.cards.parent.description')}</p>
-                  <span className="text-gold-500 font-sans font-semibold group-hover:gap-2 inline-flex items-center gap-1 transition-all">
+                  <Users className="w-12 h-12 mx-auto mb-4 text-gold-400" />
+                  <h3 className="text-xl font-serif font-bold mb-3 text-cream-100">{t('personas.cards.parent.title')}</h3>
+                  <p className="text-cream-200 text-sm mb-4 font-sans">{t('personas.cards.parent.description')}</p>
+                  <span className="text-gold-400 font-sans font-semibold group-hover:gap-2 inline-flex items-center gap-1 transition-all">
                     <span>{t('personas.cards.parent.cta')}</span>
                     <span>→</span>
                   </span>
@@ -151,39 +150,48 @@ export const HomePage = () => {
       </section>
 
       {/* Featured Programs Preview */}
-      <section className="py-24 bg-cream-200 dark:bg-slate-800">
+      <section className="py-24">
         <div className="container mx-auto px-4">
-          <h2 className="text-5xl font-serif font-bold text-center mb-16 text-forest-700 dark:text-cream-200">{t('featured.title')}</h2>
+          <h2 className="text-5xl font-serif font-bold text-center mb-16 text-cream-100">{t('featured.title')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
             <div className="group cursor-pointer">
-              <div className="aspect-[4/3] bg-slate-300 dark:bg-slate-700 mb-6 overflow-hidden shadow-tactile group-hover:shadow-tactile-hover transition-shadow duration-300">
+              <div className="aspect-[4/3] glass-card mb-6 overflow-hidden rounded-2xl group-hover:shadow-tactile-hover transition-shadow duration-300">
                 <div className="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500" style={{backgroundImage: `url(${horseLessonImg})`}} />
               </div>
-              <h3 className="text-2xl font-serif font-bold mb-3 text-forest-700 dark:text-cream-200">{t('featured.programs.beginner.title')}</h3>
-              <p className="text-slate-600 dark:text-cream-400 mb-6 font-sans">{t('featured.programs.beginner.description')}</p>
+              <h3 className="text-2xl font-serif font-bold mb-3 text-cream-100">{t('featured.programs.beginner.title')}</h3>
+              <p className="text-cream-200 mb-6 font-sans">{t('featured.programs.beginner.description')}</p>
               <Button variant="outline">{t('featured.programs.beginner.cta')}</Button>
             </div>
 
             <div className="group cursor-pointer">
-              <div className="aspect-[4/3] bg-slate-300 dark:bg-slate-700 mb-6 overflow-hidden shadow-tactile group-hover:shadow-tactile-hover transition-shadow duration-300">
+              <div className="aspect-[4/3] glass-card mb-6 overflow-hidden rounded-2xl group-hover:shadow-tactile-hover transition-shadow duration-300">
                 <div className="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500" style={{backgroundImage: `url(${privateTrainingImg})`}} />
               </div>
-              <h3 className="text-2xl font-serif font-bold mb-3 text-forest-700 dark:text-cream-200">{t('featured.programs.jumping.title')}</h3>
-              <p className="text-slate-600 dark:text-cream-400 mb-6 font-sans">{t('featured.programs.jumping.description')}</p>
+              <h3 className="text-2xl font-serif font-bold mb-3 text-cream-100">{t('featured.programs.jumping.title')}</h3>
+              <p className="text-cream-200 mb-6 font-sans">{t('featured.programs.jumping.description')}</p>
               <Button variant="outline">{t('featured.programs.jumping.cta')}</Button>
             </div>
 
             <div className="group cursor-pointer">
-              <div className="aspect-[4/3] bg-slate-300 dark:bg-slate-700 mb-6 overflow-hidden shadow-tactile group-hover:shadow-tactile-hover transition-shadow duration-300">
+              <div className="aspect-[4/3] glass-card mb-6 overflow-hidden rounded-2xl group-hover:shadow-tactile-hover transition-shadow duration-300">
                 <div className="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500" style={{backgroundImage: `url(${ridingSafariImg})`}} />
               </div>
-              <h3 className="text-2xl font-serif font-bold mb-3 text-forest-700 dark:text-cream-200">{t('featured.programs.camp.title')}</h3>
-              <p className="text-slate-600 dark:text-cream-400 mb-6 font-sans">{t('featured.programs.camp.description')}</p>
+              <h3 className="text-2xl font-serif font-bold mb-3 text-cream-100">{t('featured.programs.camp.title')}</h3>
+              <p className="text-cream-200 mb-6 font-sans">{t('featured.programs.camp.description')}</p>
               <Button variant="outline">{t('featured.programs.camp.cta')}</Button>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Testimonials Section */}
+      <Testimonials 
+        title={t('testimonials.title', 'What Our Clients Say')}
+        subtitle={t('testimonials.subtitle', 'Real experiences from our community')}
+      />
+
+      {/* WhatsApp Button */}
+      <WhatsAppButton message="Hi! I'm interested in learning more about MAM Center programs." />
     </div>
   );
 };

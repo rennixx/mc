@@ -14,44 +14,44 @@ export const Footer = () => {
         <div className={`grid grid-cols-1 md:grid-cols-4 gap-12 ${isRTL ? 'text-right' : 'text-left'}`}>
           {/* Brand Column */}
           <div>
-            <h3 className="text-2xl font-serif font-bold text-gold-400 mb-4">
+            <h3 className="text-2xl text-left font-serif font-bold text-gold-400 mb-4">
               {t('brandName')}
             </h3>
-            <p className="text-cream-300 font-sans text-sm leading-relaxed">
+            <p className="text-cream-300 font-sans text-sm leading-relaxed text-left">
               {t('footer.tagline')}
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-lg font-sans font-semibold text-gold-400 mb-4">{t('footer.quickLinks')}</h4>
-            <ul className="space-y-2 font-sans text-sm">
+            <h4 className="text-lg text-left font-sans font-semibold text-gold-400 mb-4">{t('footer.quickLinks')}</h4>
+            <ul className="space-y-2 font-sans text-sm text-left">
               <li>
-                <Link to="/academy" className="text-cream-300 hover:text-gold-400 transition-colors">
-                  {tNav('academy')}
-                </Link>
+              <Link to="/academy" className="text-cream-300 hover:text-gold-400 transition-colors">
+                {tNav('academy')}
+              </Link>
               </li>
               <li>
-                <Link to="/safari" className="text-cream-300 hover:text-gold-400 transition-colors">
-                  {tNav('safari')}
-                </Link>
+              <Link to="/safari" className="text-cream-300 hover:text-gold-400 transition-colors">
+                {tNav('safari')}
+              </Link>
               </li>
               <li>
-                <Link to="/lifestyle" className="text-cream-300 hover:text-gold-400 transition-colors">
-                  {tNav('lifestyle')}
-                </Link>
+              <Link to="/lifestyle" className="text-cream-300 hover:text-gold-400 transition-colors">
+                {tNav('lifestyle')}
+              </Link>
               </li>
               <li>
-                <Link to="/gallery" className="text-cream-300 hover:text-gold-400 transition-colors">
-                  {tNav('gallery')}
-                </Link>
+              <Link to="/gallery" className="text-cream-300 hover:text-gold-400 transition-colors">
+                {tNav('gallery')}
+              </Link>
               </li>
             </ul>
           </div>
 
           {/* Contact Info */}
           <div>
-            <h4 className="text-lg font-sans font-semibold text-gold-400 mb-4">{t('footer.contact')}</h4>
+            <h4 className="text-lg text-left font-sans font-semibold text-gold-400 mb-4">{t('footer.contact')}</h4>
             <ul className="space-y-3 font-sans text-sm text-cream-300">
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4" />
@@ -74,16 +74,16 @@ export const Footer = () => {
 
           {/* Hours */}
           <div>
-            <h4 className="text-lg font-sans font-semibold text-gold-400 mb-4">{t('footer.hours')}</h4>
-            <ul className="space-y-2 font-sans text-sm text-cream-300">
+            <h4 className="text-lg text-left font-sans font-semibold text-gold-400 mb-4">{t('footer.hours')}</h4>
+            <ul className="space-y-2 font-sans text-sm text-cream-300 text-left">
               <li>
-                <span className="font-semibold">{t('footer.academy')}</span> {t('footer.academyHours')}
+              <span className="font-semibold">{t('footer.academy')}</span> {t('footer.academyHours')}
               </li>
               <li>
-                <span className="font-semibold">{t('footer.safari')}</span> {t('footer.safariHours')}
+              <span className="font-semibold">{t('footer.safari')}</span> {t('footer.safariHours')}
               </li>
               <li>
-                <span className="font-semibold">{t('footer.cafe')}</span> {t('footer.cafeHours')}
+              <span className="font-semibold">{t('footer.cafe')}</span> {t('footer.cafeHours')}
               </li>
             </ul>
           </div>
