@@ -3,7 +3,6 @@ import { lazy, Suspense } from 'react';
 import { Loader2 } from 'lucide-react';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
-import { MobileBottomNav } from './components/layout/MobileBottomNav';
 import { HomePage } from './pages/HomePage';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 
@@ -20,7 +19,7 @@ function App() {
   return (
     <Router>
       <ErrorBoundary>
-        <div className="min-h-screen pb-16 md:pb-0">
+        <div className="min-h-screen">
           <Header />
           <main>
             <Suspense fallback={
@@ -44,7 +43,6 @@ function App() {
             </Suspense>
           </main>
           <Footer />
-          <MobileBottomNav />
         </div>
       </ErrorBoundary>
     </Router>

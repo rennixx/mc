@@ -41,12 +41,12 @@ export const HomePage = () => {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link to="/academy">
-              <Button variant="action" className="min-w-[200px] text-lg py-6 shadow-luxury-lg">
+              <Button variant="action" className="min-w-[180px] text-base py-4 shadow-luxury-lg backdrop-blur-md bg-action-500/90 hover:bg-action-600/90 border border-white/20">
                 {t('hero.cta.academy', 'Explore Academy')}
               </Button>
             </Link>
             <Link to="/safari">
-              <Button variant="primary" className="min-w-[200px] text-lg py-6 shadow-luxury-lg">
+              <Button variant="primary" className="min-w-[180px] text-base py-4 shadow-luxury-lg backdrop-blur-md bg-forest-600/90 hover:bg-forest-700/90 border border-white/20">
                 {t('hero.cta.safari', 'Book Safari')}
               </Button>
             </Link>
@@ -160,7 +160,7 @@ export const HomePage = () => {
               </div>
               <h3 className="text-2xl font-serif font-bold mb-3 text-cream-100">{t('featured.programs.beginner.title')}</h3>
               <p className="text-cream-200 mb-6 font-sans">{t('featured.programs.beginner.description')}</p>
-              <Button variant="outline">{t('featured.programs.beginner.cta')}</Button>
+              <Button variant="outline" className="backdrop-blur-md bg-transparent/50 hover:bg-white/10 border border-white/20">{t('featured.programs.beginner.cta')}</Button>
             </div>
 
             <div className="group cursor-pointer">
@@ -169,7 +169,7 @@ export const HomePage = () => {
               </div>
               <h3 className="text-2xl font-serif font-bold mb-3 text-cream-100">{t('featured.programs.jumping.title')}</h3>
               <p className="text-cream-200 mb-6 font-sans">{t('featured.programs.jumping.description')}</p>
-              <Button variant="outline">{t('featured.programs.jumping.cta')}</Button>
+              <Button variant="outline" className="backdrop-blur-md bg-transparent/50 hover:bg-white/10 border border-white/20">{t('featured.programs.jumping.cta')}</Button>
             </div>
 
             <div className="group cursor-pointer">
@@ -178,7 +178,7 @@ export const HomePage = () => {
               </div>
               <h3 className="text-2xl font-serif font-bold mb-3 text-cream-100">{t('featured.programs.camp.title')}</h3>
               <p className="text-cream-200 mb-6 font-sans">{t('featured.programs.camp.description')}</p>
-              <Button variant="outline">{t('featured.programs.camp.cta')}</Button>
+              <Button variant="outline" className="backdrop-blur-md bg-transparent/50 hover:bg-white/10 border border-white/20">{t('featured.programs.camp.cta')}</Button>
             </div>
           </div>
         </div>

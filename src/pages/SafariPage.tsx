@@ -117,7 +117,7 @@ export const SafariPage = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button variant="action" onClick={handleBooking}>
+            <Button variant="action" onClick={handleBooking} className="backdrop-blur-md bg-action-500/90 hover:bg-action-600/90 border border-white/20">
               {t('booking.ctaPrimary')}
             </Button>
             <button
@@ -170,14 +170,14 @@ export const SafariPage = () => {
 
       {/* Sticky Mobile CTA */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-cream-200/98 dark:bg-slate-800/98 border-t border-forest-600/20 shadow-luxury z-40">
-        <Button variant="action" onClick={handleBooking} className="w-full">
+        <Button variant="action" onClick={handleBooking} className="w-full backdrop-blur-md bg-action-500/90 hover:bg-action-600/90 border border-white/20">
           {t('booking.cta.mobile')}
         </Button>
       </div>
 
       {/* Desktop Fixed CTA */}
       <div className="hidden md:block fixed bottom-8 right-8 z-40">
-        <Button variant="action" onClick={handleBooking} className="shadow-luxury-lg">
+        <Button variant="action" onClick={handleBooking} className="shadow-luxury-lg backdrop-blur-md bg-action-500/90 hover:bg-action-600/90 border border-white/20">
           {t('booking.cta.desktop')}
         </Button>
       </div>
