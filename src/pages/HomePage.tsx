@@ -73,7 +73,7 @@ export const HomePage = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8 max-w-7xl mx-auto">
             {/* Persona Card 1 */}
             <Link to="/academy" className="group">
-              <div className="glass-card rounded-2xl p-10 text-center hover:shadow-luxury transition-all duration-300 hover:-translate-y-3 hover:border-gold-400">
+              <div className="glass-card p-10 text-center hover:shadow-luxury transition-all duration-300 hover:-translate-y-3 hover:border-gold-400">
                 <div className="relative z-10">
                   <Target className="w-12 h-12 mx-auto mb-4 text-gold-400" />
                   <h3 className="text-xl font-serif font-bold mb-3 text-cream-100">{t('personas.cards.learner.title')}</h3>
@@ -88,7 +88,7 @@ export const HomePage = () => {
 
             {/* Persona Card 2 */}
             <Link to="/lifestyle" className="group">
-              <div className="glass-card rounded-2xl p-10 text-center hover:shadow-luxury transition-all duration-300 hover:-translate-y-3 hover:border-gold-400">
+              <div className="glass-card p-10 text-center hover:shadow-luxury transition-all duration-300 hover:-translate-y-3 hover:border-gold-400">
                 <div className="relative z-10">
                   <Coffee className="w-12 h-12 mx-auto mb-4 text-gold-400" />
                   <h3 className="text-xl font-serif font-bold mb-3 text-cream-100">{t('personas.cards.coffee.title')}</h3>
@@ -103,7 +103,7 @@ export const HomePage = () => {
 
             {/* Persona Card 3 */}
             <a href="#contact" className="group">
-              <div className="glass-card rounded-2xl p-10 text-center hover:shadow-luxury transition-all duration-300 hover:-translate-y-3 hover:border-gold-400">
+              <div className="glass-card p-10 text-center hover:shadow-luxury transition-all duration-300 hover:-translate-y-3 hover:border-gold-400">
                 <div className="relative z-10">
                   <Building2 className="w-12 h-12 mx-auto mb-4 text-gold-400" />
                   <h3 className="text-xl font-serif font-bold mb-3 text-cream-100">{t('personas.cards.venue.title')}</h3>
@@ -118,7 +118,7 @@ export const HomePage = () => {
 
             {/* Persona Card 4 */}
             <Link to="/safari" className="group">
-              <div className="glass-card rounded-2xl p-10 text-center hover:shadow-luxury transition-all duration-300 hover:-translate-y-3 hover:border-gold-400">
+              <div className="glass-card p-10 text-center hover:shadow-luxury transition-all duration-300 hover:-translate-y-3 hover:border-gold-400">
                 <div className="relative z-10">
                   <Camera className="w-12 h-12 mx-auto mb-4 text-gold-400" />
                   <h3 className="text-xl font-serif font-bold mb-3 text-cream-100">{t('personas.cards.photographer.title')}</h3>
@@ -133,7 +133,7 @@ export const HomePage = () => {
 
             {/* Persona Card 5 */}
             <Link to="/academy?age=kids" className="group">
-              <div className="glass-card rounded-2xl p-10 text-center hover:shadow-luxury transition-all duration-300 hover:-translate-y-3 hover:border-gold-400">
+              <div className="glass-card p-10 text-center hover:shadow-luxury transition-all duration-300 hover:-translate-y-3 hover:border-gold-400">
                 <div className="relative z-10">
                   <Users className="w-12 h-12 mx-auto mb-4 text-gold-400" />
                   <h3 className="text-xl font-serif font-bold mb-3 text-cream-100">{t('personas.cards.parent.title')}</h3>
@@ -155,7 +155,7 @@ export const HomePage = () => {
           <h2 className="text-5xl font-serif font-bold text-center mb-16 text-cream-100">{t('featured.title')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
             <div className="group cursor-pointer">
-              <div className="aspect-[4/3] glass-card mb-6 overflow-hidden rounded-2xl group-hover:shadow-tactile-hover transition-shadow duration-300">
+              <div className="aspect-[4/3] glass-card mb-6 overflow-hidden group-hover:shadow-tactile-hover transition-shadow duration-300">
                 <div className="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500" style={{backgroundImage: `url(${horseLessonImg})`}} />
               </div>
               <h3 className="text-2xl font-serif font-bold mb-3 text-cream-100">{t('featured.programs.beginner.title')}</h3>
@@ -164,7 +164,7 @@ export const HomePage = () => {
             </div>
 
             <div className="group cursor-pointer">
-              <div className="aspect-[4/3] glass-card mb-6 overflow-hidden rounded-2xl group-hover:shadow-tactile-hover transition-shadow duration-300">
+              <div className="aspect-[4/3] glass-card mb-6 overflow-hidden group-hover:shadow-tactile-hover transition-shadow duration-300">
                 <div className="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500" style={{backgroundImage: `url(${privateTrainingImg})`}} />
               </div>
               <h3 className="text-2xl font-serif font-bold mb-3 text-cream-100">{t('featured.programs.jumping.title')}</h3>
@@ -173,7 +173,7 @@ export const HomePage = () => {
             </div>
 
             <div className="group cursor-pointer">
-              <div className="aspect-[4/3] glass-card mb-6 overflow-hidden rounded-2xl group-hover:shadow-tactile-hover transition-shadow duration-300">
+              <div className="aspect-[4/3] glass-card mb-6 overflow-hidden group-hover:shadow-tactile-hover transition-shadow duration-300">
                 <div className="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500" style={{backgroundImage: `url(${ridingSafariImg})`}} />
               </div>
               <h3 className="text-2xl font-serif font-bold mb-3 text-cream-100">{t('featured.programs.camp.title')}</h3>

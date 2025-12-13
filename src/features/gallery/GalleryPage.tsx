@@ -300,14 +300,14 @@ export const GalleryPage = () => {
             Follow us on Instagram for daily updates
           </p>
           <a
-            href="https://instagram.com/mamcenter"
+            href="https://instagram.com/mamcenter2011"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-8 py-4 bg-gold-400 hover:bg-gold-500 text-forest-900 font-sans font-semibold transition-colors"
             dir="ltr"
           >
             <Instagram className="w-5 h-5" />
-            <span>@mamcenter</span>
+            <span>@mamcenter2011</span>
           </a>
         </div>
       </section>
