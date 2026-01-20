@@ -40,29 +40,8 @@ export const AcademyPage = () => {
         keywords="riding academy, horse lessons, equestrian training, show jumping, Iraq, Kurdistan"
       />
 
-      {/* Hero */}
-      <section className="relative min-h-[60vh] bg-gradient-to-br from-forest-800 to-forest-600 flex items-center">
-        <div className="max-w-7xl mx-auto px-4 py-24 text-center">
-          <div className="inline-block px-4 py-2 bg-gold-400/20 border border-gold-400 mb-6">
-            <span className="text-gold-400 font-sans text-sm tracking-wider uppercase">{t('hero.badge')}</span>
-          </div>
-          <h1 className="text-5xl md:text-6xl font-serif font-bold text-cream-200 mb-6">
-            {t('hero.title')}
-          </h1>
-          <p className="text-xl text-cream-300 font-sans max-w-3xl mx-auto mb-8">
-            {t('hero.subtitle')}
-          </p>
-          <a
-            href="#programs"
-            className="inline-block px-8 py-4 bg-gold-400 hover:bg-gold-500 text-forest-900 font-sans font-semibold transition-colors"
-          >
-            {t('hero.cta')}
-          </a>
-        </div>
-      </section>
-
       {/* Programs */}
-      <section id="programs" className="py-20 bg-cream-200 dark:bg-slate-900">
+      <section id="programs" className="py-40 bg-cream-200 dark:bg-slate-900">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-serif font-bold text-forest-700 dark:text-cream-200 mb-4">

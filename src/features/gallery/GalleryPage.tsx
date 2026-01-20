@@ -152,21 +152,11 @@ export const GalleryPage = () => {
         keywords="gallery, photos, horse riding, cafe, equestrian, Kurdistan, Iraq"
       />
 
-      {/* Hero */}
-      <section className="relative min-h-[40vh] bg-gradient-to-br from-forest-800 to-forest-600 flex items-center">
-        <div className="max-w-7xl mx-auto px-4 py-20 text-center">
-          <h1 className="text-5xl md:text-6xl font-serif font-bold text-cream-200 mb-6">
-            {t('hero.title')}
-          </h1>
-          <p className="text-xl text-cream-300 font-sans max-w-2xl mx-auto">
-            {selectedAlbum ? selectedAlbum.description : t('hero.subtitle')}
-          </p>
-        </div>
-      </section>
+      
 
       {/* Albums View */}
       {!selectedAlbum ? (
-        <section className="py-20">
+        <section className="py-40">
           <div className="max-w-7xl mx-auto px-4">
             <div className="text-center mb-12">
               <div className="inline-flex items-center gap-3 glass px-6 py-3 mb-6">
