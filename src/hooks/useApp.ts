@@ -1,6 +1,6 @@
 import { useAppStore } from '../store'
 
-
+//removed
 // Individual selectors for Zustand to avoid infinite re-renders
 // Use individual selectors instead of object selectors
 
