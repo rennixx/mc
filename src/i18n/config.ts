@@ -1,6 +1,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import { useAppStore } from '../store';
 
 // English translations
 import enCommon from './locales/en/common.json';
@@ -126,5 +127,27 @@ const initialLang = i18n.language || 'ku';
 const initialDir = rtlLanguages.includes(initialLang) ? 'rtl' : 'ltr';
 document.documentElement.dir = initialDir;
 document.documentElement.lang = initialLang;
+
+/**
+ * Integrate Zustand store with i18next
+ * This ensures the global store and i18next are always in sync
+ * Only runs in browser environment
+ */
+if (typeof window !== 'undefined') {
+  // Initialize i18next with the language from Zustand store (if exists)
+  const storedLanguage = useAppStore.getState().language;
+  if (storedLanguage && storedLanguage !== i18n.language) {
+    i18n.changeLanguage(storedLanguage);
+  }
+
+  // Subscribe to Zustand store changes and sync with i18next
+  useAppStore.subscribe((state) => {
+    const language = state.language;
+    // Only update if language is different
+    if (language !== i18n.language) {
+      i18n.changeLanguage(language);
+    }
+  });
+}
 
 export default i18n;
