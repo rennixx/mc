@@ -136,6 +136,13 @@ export function deleteBooking(id: string): boolean {
 }
 
 /**
+ * Clear all bookings (useful for removing sample data)
+ */
+export function clearAllBookings(): void {
+  localStorage.removeItem(STORAGE_KEY);
+}
+
+/**
  * Save bookings to localStorage
  */
 function saveBookings(bookings: Booking[]): void {
@@ -180,88 +187,8 @@ export function searchBookings(query: string): Booking[] {
 
 /**
  * Initialize with sample data if empty (for demo purposes)
+ * Sample data removed - starts empty
  */
 export function initializeSampleData(): void {
-  const existing = getAllBookings();
-  if (existing.length > 0) {
-    return; // Already has data
-  }
-
-  const today = new Date();
-  const sampleBookings: Omit<Booking, 'id' | 'createdAt' | 'status'>[] = [
-    {
-      service: 'safari',
-      name: 'Ahmed Hassan',
-      email: 'ahmed@example.com',
-      phone: '+964 750 123 4567',
-      experienceLevel: 'beginner',
-      groupSize: 2,
-      specialRequests: 'Would like to take photos during the ride',
-      date: formatDate(today),
-      time: '10:00',
-    },
-    {
-      service: 'academy',
-      name: 'Sarah Ahmed',
-      email: 'sarah@example.com',
-      phone: '+964 750 987 6543',
-      experienceLevel: 'novice',
-      groupSize: 1,
-      specialRequests: 'Private lesson preferred',
-      date: formatDate(today),
-      time: '14:00',
-    },
-    {
-      service: 'private',
-      name: 'Omar Ibrahim',
-      email: 'omar@example.com',
-      phone: '+964 770 555 1234',
-      experienceLevel: 'intermediate',
-      groupSize: 4,
-      specialRequests: 'Family group, including children',
-      date: formatDate(addDays(today, 1)),
-      time: '08:00',
-    },
-    {
-      service: 'safari',
-      name: 'Layla Kareem',
-      email: 'layla@example.com',
-      phone: '+964 751 111 2233',
-      experienceLevel: 'beginner',
-      groupSize: 3,
-      specialRequests: '',
-      date: formatDate(addDays(today, 2)),
-      time: '16:00',
-    },
-    {
-      service: 'event',
-      name: 'Ranya Mahmoud',
-      email: 'ranya@example.com',
-      phone: '+964 751 444 5566',
-      experienceLevel: 'advanced',
-      groupSize: 15,
-      specialRequests: 'Corporate event, need catering options',
-      date: formatDate(addDays(today, 3)),
-      time: '10:00',
-    },
-  ];
-
-  const bookings: Booking[] = sampleBookings.map((booking, index) => ({
-    ...booking,
-    id: `BK-${Date.now()}-${index}`,
-    status: ['pending', 'confirmed', 'confirmed', 'pending', 'pending'][index] as BookingStatus,
-    createdAt: new Date(Date.now() - index * 3600000).toISOString(),
-  }));
-
-  saveBookings(bookings);
-}
-
-function formatDate(date: Date): string {
-  return date.toISOString().split('T')[0];
-}
-
-function addDays(date: Date, days: number): Date {
-  const result = new Date(date);
-  result.setDate(result.getDate() + days);
-  return result;
+  // No sample data - starts with empty booking list
 }

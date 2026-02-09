@@ -1,5 +1,6 @@
-import { Menu, Bell } from 'lucide-react';
+import { Menu, Bell, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { clearAllBookings } from '../../services/bookingStorage';
 
 interface AdminHeaderProps {
   onMenuClick: () => void;
@@ -12,6 +13,13 @@ export const AdminHeader = ({ onMenuClick }: AdminHeaderProps) => {
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
     document.documentElement.dir = i18n.dir(lng);
+  };
+
+  const handleClearData = () => {
+    if (confirm('Are you sure you want to delete ALL bookings? This cannot be undone.')) {
+      clearAllBookings();
+      window.location.reload();
+    }
   };
 
   return (
@@ -74,6 +82,16 @@ export const AdminHeader = ({ onMenuClick }: AdminHeaderProps) => {
               عربي
             </button>
           </div>
+
+          {/* Clear Data Button */}
+          <button
+            onClick={handleClearData}
+            className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg transition-colors text-xs font-semibold"
+            title="Clear all bookings"
+          >
+            <Trash2 className="w-4 h-4" />
+            <span>Clear Data</span>
+          </button>
 
           {/* Notifications */}
           <button className="relative p-2 text-cream-400 hover:text-cream-100 hover:bg-cream-400/10 rounded-lg transition-colors">
