@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Ban } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { isDateAvailable, getAvailableSlots, getDayConfig } from '../../services/calendarStorage';
+import { isDateAvailable, getAvailableSlots, getDayConfig, getBookedSlotsForDate } from '../../services/calendarStorage';
 
 interface BookingCalendarProps {
   onDateSelect: (date: Date) => void;
@@ -55,12 +55,21 @@ export const BookingCalendar = ({ onDateSelect, onTimeSelect, selectedDate, sele
     return () => window.removeEventListener('calendarUpdated', handleUpdate);
   }, [currentMonth]);
 
-  // Get available time slots for selected date
+  // Get all time slots for selected date (including booked ones)
   const getAvailableTimeSlots = () => {
     if (!selectedDate) return [];
 
     const dateStr = selectedDate.toISOString().split('T')[0];
-    const availableSlots = getAvailableSlots(dateStr);
+    const config = getDayConfig(dateStr);
+
+    // Get all configured slots for this date
+    const configuredSlots = config?.availableSlots || [];
+
+    // If no slots configured, return empty
+    if (configuredSlots.length === 0) return [];
+
+    // Get booked slots for this date
+    const bookedTimes = getBookedSlotsForDate(dateStr);
 
     // Slot labels for translation - support various time formats
     const slotLabels: Record<string, string> = {
@@ -79,11 +88,12 @@ export const BookingCalendar = ({ onDateSelect, onTimeSelect, selectedDate, sele
       '20:00': t('calendar.times.8pm', '8:00 PM'),
     };
 
-    // Only show slots configured by admin (that haven't been booked)
-    return availableSlots.map(time => ({
+    // Show all configured slots, but mark booked ones as unavailable
+    return configuredSlots.map(time => ({
       time,
       label: slotLabels[time] || time,
-      available: true,
+      available: !bookedTimes.includes(time),
+      booked: bookedTimes.includes(time),
     }));
   };
 
@@ -265,13 +275,17 @@ export const BookingCalendar = ({ onDateSelect, onTimeSelect, selectedDate, sele
                   disabled={!slot.available}
                   className={`
                     px-4 py-3 font-sans font-semibold transition-all
-                    ${!slot.available ? 'bg-cream-400/10 text-cream-400/50 cursor-not-allowed' : ''}
+                    ${slot.booked ? 'bg-red-500/10 text-red-400/70 cursor-not-allowed border border-red-400/30' : ''}
+                    ${!slot.available && !slot.booked ? 'bg-cream-400/10 text-cream-400/50 cursor-not-allowed' : ''}
                     ${slot.available && selectedTime !== slot.time ? 'glass hover:bg-white/10 text-cream-100' : ''}
                     ${selectedTime === slot.time ? 'bg-gold-500 text-forest-900' : ''}
                   `}
                 >
                   {slot.label}
-                  {!slot.available && (
+                  {slot.booked && (
+                    <span className="block text-xs mt-1">{t('calendar.booked', 'Booked')}</span>
+                  )}
+                  {!slot.available && !slot.booked && (
                     <span className="block text-xs mt-1">{t('calendar.full')}</span>
                   )}
                 </button>
