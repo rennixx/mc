@@ -55,17 +55,7 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
     const newErrors: Partial<Record<keyof BookingFormData, string>> = {};
 
     if (step === 1) {
-      if (!formData.service) newErrors.service = 'Please select a service';
-    }
-
-    if (step === 2) {
-      if (!formData.name.trim()) newErrors.name = 'Name is required';
-      if (!formData.email.trim()) newErrors.email = 'Email is required';
-      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Invalid email format';
-      if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
-    }
-
-    if (step === 3) {
+      // Date & Time validation (was Step 3)
       if (!formData.date) newErrors.date = 'Please select a date';
       if (!formData.time) newErrors.time = 'Please select a time';
 
@@ -89,6 +79,19 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
           }
         }
       }
+    }
+
+    if (step === 2) {
+      // Service validation (was Step 1)
+      if (!formData.service) newErrors.service = 'Please select a service';
+    }
+
+    if (step === 3) {
+      // Personal Details validation (was Step 2)
+      if (!formData.name.trim()) newErrors.name = 'Name is required';
+      if (!formData.email.trim()) newErrors.email = 'Email is required';
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Invalid email format';
+      if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
     }
 
     setErrors(newErrors);
@@ -213,9 +216,9 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
           </div>
 
           <div className="flex justify-between mt-2 text-sm font-sans text-cream-300">
-            <span className={currentStep === 1 ? 'text-gold-400 font-semibold' : ''}>Service</span>
-            <span className={currentStep === 2 ? 'text-gold-400 font-semibold' : ''}>Details</span>
-            <span className={currentStep === 3 ? 'text-gold-400 font-semibold' : ''}>Date & Time</span>
+            <span className={currentStep === 1 ? 'text-gold-400 font-semibold' : ''}>Date & Time</span>
+            <span className={currentStep === 2 ? 'text-gold-400 font-semibold' : ''}>Service</span>
+            <span className={currentStep === 3 ? 'text-gold-400 font-semibold' : ''}>Details</span>
           </div>
         </div>
 
@@ -223,8 +226,33 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
         <div className="p-8">
           {!isSubmitted ? (
             <>
-              {/* Step 1: Service Selection */}
+              {/* Step 1: Date & Time */}
               {currentStep === 1 && (
+                <div className="space-y-6">
+                  <h3 className="text-xl font-sans font-bold text-cream-100 mb-4">
+                    Choose Your Date & Time
+                  </h3>
+                  <BookingCalendar
+                    selectedDate={formData.date}
+                    selectedTime={formData.time}
+                    onDateSelect={(date) => updateFormData('date', date)}
+                    onTimeSelect={(time) => updateFormData('time', time)}
+                  />
+                  {(errors.date || errors.time) && (
+                    <p className="text-red-400 text-sm font-sans">
+                      Please select both a date and time to continue
+                    </p>
+                  )}
+                  {availabilityError && !errors.date && !errors.time && (
+                    <p className="text-red-400 text-sm font-sans">
+                      {availabilityError}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Step 2: Service Selection */}
+              {currentStep === 2 && (
                 <div className="space-y-6">
                   <h3 className="text-xl font-sans font-bold text-cream-100 mb-4">
                     What would you like to book?
@@ -251,8 +279,8 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
                 </div>
               )}
 
-              {/* Step 2: Personal Details */}
-              {currentStep === 2 && (
+              {/* Step 3: Personal Details */}
+              {currentStep === 3 && (
                 <div className="space-y-6">
                   <h3 className="text-xl font-sans font-bold text-cream-100 mb-4">
                     Your Information
@@ -365,31 +393,6 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
                       placeholder="Any dietary restrictions, accessibility needs, or special occasions?"
                     />
                   </div>
-                </div>
-              )}
-
-              {/* Step 3: Date & Time */}
-              {currentStep === 3 && (
-                <div className="space-y-6">
-                  <h3 className="text-xl font-sans font-bold text-cream-100 mb-4">
-                    Choose Your Date & Time
-                  </h3>
-                  <BookingCalendar
-                    selectedDate={formData.date}
-                    selectedTime={formData.time}
-                    onDateSelect={(date) => updateFormData('date', date)}
-                    onTimeSelect={(time) => updateFormData('time', time)}
-                  />
-                  {(errors.date || errors.time) && (
-                    <p className="text-red-400 text-sm font-sans">
-                      Please select both a date and time to continue
-                    </p>
-                  )}
-                  {availabilityError && !errors.date && !errors.time && (
-                    <p className="text-red-400 text-sm font-sans">
-                      {availabilityError}
-                    </p>
-                  )}
                 </div>
               )}
             </>

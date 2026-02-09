@@ -55,17 +55,7 @@ export const BookingPage = () => {
     const newErrors: Partial<Record<keyof BookingFormData, string>> = {};
 
     if (step === 1) {
-      if (!formData.service) newErrors.service = t('step1.errors.selectService');
-    }
-
-    if (step === 2) {
-      if (!formData.name.trim()) newErrors.name = t('step2.errors.nameRequired');
-      if (!formData.email.trim()) newErrors.email = t('step2.errors.emailRequired');
-      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = t('step2.errors.emailInvalid');
-      if (!formData.phone.trim()) newErrors.phone = t('step2.errors.phoneRequired');
-    }
-
-    if (step === 3) {
+      // Date & Time validation (was Step 3)
       if (!formData.date) newErrors.date = t('step3.errors.selectDateTime');
       if (!formData.time) newErrors.time = t('step3.errors.selectDateTime');
 
@@ -89,6 +79,19 @@ export const BookingPage = () => {
           }
         }
       }
+    }
+
+    if (step === 2) {
+      // Service validation (was Step 1)
+      if (!formData.service) newErrors.service = t('step1.errors.selectService');
+    }
+
+    if (step === 3) {
+      // Personal Details validation (was Step 2)
+      if (!formData.name.trim()) newErrors.name = t('step2.errors.nameRequired');
+      if (!formData.email.trim()) newErrors.email = t('step2.errors.emailRequired');
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = t('step2.errors.emailInvalid');
+      if (!formData.phone.trim()) newErrors.phone = t('step2.errors.phoneRequired');
     }
 
     setErrors(newErrors);
@@ -182,7 +185,7 @@ export const BookingPage = () => {
                         {currentStep > step ? <Check className="w-6 h-6" /> : step}
                       </div>
                       <span className={`mt-3 text-sm font-sans whitespace-nowrap ${currentStep === step ? 'text-gold-400 font-semibold' : 'text-cream-300'}`}>
-                        {step === 1 ? t('progress.step1') : step === 2 ? t('progress.step2') : t('progress.step3')}
+                        {step === 1 ? t('progress.step3') : step === 2 ? t('progress.step1') : t('progress.step2')}
                       </span>
                     </div>
                     {step < 3 && (
@@ -202,8 +205,33 @@ export const BookingPage = () => {
           <div className="glass-card p-8 md:p-12">
             {!isSubmitted ? (
               <>
-                {/* Step 1: Service Selection */}
+                {/* Step 1: Date & Time */}
                 {currentStep === 1 && (
+                  <div className="space-y-6">
+                    <h2 className="text-2xl font-sans font-bold text-cream-100 mb-6">
+                      {t('step3.title')}
+                    </h2>
+                    <BookingCalendar
+                      selectedDate={formData.date}
+                      selectedTime={formData.time}
+                      onDateSelect={(date) => updateFormData('date', date)}
+                      onTimeSelect={(time) => updateFormData('time', time)}
+                    />
+                    {(errors.date || errors.time) && (
+                      <p className="text-red-400 text-sm font-sans">
+                        {t('step3.errors.selectDateTime')}
+                      </p>
+                    )}
+                    {availabilityError && !errors.date && !errors.time && (
+                      <p className="text-red-400 text-sm font-sans">
+                        {availabilityError}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Step 2: Service Selection */}
+                {currentStep === 2 && (
                   <div className="space-y-6">
                     <h2 className="text-2xl font-sans font-bold text-cream-100 mb-6">
                       {t('step1.title')}
@@ -230,8 +258,8 @@ export const BookingPage = () => {
                   </div>
                 )}
 
-                {/* Step 2: Personal Details */}
-                {currentStep === 2 && (
+                {/* Step 3: Personal Details */}
+                {currentStep === 3 && (
                   <div className="space-y-6">
                     <h2 className="text-2xl font-sans font-bold text-cream-100 mb-6">
                       {t('step2.title')}
@@ -344,31 +372,6 @@ export const BookingPage = () => {
                         placeholder={t('step2.fields.specialRequests.placeholder')}
                       />
                     </div>
-                  </div>
-                )}
-
-                {/* Step 3: Date & Time */}
-                {currentStep === 3 && (
-                  <div className="space-y-6">
-                    <h2 className="text-2xl font-sans font-bold text-cream-100 mb-6">
-                      {t('step3.title')}
-                    </h2>
-                    <BookingCalendar
-                      selectedDate={formData.date}
-                      selectedTime={formData.time}
-                      onDateSelect={(date) => updateFormData('date', date)}
-                      onTimeSelect={(time) => updateFormData('time', time)}
-                    />
-                    {(errors.date || errors.time) && (
-                      <p className="text-red-400 text-sm font-sans">
-                        {t('step3.errors.selectDateTime')}
-                      </p>
-                    )}
-                    {availabilityError && !errors.date && !errors.time && (
-                      <p className="text-red-400 text-sm font-sans">
-                        {availabilityError}
-                      </p>
-                    )}
                   </div>
                 )}
               </>
