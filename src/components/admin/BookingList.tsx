@@ -92,7 +92,7 @@ export const BookingList = ({ onEdit, onView }: BookingListProps) => {
   return (
     <div className="space-y-6">
       {/* Filters */}
-      <div className="glass-card p-6">
+      <div className="admin-glass-card p-6">
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search */}
           <div className="flex-1 relative">
@@ -158,7 +158,7 @@ export const BookingList = ({ onEdit, onView }: BookingListProps) => {
       </p>
 
       {/* Table */}
-      <div className="glass-card overflow-hidden">
+      <div className="admin-glass-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>

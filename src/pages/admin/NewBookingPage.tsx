@@ -133,7 +133,7 @@ export const NewBookingPage = () => {
       </div>
 
       {/* Content */}
-      <div className="glass-card p-8 max-w-3xl">
+      <div className="admin-glass-card p-8 max-w-3xl">
         {isSubmitted ? (
           <div className="text-center py-12">
             <div className="inline-flex items-center justify-center w-20 h-20 bg-green-500/20 mb-6">
@@ -173,7 +173,7 @@ export const NewBookingPage = () => {
                     notes: '',
                   });
                 }}
-                className="px-6 py-3 glass-card text-cream-100 font-sans font-semibold hover:bg-white/10 transition-colors"
+                className="px-6 py-3 admin-glass-card text-cream-100 font-sans font-semibold hover:bg-white/10 transition-colors"
               >
                 Create Another
               </button>
@@ -196,7 +196,7 @@ export const NewBookingPage = () => {
                     className={`p-4 text-left transition-all ${
                       formData.service === service.id
                         ? 'bg-gold-400 text-forest-900 border-2 border-gold-400'
-                        : 'glass-card text-cream-100 hover:bg-white/10 border-2 border-transparent'
+                        : 'admin-glass-card text-cream-100 hover:bg-white/10 border-2 border-transparent'
                     }`}
                   >
                     <span className="text-2xl mb-2 block">{service.icon}</span>
@@ -374,7 +374,7 @@ export const NewBookingPage = () => {
               <button
                 type="button"
                 onClick={() => navigate('/admin/bookings')}
-                className="px-6 py-3 glass-card text-cream-100 font-sans font-semibold hover:bg-white/10 transition-colors"
+                className="px-6 py-3 admin-glass-card text-cream-100 font-sans font-semibold hover:bg-white/10 transition-colors"
               >
                 Cancel
               </button>

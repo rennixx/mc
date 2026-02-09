@@ -58,7 +58,7 @@ export const AdminPage = () => {
             <Route index element={
               <div className="space-y-6">
                 {/* Welcome Section */}
-                <div className="glass-card p-6">
+                <div className="admin-glass-card p-6">
                   <h2 className="text-2xl font-serif font-bold text-cream-100 mb-2">
                     Welcome to Admin Dashboard
                   </h2>
@@ -68,7 +68,7 @@ export const AdminPage = () => {
                 </div>
 
                 {/* Recent Bookings */}
-                <div className="glass-card p-6">
+                <div className="admin-glass-card p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xl font-semibold text-cream-100 font-sans">
                       Recent Bookings
@@ -139,7 +139,7 @@ function StatCard({ icon, label, value, color }: StatCardProps) {
   };
 
   return (
-    <div className={`glass-card p-6 border ${colorClasses[color]} hover:scale-105 transition-transform`}>
+    <div className={`admin-glass-card p-6 border ${colorClasses[color]} hover:scale-105 transition-transform`}>
       <div className="flex items-center gap-4">
         <div className="p-3 bg-cream-400/5 rounded-lg">
           {icon}

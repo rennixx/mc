@@ -108,22 +108,22 @@ export const CalendarPage = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={goToToday}
-            className="px-4 py-2 glass-card text-cream-100 font-sans text-sm hover:bg-white/10 transition-colors"
+            className="px-4 py-2 admin-glass-card text-cream-100 font-sans text-sm hover:bg-white/10 transition-colors"
           >
             Today
           </button>
           <button
             onClick={goToPreviousMonth}
-            className="p-2 glass-card text-cream-100 hover:bg-white/10 transition-colors"
+            className="p-2 admin-glass-card text-cream-100 hover:bg-white/10 transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <span className="px-4 py-2 glass-card text-cream-100 font-serif font-semibold min-w-[150px] text-center">
+          <span className="px-4 py-2 admin-glass-card text-cream-100 font-serif font-semibold min-w-[150px] text-center">
             {monthNames[month]} {year}
           </span>
           <button
             onClick={goToNextMonth}
-            className="p-2 glass-card text-cream-100 hover:bg-white/10 transition-colors"
+            className="p-2 admin-glass-card text-cream-100 hover:bg-white/10 transition-colors"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
@@ -133,7 +133,7 @@ export const CalendarPage = () => {
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Calendar */}
         <div className="lg:col-span-2">
-          <div className="glass-card p-6">
+          <div className="admin-glass-card p-6">
             {/* Day headers */}
             <div className="grid grid-cols-7 gap-2 mb-4">
               {dayNames.map(day => (
@@ -183,7 +183,7 @@ export const CalendarPage = () => {
 
         {/* Selected date details */}
         <div className="lg:col-span-1">
-          <div className="glass-card p-6 sticky top-24">
+          <div className="admin-glass-card p-6 sticky top-24">
             <h3 className="text-lg font-semibold text-cream-100 mb-4 font-sans">
               {selectedDate
                 ? `Bookings for ${selectedDate}`
