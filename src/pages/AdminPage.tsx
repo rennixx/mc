@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { AdminSidebar } from '../components/layout/AdminSidebar';
 import { AdminHeader } from '../components/layout/AdminHeader';
 import { getBookingStats, initializeSampleData, getAllBookings } from '../services/bookingStorage';
@@ -13,6 +14,7 @@ if (typeof window !== 'undefined') {
 }
 
 export const AdminPage = () => {
+  const { t } = useTranslation('admin');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const stats = getBookingStats();
   const recentBookings = getAllBookings().slice(0, 5);
@@ -29,25 +31,25 @@ export const AdminPage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <StatCard
               icon={<FileText className="w-6 h-6" />}
-              label="Total Bookings"
+              label={t('stats.total', 'Total Bookings')}
               value={stats.total}
               color="gold"
             />
             <StatCard
               icon={<Clock className="w-6 h-6" />}
-              label="Pending"
+              label={t('stats.pending', 'Pending')}
               value={stats.pending}
               color="yellow"
             />
             <StatCard
               icon={<CheckCircle2 className="w-6 h-6" />}
-              label="Confirmed"
+              label={t('stats.confirmed', 'Confirmed')}
               value={stats.confirmed}
               color="green"
             />
             <StatCard
               icon={<Calendar className="w-6 h-6" />}
-              label="Today"
+              label={t('stats.today', 'Today')}
               value={stats.today}
               color="blue"
             />
@@ -60,10 +62,10 @@ export const AdminPage = () => {
                 {/* Welcome Section */}
                 <div className="admin-glass-card p-6">
                   <h2 className="text-2xl font-serif font-bold text-cream-100 mb-2">
-                    Welcome to Admin Dashboard
+                    {t('dashboard.welcome', 'Welcome to Admin Dashboard')}
                   </h2>
                   <p className="text-cream-400 font-sans">
-                    Manage your bookings efficiently
+                    {t('dashboard.subtitle', 'Manage your bookings efficiently')}
                   </p>
                 </div>
 
@@ -71,18 +73,18 @@ export const AdminPage = () => {
                 <div className="admin-glass-card p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xl font-semibold text-cream-100 font-sans">
-                      Recent Bookings
+                      {t('dashboard.recentBookings', 'Recent Bookings')}
                     </h3>
                     <button
                       onClick={() => window.location.href = '/admin/bookings'}
                       className="text-gold-400 hover:text-gold-300 font-sans text-sm"
                     >
-                      View All →
+                      {t('dashboard.viewAll', 'View All →')}
                     </button>
                   </div>
 
                   {recentBookings.length === 0 ? (
-                    <p className="text-cream-400 font-sans">No bookings yet</p>
+                    <p className="text-cream-400 font-sans">{t('dashboard.noBookings', 'No bookings yet')}</p>
                   ) : (
                     <div className="space-y-3">
                       {recentBookings.map((booking) => (

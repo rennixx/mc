@@ -22,23 +22,38 @@
     "cancelled": "ملغي",
     "today": "اليوم"
   },
+  "dashboard": {
+    "welcome": "مرحباً بك في لوحة المشرف",
+    "subtitle": "أدر حجوزاتك بكفاءة",
+    "recentBookings": "الحجوزات الأخيرة",
+    "viewAll": "عرض الكل →",
+    "noBookings": "لا توجد حجوزات بعد"
+  },
   "bookings": {
     "title": "الحجوزات",
-    "subtitle": "إدارة جميع حجوزات العملاء"
+    "subtitle": "إدارة جميع حجوزات العملاء",
+    "showing": "عرض {count} من {total} حجوزات",
+    "page": "صفحة {current} من {total}"
   },
   "calendar": {
     "title": "التقويم",
-    "subtitle": "عرض الحجوزات حسب التاريخ"
+    "subtitle": "عرض الحجوزات حسب التاريخ",
+    "today": "اليوم",
+    "selectDate": "حدد تاريخاً لعرض الحجوزات",
+    "noBookings": "لا توجد حجوزات لهذا التاريخ",
+    "clickDate": "انقر على التاريخ لرؤية التفاصيل"
   },
   "newBooking": {
     "title": "حجز جديد",
     "subtitle": "إنشاء حجز جديد يدوياً",
+    "back": "العودة للحجوزات",
     "success": "تم إنشاء الحجز بنجاح",
     "created": "تم إنشاء حجز {name} بنجاح.",
     "reference": "المرجع",
-    "viewAll": "عرض جميع الحجوزات",
+    "viewAll": "عرض كل الحجوزات",
     "createAnother": "إنشاء آخر",
-    "back": "العودة للحجوزات"
+    "submit": "إنشاء الحجز",
+    "cancel": "إلغاء"
   },
   "status": {
     "pending": "قيد الانتظار",
@@ -47,20 +62,47 @@
     "cancelled": "ملغي"
   },
   "services": {
+    "all": "جميع الخدمات",
     "safari": "سفاري",
     "academy": "الأكاديمية",
     "private": "خاص",
     "event": "فعالية"
   },
+  "filters": {
+    "allStatus": "جميع الحالات",
+    "allServices": "جميع الخدمات",
+    "searchPlaceholder": "البحث بالاسم، البريد، الهاتف أو رقم الحجز..."
+  },
   "actions": {
-    "search": "البحث في الحجوزات...",
-    "filter": "تصفية",
     "export": "تصدير CSV",
     "delete": "حذف",
     "edit": "تعديل",
     "view": "عرض",
-    "confirm": "تأكيد",
-    "cancel": "إلغاء",
-    "save": "حفظ"
+    "confirmDelete": "هل أنت متأكد من حذف هذا الحجز؟"
+  },
+  "table": {
+    "id": "الرقم",
+    "date": "التاريخ",
+    "time": "الوقت",
+    "name": "العميل",
+    "email": "البريد",
+    "phone": "الهاتف",
+    "service": "الخدمة",
+    "groupSize": "المجموعة",
+    "status": "الحالة",
+    "actions": "الإجراءات"
+  },
+  "form": {
+    "service": "الخدمة",
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "phone": "رقم الهاتف",
+    "experience": "مستوى الخبرة",
+    "groupSize": "حجم المجموعة",
+    "specialRequests": "طلبات خاصة",
+    "date": "التاريخ والوقت",
+    "status": "الحالة",
+    "notes": "ملاحظات المشرف (داخلي)",
+    "submit": "إنشاء الحجز"
   }
 }
