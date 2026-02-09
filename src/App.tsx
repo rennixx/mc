@@ -32,7 +32,7 @@ function App() {
         }>
           <Routes>
             {/* Admin routes (separate layout without Header/Footer) */}
-            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/admin/*" element={<AdminPage />} />
 
             {/* Public routes (with Header/Footer) */}
             <Route path="*" element={
