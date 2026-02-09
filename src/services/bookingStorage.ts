@@ -148,8 +148,8 @@ export function clearAllBookings(): void {
 function saveBookings(bookings: Booking[]): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(bookings));
-    // Dispatch event for real-time updates
-    window.dispatchEvent(new Event('bookingsUpdated'));
+    // Dispatch custom event for same-tab updates
+    window.dispatchEvent(new CustomEvent('bookingsUpdated', { detail: bookings }));
   } catch (error) {
     console.error('Error saving bookings to storage:', error);
   }

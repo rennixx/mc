@@ -15,11 +15,25 @@ export const BookingList = ({ onEdit, onView }: BookingListProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // Auto-refresh when bookings change
+  // Auto-refresh when bookings change (same-tab and cross-tab)
   useEffect(() => {
     const handleUpdate = () => setBookings(getAllBookings());
+
+    // Listen for custom event (same-tab updates)
     window.addEventListener('bookingsUpdated', handleUpdate);
-    return () => window.removeEventListener('bookingsUpdated', handleUpdate);
+
+    // Listen for storage event (cross-tab updates from main site)
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === 'mam_bookings') {
+        handleUpdate();
+      }
+    };
+    window.addEventListener('storage', handleStorage);
+
+    return () => {
+      window.removeEventListener('bookingsUpdated', handleUpdate);
+      window.removeEventListener('storage', handleStorage);
+    };
   }, []);
 
   // Filter and search bookings

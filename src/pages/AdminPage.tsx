@@ -21,11 +21,25 @@ export const AdminPage = () => {
   const stats = getBookingStats();
   const recentBookings = getAllBookings().slice(0, 5);
 
-  // Auto-refresh when bookings change
+  // Auto-refresh when bookings change (same-tab and cross-tab)
   useEffect(() => {
     const handleUpdate = () => setRefresh(prev => prev + 1);
+
+    // Listen for custom event (same-tab updates)
     window.addEventListener('bookingsUpdated', handleUpdate);
-    return () => window.removeEventListener('bookingsUpdated', handleUpdate);
+
+    // Listen for storage event (cross-tab updates from main site)
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === 'mam_bookings') {
+        handleUpdate();
+      }
+    };
+    window.addEventListener('storage', handleStorage);
+
+    return () => {
+      window.removeEventListener('bookingsUpdated', handleUpdate);
+      window.removeEventListener('storage', handleStorage);
+    };
   }, []);
 
   return (
