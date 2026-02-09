@@ -68,6 +68,8 @@
     "contactUs": "اتصل بنا"
   },
   "testimonials": {
+    "title": "ماذا يقول عملاؤنا",
+    "subtitle": "تجارب حقيقية من مجتمعنا",
     "joinSatisfied": "انضم إلى مئات الفرسان والزوار الراضين",
     "readMoreReviews": "اقرأ المزيد من التقييمات على جوجل",
     "viewAllReviews": "عرض جميع تقييمات جوجل"

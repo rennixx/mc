@@ -9,7 +9,7 @@ import privateTrainingImg from '../assets/images/services/private-training.jpg';
 import ridingSafariImg from '../assets/images/services/riding-safari.jpg';
 
 export const HomePage = () => {
-  const { t } = useTranslation('home');
+  const { t } = useTranslation(['home', 'components']);
   const stats = useDefaultStats();
 
   return (
@@ -185,9 +185,9 @@ export const HomePage = () => {
       </section>
 
       {/* Testimonials Section */}
-      <Testimonials 
-        title={t('testimonials.title', 'What Our Clients Say')}
-        subtitle={t('testimonials.subtitle', 'Real experiences from our community')}
+      <Testimonials
+        title={t('components:testimonials.title', 'What Our Clients Say')}
+        subtitle={t('components:testimonials.subtitle', 'Real experiences from our community')}
       />
 
       {/* WhatsApp Button */}
