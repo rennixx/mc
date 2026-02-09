@@ -15,6 +15,35 @@ export const BookingCalendar = ({ onDateSelect, onTimeSelect, selectedDate, sele
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [dateConfigs, setDateConfigs] = useState<Record<string, any>>({});
 
+  // Format date based on language
+  const formatDate = (date: Date, lang: string): string => {
+    const day = date.getDate();
+    const year = date.getFullYear();
+    const months: Record<string, string[]> = {
+      en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      ar: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+      ku: ['کانوونی دووەم', 'شوبات', 'ئازار', 'نیسان', 'ئایار', 'حوزەیران', 'تەمموز', 'ئاب', 'ئەیلول', 'تشرینی یەکەم', 'تشرینی دووەم', 'کانوونی یەکەم']
+    };
+    const weekDays: Record<string, string[]> = {
+      en: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      ar: ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+      ku: ['یەکشەممە', 'دووشەممە', 'سێشەممە', 'چوارشەممە', 'پێنجشەممە', 'ھەینی', 'شەممە']
+    };
+
+    const monthIndex = date.getMonth();
+    const dayIndex = date.getDay();
+    const month = months[lang]?.[monthIndex] || months.en[monthIndex];
+    const weekDay = weekDays[lang]?.[dayIndex] || weekDays.en[dayIndex];
+
+    if (lang === 'ar') {
+      return `${weekDay}، ${day} ${month} ${year}`;
+    } else if (lang === 'ku') {
+      return `${weekDay}، ${day}ی ${month}ی ${year}`;
+    } else {
+      return `${weekDay}, ${month} ${day}, ${year}`;
+    }
+  };
+
   // Load calendar configs for current month
   useEffect(() => {
     const configs: Record<string, any> = {};
@@ -303,7 +332,9 @@ export const BookingCalendar = ({ onDateSelect, onTimeSelect, selectedDate, sele
             <span>{t('calendar.bookingSummary')}</span>
           </div>
           <p className="text-cream-100 font-sans">
-            <span className="font-bold">{selectedDate.toLocaleDateString(i18n.language === 'en' ? 'en-US' : i18n.language === 'ku' ? 'ku-IQ' : 'ar-IQ', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</span>
+            <span className="font-bold" dir={i18n.language === 'ar' || i18n.language === 'ku' ? 'rtl' : 'ltr'}>
+              {formatDate(selectedDate, i18n.language)}
+            </span>
             <br />
             {t('calendar.at')} <span className="font-bold">{timeSlots.find(s => s.time === selectedTime)?.label}</span>
           </p>
