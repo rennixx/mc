@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { BookingCalendar } from '../components/common/BookingCalendar';
 import { SEOMeta } from '../components/common/SEOMeta';
 import { WhatsAppButton } from '../components/common/WhatsAppButton';
+import { addBooking } from '../services/bookingStorage';
 
 interface BookingFormData {
   service: string;
@@ -31,6 +32,7 @@ export const BookingPage = () => {
   });
   const [errors, setErrors] = useState<Partial<Record<keyof BookingFormData, string>>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [bookingId, setBookingId] = useState<string | null>(null);
 
   const services = [
     { id: 'safari', name: t('step1.services.safari'), icon: <Compass className="w-full h-full" /> },
@@ -83,11 +85,30 @@ export const BookingPage = () => {
   };
 
   const handleSubmit = () => {
-    if (validateStep(3)) {
-      // Here you would send the data to your backend
-      console.log('Booking submitted:', formData);
-      setIsSubmitted(true);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (validateStep(3) && formData.date && formData.time) {
+      try {
+        // Save booking to localStorage
+        const booking = addBooking({
+          service: formData.service as any,
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          experienceLevel: formData.experienceLevel,
+          groupSize: parseInt(formData.groupSize),
+          specialRequests: formData.specialRequests,
+          date: formData.date.toISOString().split('T')[0],
+          time: formData.time,
+        });
+
+        setBookingId(booking.id);
+        setIsSubmitted(true);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (error) {
+        console.error('Error saving booking:', error);
+        // Still show success even if storage fails
+        setIsSubmitted(true);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
   };
 
@@ -330,6 +351,11 @@ export const BookingPage = () => {
                 <p className="text-cream-200 font-sans text-lg mb-2">
                   {t('success.message', { name: formData.name })}
                 </p>
+                {bookingId && (
+                  <p className="text-gold-400 font-sans text-lg mb-2 font-semibold" dir="ltr">
+                    {t('success.reference')}: {bookingId}
+                  </p>
+                )}
                 <p className="text-cream-300 font-sans" dir="ltr">
                   {t('success.contact', { phone: formData.phone })}
                 </p>

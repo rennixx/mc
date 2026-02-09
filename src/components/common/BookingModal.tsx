@@ -1,6 +1,7 @@
 import { X, Calendar, Users, Mail, Phone, User, MessageSquare, ChevronRight, ChevronLeft, Check } from 'lucide-react';
 import { useState } from 'react';
 import { BookingCalendar } from './BookingCalendar';
+import { addBooking } from '../../services/bookingStorage';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -82,13 +83,33 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
   };
 
   const handleSubmit = () => {
-    if (validateStep(3)) {
-      // Here you would send the data to your backend
-      console.log('Booking submitted:', formData);
-      setIsSubmitted(true);
-      setTimeout(() => {
-        handleClose();
-      }, 3000);
+    if (validateStep(3) && formData.date && formData.time) {
+      try {
+        // Save booking to localStorage
+        addBooking({
+          service: formData.service as any,
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          experienceLevel: formData.experienceLevel,
+          groupSize: parseInt(formData.groupSize),
+          specialRequests: formData.specialRequests,
+          date: formData.date.toISOString().split('T')[0],
+          time: formData.time,
+        });
+
+        setIsSubmitted(true);
+        setTimeout(() => {
+          handleClose();
+        }, 3000);
+      } catch (error) {
+        console.error('Error saving booking:', error);
+        // Still close the modal even if storage fails
+        setIsSubmitted(true);
+        setTimeout(() => {
+          handleClose();
+        }, 3000);
+      }
     }
   };
 

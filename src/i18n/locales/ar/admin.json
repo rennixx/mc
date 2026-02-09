@@ -1,0 +1,66 @@
+{
+  "header": {
+    "welcome": "مرحباً بعودتك",
+    "subtitle": "أدر حجوزاتك بكفاءة",
+    "adminName": "المشرف",
+    "role": "مدير النظام"
+  },
+  "sidebar": {
+    "title": "مركز مام",
+    "adminPanel": "لوحة المشرف",
+    "dashboard": "لوحة التحكم",
+    "bookings": "الحجوزات",
+    "calendar": "التقويم",
+    "newBooking": "حجز جديد",
+    "backToSite": "العودة للموقع"
+  },
+  "stats": {
+    "total": "إجمالي الحجوزات",
+    "pending": "قيد الانتظار",
+    "confirmed": "مؤكد",
+    "completed": "مكتمل",
+    "cancelled": "ملغي",
+    "today": "اليوم"
+  },
+  "bookings": {
+    "title": "الحجوزات",
+    "subtitle": "إدارة جميع حجوزات العملاء"
+  },
+  "calendar": {
+    "title": "التقويم",
+    "subtitle": "عرض الحجوزات حسب التاريخ"
+  },
+  "newBooking": {
+    "title": "حجز جديد",
+    "subtitle": "إنشاء حجز جديد يدوياً",
+    "success": "تم إنشاء الحجز بنجاح",
+    "created": "تم إنشاء حجز {name} بنجاح.",
+    "reference": "المرجع",
+    "viewAll": "عرض جميع الحجوزات",
+    "createAnother": "إنشاء آخر",
+    "back": "العودة للحجوزات"
+  },
+  "status": {
+    "pending": "قيد الانتظار",
+    "confirmed": "مؤكد",
+    "completed": "مكتمل",
+    "cancelled": "ملغي"
+  },
+  "services": {
+    "safari": "سفاري",
+    "academy": "الأكاديمية",
+    "private": "خاص",
+    "event": "فعالية"
+  },
+  "actions": {
+    "search": "البحث في الحجوزات...",
+    "filter": "تصفية",
+    "export": "تصدير CSV",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "view": "عرض",
+    "confirm": "تأكيد",
+    "cancel": "إلغاء",
+    "save": "حفظ"
+  }
+}

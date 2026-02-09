@@ -15,35 +15,46 @@ const CoffeePage = lazy(() => import('./pages/CoffeePage').then(m => ({ default:
 const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })));
 const BookingPage = lazy(() => import('./pages/BookingPage').then(m => ({ default: m.BookingPage })));
 
+// Admin routes (no Header/Footer)
+const AdminPage = lazy(() => import('./pages/AdminPage').then(m => ({ default: m.AdminPage })));
+
 function App() {
   return (
     <Router>
       <ErrorBoundary>
-        <div className="min-h-screen">
-          <Header />
-          <main>
-            <Suspense fallback={
-              <div className="min-h-screen flex items-center justify-center">
-                <div className="text-center">
-                  <Loader2 className="w-16 h-16 animate-spin text-gold-500 mx-auto mb-4" />
-                  <p className="text-lg font-sans text-slate-600 dark:text-cream-400">Loading...</p>
-                </div>
+        <Suspense fallback={
+          <div className="min-h-screen flex items-center justify-center">
+            <div className="text-center">
+              <Loader2 className="w-16 h-16 animate-spin text-gold-500 mx-auto mb-4" />
+              <p className="text-lg font-sans text-slate-600 dark:text-cream-400">Loading...</p>
+            </div>
+          </div>
+        }>
+          <Routes>
+            {/* Admin routes (separate layout without Header/Footer) */}
+            <Route path="/admin" element={<AdminPage />} />
+
+            {/* Public routes (with Header/Footer) */}
+            <Route path="*" element={
+              <div className="min-h-screen">
+                <Header />
+                <main>
+                  <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/academy" element={<AcademyPage />} />
+                    <Route path="/safari" element={<SafariPage />} />
+                    <Route path="/lifestyle" element={<LifestylePage />} />
+                    <Route path="/gallery" element={<GalleryPage />} />
+                    <Route path="/coffee" element={<CoffeePage />} />
+                    <Route path="/contact" element={<ContactPage />} />
+                    <Route path="/booking" element={<BookingPage />} />
+                  </Routes>
+                </main>
+                <Footer />
               </div>
-            }>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/academy" element={<AcademyPage />} />
-              <Route path="/safari" element={<SafariPage />} />
-              <Route path="/lifestyle" element={<LifestylePage />} />
-              <Route path="/gallery" element={<GalleryPage />} />
-              <Route path="/coffee" element={<CoffeePage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/booking" element={<BookingPage />} />
-            </Routes>
-            </Suspense>
-          </main>
-          <Footer />
-        </div>
+            } />
+          </Routes>
+        </Suspense>
       </ErrorBoundary>
     </Router>
   );
