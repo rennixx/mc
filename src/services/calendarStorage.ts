@@ -4,6 +4,7 @@
  */
 
 const STORAGE_KEY = 'mam_calendar';
+const BOOKED_SLOTS_KEY = 'mam_booked_slots';
 
 export interface DayConfig {
   date: string; // YYYY-MM-DD
@@ -11,6 +12,12 @@ export interface DayConfig {
   blockReason?: string;
   availableSlots?: string[]; // e.g., ["10:00", "14:00", "16:00"]
   capacity?: number; // max bookings per day
+}
+
+export interface BookedSlot {
+  date: string; // YYYY-MM-DD
+  time: string; // HH:MM
+  bookingId: string;
 }
 
 /**
@@ -59,13 +66,19 @@ export function isTimeSlotAvailable(date: string, time: string): boolean {
 }
 
 /**
- * Get available time slots for a date
+ * Get available time slots for a date (excluding booked ones)
  */
 export function getAvailableSlots(date: string): string[] {
   const config = getDayConfig(date);
   if (!config) return []; // No config = all slots available
   if (config.blocked) return [];
-  return config.availableSlots || [];
+
+  const configuredSlots = config.availableSlots || [];
+  if (configuredSlots.length === 0) return [];
+
+  // Filter out already booked slots
+  const bookedTimes = getBookedSlotsForDate(date);
+  return configuredSlots.filter(slot => !bookedTimes.includes(slot));
 }
 
 /**
@@ -190,6 +203,90 @@ export function clearAllCalendarConfigs(): void {
   dispatchCalendarEvent();
 }
 
+// ==================== Booked Slots Management ====================
+
+/**
+ * Get all booked slots
+ */
+export function getAllBookedSlots(): BookedSlot[] {
+  try {
+    const stored = localStorage.getItem(BOOKED_SLOTS_KEY);
+    if (!stored) return [];
+    return JSON.parse(stored);
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Get booked slots for a specific date
+ */
+export function getBookedSlotsForDate(date: string): string[] {
+  const allBooked = getAllBookedSlots();
+  return allBooked
+    .filter(slot => slot.date === date)
+    .map(slot => slot.time);
+}
+
+/**
+ * Check if a specific time slot is already booked
+ */
+export function isSlotBooked(date: string, time: string): boolean {
+  const bookedTimes = getBookedSlotsForDate(date);
+  return bookedTimes.includes(time);
+}
+
+/**
+ * Mark a time slot as booked
+ */
+export function bookTimeSlot(date: string, time: string, bookingId: string): void {
+  const allBooked = getAllBookedSlots();
+
+  // Check if already booked
+  const alreadyBooked = allBooked.some(
+    slot => slot.date === date && slot.time === time
+  );
+
+  if (alreadyBooked) {
+    console.warn(`Slot ${date} at ${time} is already booked`);
+    return;
+  }
+
+  allBooked.push({ date, time, bookingId });
+  saveBookedSlots(allBooked);
+  dispatchCalendarEvent();
+}
+
+/**
+ * Release a booked slot (when booking is cancelled/deleted)
+ */
+export function releaseBookedSlot(date: string, time: string): void {
+  const allBooked = getAllBookedSlots();
+  const filtered = allBooked.filter(
+    slot => !(slot.date === date && slot.time === time)
+  );
+  saveBookedSlots(filtered);
+  dispatchCalendarEvent();
+}
+
+/**
+ * Release all booked slots for a specific booking
+ */
+export function releaseBookedSlotsForBooking(bookingId: string): void {
+  const allBooked = getAllBookedSlots();
+  const filtered = allBooked.filter(slot => slot.bookingId !== bookingId);
+  saveBookedSlots(filtered);
+  dispatchCalendarEvent();
+}
+
+/**
+ * Clear all booked slots
+ */
+export function clearAllBookedSlots(): void {
+  localStorage.removeItem(BOOKED_SLOTS_KEY);
+  dispatchCalendarEvent();
+}
+
 /**
  * Save calendar configurations to localStorage
  */
@@ -198,6 +295,17 @@ function saveCalendarConfigs(configs: Record<string, DayConfig>): void {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(configs));
   } catch (error) {
     console.error('Error saving calendar configs:', error);
+  }
+}
+
+/**
+ * Save booked slots to localStorage
+ */
+function saveBookedSlots(slots: BookedSlot[]): void {
+  try {
+    localStorage.setItem(BOOKED_SLOTS_KEY, JSON.stringify(slots));
+  } catch (error) {
+    console.error('Error saving booked slots:', error);
   }
 }
 

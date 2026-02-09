@@ -32,6 +32,9 @@ export type Booking = {
 
 const STORAGE_KEY = 'mam_bookings';
 
+// Import calendar functions for slot management
+import { bookTimeSlot, releaseBookedSlot, releaseBookedSlotsForBooking } from './calendarStorage';
+
 /**
  * Generate a unique booking ID
  */
@@ -105,6 +108,9 @@ export function addBooking(booking: Omit<Booking, 'id' | 'createdAt' | 'status'>
   bookings.push(newBooking);
   saveBookings(bookings);
 
+  // Mark the time slot as booked
+  bookTimeSlot(newBooking.date, newBooking.time, newBooking.id);
+
   return newBooking;
 }
 
@@ -119,7 +125,24 @@ export function updateBooking(id: string, updates: Partial<Booking>): Booking | 
     return null;
   }
 
-  bookings[index] = { ...bookings[index], ...updates };
+  const oldBooking = bookings[index];
+  const newBooking = { ...oldBooking, ...updates };
+
+  // If date or time changed, release old slot and book new one
+  if (updates.date || updates.time) {
+    const oldDate = updates.date ? oldBooking.date : null;
+    const oldTime = updates.time ? oldBooking.time : null;
+
+    // Release the old slot if it changed
+    if (oldDate || oldTime) {
+      releaseBookedSlot(oldBooking.date, oldBooking.time);
+    }
+
+    // Book the new slot (use new values if provided, otherwise use old values)
+    bookTimeSlot(newBooking.date, newBooking.time, newBooking.id);
+  }
+
+  bookings[index] = newBooking;
   saveBookings(bookings);
 
   return bookings[index];
@@ -127,8 +150,27 @@ export function updateBooking(id: string, updates: Partial<Booking>): Booking | 
 
 /**
  * Update booking status
+ * When cancelling, release the booked slot
+ * When reactivating a cancelled booking, re-book the slot
  */
 export function updateBookingStatus(id: string, status: BookingStatus): Booking | null {
+  const bookings = getAllBookings();
+  const booking = bookings.find(b => b.id === id);
+
+  if (!booking) {
+    return null;
+  }
+
+  // If cancelling, release the slot
+  if (status === 'cancelled' && booking.status !== 'cancelled') {
+    releaseBookedSlot(booking.date, booking.time);
+  }
+
+  // If reactivating from cancelled, re-book the slot
+  if (status !== 'cancelled' && booking.status === 'cancelled') {
+    bookTimeSlot(booking.date, booking.time, booking.id);
+  }
+
   return updateBooking(id, { status });
 }
 
@@ -137,13 +179,18 @@ export function updateBookingStatus(id: string, status: BookingStatus): Booking 
  */
 export function deleteBooking(id: string): boolean {
   const bookings = getAllBookings();
-  const filtered = bookings.filter(b => b.id !== id);
+  const booking = bookings.find(b => b.id === id);
 
-  if (filtered.length === bookings.length) {
+  if (!booking) {
     return false; // Booking not found
   }
 
+  const filtered = bookings.filter(b => b.id !== id);
   saveBookings(filtered);
+
+  // Release the booked slot
+  releaseBookedSlotsForBooking(id);
+
   return true;
 }
 

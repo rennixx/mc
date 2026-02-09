@@ -62,33 +62,29 @@ export const BookingCalendar = ({ onDateSelect, onTimeSelect, selectedDate, sele
     const dateStr = selectedDate.toISOString().split('T')[0];
     const availableSlots = getAvailableSlots(dateStr);
 
-    if (availableSlots.length > 0) {
-      // Only show configured slots
-      const slotLabels: Record<string, string> = {
-        '08:00': t('calendar.times.8am'),
-        '10:00': t('calendar.times.10am'),
-        '12:00': t('calendar.times.12pm'),
-        '14:00': t('calendar.times.2pm'),
-        '16:00': t('calendar.times.4pm'),
-        '18:00': t('calendar.times.6pm'),
-      };
+    // Slot labels for translation - support various time formats
+    const slotLabels: Record<string, string> = {
+      '08:00': t('calendar.times.8am'),
+      '09:00': t('calendar.times.9am', '9:00 AM'),
+      '10:00': t('calendar.times.10am'),
+      '11:00': t('calendar.times.11am', '11:00 AM'),
+      '12:00': t('calendar.times.12pm'),
+      '13:00': t('calendar.times.1pm', '1:00 PM'),
+      '14:00': t('calendar.times.2pm'),
+      '15:00': t('calendar.times.3pm', '3:00 PM'),
+      '16:00': t('calendar.times.4pm'),
+      '17:00': t('calendar.times.5pm', '5:00 PM'),
+      '18:00': t('calendar.times.6pm'),
+      '19:00': t('calendar.times.7pm', '7:00 PM'),
+      '20:00': t('calendar.times.8pm', '8:00 PM'),
+    };
 
-      return availableSlots.map(time => ({
-        time,
-        label: slotLabels[time] || time,
-        available: true,
-      }));
-    }
-
-    // Default slots
-    return [
-      { time: '08:00', label: t('calendar.times.8am'), available: true },
-      { time: '10:00', label: t('calendar.times.10am'), available: true },
-      { time: '12:00', label: t('calendar.times.12pm'), available: false },
-      { time: '14:00', label: t('calendar.times.2pm'), available: true },
-      { time: '16:00', label: t('calendar.times.4pm'), available: true },
-      { time: '18:00', label: t('calendar.times.6pm'), available: false },
-    ];
+    // Only show slots configured by admin (that haven't been booked)
+    return availableSlots.map(time => ({
+      time,
+      label: slotLabels[time] || time,
+      available: true,
+    }));
   };
 
   const timeSlots = getAvailableTimeSlots();
@@ -254,26 +250,34 @@ export const BookingCalendar = ({ onDateSelect, onTimeSelect, selectedDate, sele
           <h4 className="text-lg font-sans font-bold text-cream-100 mb-4">
             {t('calendar.availableTimes')}
           </h4>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {timeSlots.map((slot) => (
-              <button
-                key={slot.time}
-                onClick={() => slot.available && onTimeSelect(slot.time)}
-                disabled={!slot.available}
-                className={`
-                  px-4 py-3 font-sans font-semibold transition-all
-                  ${!slot.available ? 'bg-cream-400/10 text-cream-400/50 cursor-not-allowed' : ''}
-                  ${slot.available && selectedTime !== slot.time ? 'glass hover:bg-white/10 text-cream-100' : ''}
-                  ${selectedTime === slot.time ? 'bg-gold-500 text-forest-900' : ''}
-                `}
-              >
-                {slot.label}
-                {!slot.available && (
-                  <span className="block text-xs mt-1">{t('calendar.full')}</span>
-                )}
-              </button>
-            ))}
-          </div>
+          {timeSlots.length === 0 ? (
+            <div className="p-4 bg-yellow-500/10 border border-yellow-400/30 rounded-lg">
+              <p className="text-yellow-400 text-sm font-sans">
+                {t('calendar.noSlotsAvailable', 'No time slots available for this date. Please select a different date.')}
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {timeSlots.map((slot) => (
+                <button
+                  key={slot.time}
+                  onClick={() => slot.available && onTimeSelect(slot.time)}
+                  disabled={!slot.available}
+                  className={`
+                    px-4 py-3 font-sans font-semibold transition-all
+                    ${!slot.available ? 'bg-cream-400/10 text-cream-400/50 cursor-not-allowed' : ''}
+                    ${slot.available && selectedTime !== slot.time ? 'glass hover:bg-white/10 text-cream-100' : ''}
+                    ${selectedTime === slot.time ? 'bg-gold-500 text-forest-900' : ''}
+                  `}
+                >
+                  {slot.label}
+                  {!slot.available && (
+                    <span className="block text-xs mt-1">{t('calendar.full')}</span>
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
