@@ -15,6 +15,7 @@ import enCoffee from './locales/en/coffee.json';
 import enContact from './locales/en/contact.json';
 import enComponents from './locales/en/components.json';
 import enBooking from './locales/en/booking.json';
+import enAdmin from './locales/en/admin.json';
 
 // Arabic translations
 import arCommon from './locales/ar/common.json';
@@ -28,6 +29,7 @@ import arCoffee from './locales/ar/coffee.json';
 import arContact from './locales/ar/contact.json';
 import arComponents from './locales/ar/components.json';
 import arBooking from './locales/ar/booking.json';
+import arAdmin from './locales/ar/admin.json';
 
 // Kurdish translations
 import kuCommon from './locales/ku/common.json';
@@ -41,6 +43,7 @@ import kuCoffee from './locales/ku/coffee.json';
 import kuContact from './locales/ku/contact.json';
 import kuComponents from './locales/ku/components.json';
 import kuBooking from './locales/ku/booking.json';
+import kuAdmin from './locales/ku/admin.json';
 
 const resources = {
   en: {
@@ -55,6 +58,7 @@ const resources = {
     contact: enContact,
     components: enComponents,
     booking: enBooking,
+    admin: enAdmin,
   },
   ar: {
     common: arCommon,
@@ -68,6 +72,7 @@ const resources = {
     contact: arContact,
     components: arComponents,
     booking: arBooking,
+    admin: arAdmin,
   },
   ku: {
     common: kuCommon,
@@ -81,6 +86,7 @@ const resources = {
     contact: kuContact,
     components: kuComponents,
     booking: kuBooking,
+    admin: kuAdmin,
   },
 };
 
@@ -92,7 +98,7 @@ i18n
     fallbackLng: 'ku',
     lng: 'ku', // Set Kurdish as default language
     defaultNS: 'common',
-    ns: ['common', 'nav'],
+    ns: ['common', 'nav', 'admin'],
     debug: true, // Enable debug mode to see what's happening
     interpolation: {
       escapeValue: false,
