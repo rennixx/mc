@@ -2,6 +2,7 @@ import { X, Calendar, Users, Mail, Phone, User, MessageSquare, ChevronRight, Che
 import { useState } from 'react';
 import { BookingCalendar } from './BookingCalendar';
 import { addBooking } from '../../services/bookingStorage';
+import { isDateAvailable, getAvailableSlots, getDayConfig } from '../../services/calendarStorage';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -33,6 +34,7 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
   });
   const [errors, setErrors] = useState<Partial<Record<keyof BookingFormData, string>>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [availabilityError, setAvailabilityError] = useState<string | null>(null);
 
   const services = [
     { id: 'safari', name: 'Horse Riding Safari', icon: '🏇' },
@@ -65,6 +67,27 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
     if (step === 3) {
       if (!formData.date) newErrors.date = 'Please select a date';
       if (!formData.time) newErrors.time = 'Please select a time';
+
+      // Validate availability when both date and time are selected
+      if (formData.date && formData.time) {
+        const dateStr = formData.date.toISOString().split('T')[0];
+
+        // Check if date is available
+        if (!isDateAvailable(dateStr)) {
+          const config = getDayConfig(dateStr);
+          setAvailabilityError(config?.blockReason || 'This date is not available for booking');
+          newErrors.date = 'This date is not available for booking';
+        } else {
+          // Check if the specific time slot is available
+          const availableSlots = getAvailableSlots(dateStr);
+          if (availableSlots.length > 0 && !availableSlots.includes(formData.time)) {
+            setAvailabilityError('This time slot is not available');
+            newErrors.time = 'This time slot is not available';
+          } else {
+            setAvailabilityError(null);
+          }
+        }
+      }
     }
 
     setErrors(newErrors);
@@ -125,6 +148,7 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
       specialRequests: '',
     });
     setErrors({});
+    setAvailabilityError(null);
     setIsSubmitted(false);
     onClose();
   };
@@ -354,6 +378,11 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
                   {(errors.date || errors.time) && (
                     <p className="text-red-400 text-sm font-sans">
                       Please select both a date and time to continue
+                    </p>
+                  )}
+                  {availabilityError && !errors.date && !errors.time && (
+                    <p className="text-red-400 text-sm font-sans">
+                      {availabilityError}
                     </p>
                   )}
                 </div>

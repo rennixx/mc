@@ -1,6 +1,7 @@
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react';
-import { useState } from 'react';
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Ban } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { isDateAvailable, getAvailableSlots, getDayConfig } from '../../services/calendarStorage';
 
 interface BookingCalendarProps {
   onDateSelect: (date: Date) => void;
@@ -12,15 +13,85 @@ interface BookingCalendarProps {
 export const BookingCalendar = ({ onDateSelect, onTimeSelect, selectedDate, selectedTime }: BookingCalendarProps) => {
   const { t, i18n } = useTranslation('components');
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [dateConfigs, setDateConfigs] = useState<Record<string, any>>({});
 
-  const timeSlots = [
-    { time: '08:00', label: t('calendar.times.8am'), available: true },
-    { time: '10:00', label: t('calendar.times.10am'), available: true },
-    { time: '12:00', label: t('calendar.times.12pm'), available: false },
-    { time: '14:00', label: t('calendar.times.2pm'), available: true },
-    { time: '16:00', label: t('calendar.times.4pm'), available: true },
-    { time: '18:00', label: t('calendar.times.6pm'), available: false },
-  ];
+  // Load calendar configs for current month
+  useEffect(() => {
+    const configs: Record<string, any> = {};
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+
+    for (let d = new Date(firstDay); d <= lastDay; d.setDate(d.getDate() + 1)) {
+      const dateStr = d.toISOString().split('T')[0];
+      const config = getDayConfig(dateStr);
+      if (config) {
+        configs[dateStr] = config;
+      }
+    }
+    setDateConfigs(configs);
+  }, [currentMonth]);
+
+  // Listen for calendar updates
+  useEffect(() => {
+    const handleUpdate = () => {
+      const configs: Record<string, any> = {};
+      const year = currentMonth.getFullYear();
+      const month = currentMonth.getMonth();
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+
+      for (let d = new Date(firstDay); d <= lastDay; d.setDate(d.getDate() + 1)) {
+        const dateStr = d.toISOString().split('T')[0];
+        const config = getDayConfig(dateStr);
+        if (config) {
+          configs[dateStr] = config;
+        }
+      }
+      setDateConfigs(configs);
+    };
+    window.addEventListener('calendarUpdated', handleUpdate);
+    return () => window.removeEventListener('calendarUpdated', handleUpdate);
+  }, [currentMonth]);
+
+  // Get available time slots for selected date
+  const getAvailableTimeSlots = () => {
+    if (!selectedDate) return [];
+
+    const dateStr = selectedDate.toISOString().split('T')[0];
+    const availableSlots = getAvailableSlots(dateStr);
+
+    if (availableSlots.length > 0) {
+      // Only show configured slots
+      const slotLabels: Record<string, string> = {
+        '08:00': t('calendar.times.8am'),
+        '10:00': t('calendar.times.10am'),
+        '12:00': t('calendar.times.12pm'),
+        '14:00': t('calendar.times.2pm'),
+        '16:00': t('calendar.times.4pm'),
+        '18:00': t('calendar.times.6pm'),
+      };
+
+      return availableSlots.map(time => ({
+        time,
+        label: slotLabels[time] || time,
+        available: true,
+      }));
+    }
+
+    // Default slots
+    return [
+      { time: '08:00', label: t('calendar.times.8am'), available: true },
+      { time: '10:00', label: t('calendar.times.10am'), available: true },
+      { time: '12:00', label: t('calendar.times.12pm'), available: false },
+      { time: '14:00', label: t('calendar.times.2pm'), available: true },
+      { time: '16:00', label: t('calendar.times.4pm'), available: true },
+      { time: '18:00', label: t('calendar.times.6pm'), available: false },
+    ];
+  };
+
+  const timeSlots = getAvailableTimeSlots();
 
   const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear();
@@ -143,23 +214,34 @@ export const BookingCalendar = ({ onDateSelect, onTimeSelect, selectedDate, sele
         {/* Calendar Days */}
         <div className="grid grid-cols-7 gap-2">
           {days.map((date, index) => {
-            const disabled = !date || isPast(date);
+            if (!date) return <div key={index} className="aspect-square" />;
+
+            const dateStr = date.toISOString().split('T')[0];
+            const config = dateConfigs[dateStr];
+            const blocked = config?.blocked || !isDateAvailable(dateStr);
+            const hasLimitedSlots = config?.availableSlots?.length > 0;
+
+            const disabled = isPast(date) || blocked;
             const selected = isSelected(date);
             const today = isToday(date);
 
             return (
               <button
                 key={index}
-                onClick={() => date && !disabled && onDateSelect(date)}
+                onClick={() => !disabled && onDateSelect(date)}
                 disabled={disabled}
                 className={`
-                  aspect-square flex items-center justify-center font-sans text-sm transition-all
+                  aspect-square flex items-center justify-center font-sans text-sm transition-all relative
                   ${disabled ? 'text-cream-400/30 cursor-not-allowed' : 'text-cream-100 hover:bg-white/10 cursor-pointer'}
                   ${selected ? 'bg-gold-500 text-forest-900 font-bold' : ''}
                   ${today && !selected ? 'border border-gold-400' : ''}
+                  ${!disabled && hasLimitedSlots ? 'bg-yellow-500/10 border border-yellow-400/30' : ''}
                 `}
+                title={blocked ? (config?.blockReason || 'Not available') : undefined}
               >
-                {date ? date.getDate() : ''}
+                {date.getDate()}
+                {blocked && <Ban className="absolute top-1 right-1 w-3 h-3 text-red-400" />}
+                {hasLimitedSlots && !blocked && <span className="absolute top-1 right-1 w-2 h-2 bg-yellow-400 rounded-full"></span>}
               </button>
             );
           })}

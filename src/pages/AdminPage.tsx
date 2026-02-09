@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { AdminSidebar } from '../components/layout/AdminSidebar';
 import { AdminHeader } from '../components/layout/AdminHeader';
 import { getBookingStats, initializeSampleData, getAllBookings } from '../services/bookingStorage';
-import { BookingsPage, CalendarPage, NewBookingPage } from './admin';
+import { BookingsPage, CalendarPage, NewBookingPage, CalendarManagementPage } from './admin';
 import { FileText, Clock, CheckCircle2, Calendar, Users } from 'lucide-react';
 import { StatusBadge } from '../components/admin';
 
@@ -139,6 +139,7 @@ export const AdminPage = () => {
             } />
             <Route path="bookings" element={<BookingsPage />} />
             <Route path="calendar" element={<CalendarPage />} />
+            <Route path="calendar-management" element={<CalendarManagementPage />} />
             <Route path="new" element={<NewBookingPage />} />
             <Route path="*" element={<Navigate to="/admin" replace />} />
           </Routes>

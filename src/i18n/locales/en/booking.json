@@ -72,7 +72,9 @@
   "step3": {
     "title": "Choose Your Date & Time",
     "errors": {
-      "selectDateTime": "Please select both a date and time to continue"
+      "selectDateTime": "Please select both a date and time to continue",
+      "dateNotAvailable": "This date is not available for booking",
+      "timeNotAvailable": "This time slot is not available"
     }
   },
   "actions": {

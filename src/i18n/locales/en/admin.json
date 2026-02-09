@@ -11,6 +11,7 @@
     "dashboard": "Dashboard",
     "bookings": "Bookings",
     "calendar": "Calendar",
+    "calendarManagement": "Availability",
     "newBooking": "New Booking",
     "backToSite": "Back to Website"
   },

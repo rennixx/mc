@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Calendar, ListPlus, FileText, LogOut, X } from 'lucide-react';
+import { LayoutDashboard, Calendar, ListPlus, FileText, LogOut, X, Settings } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 interface AdminSidebarProps {
@@ -15,6 +15,7 @@ export const AdminSidebar = ({ isOpen, onClose }: AdminSidebarProps) => {
     { name: 'sidebar.dashboard', href: '/admin', icon: LayoutDashboard },
     { name: 'sidebar.bookings', href: '/admin/bookings', icon: FileText },
     { name: 'sidebar.calendar', href: '/admin/calendar', icon: Calendar },
+    { name: 'sidebar.calendarManagement', href: '/admin/calendar-management', icon: Settings },
     { name: 'sidebar.newBooking', href: '/admin/new', icon: ListPlus },
   ];
 

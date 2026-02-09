@@ -5,6 +5,7 @@ import { BookingCalendar } from '../components/common/BookingCalendar';
 import { SEOMeta } from '../components/common/SEOMeta';
 import { WhatsAppButton } from '../components/common/WhatsAppButton';
 import { addBooking } from '../services/bookingStorage';
+import { isDateAvailable, getAvailableSlots, getDayConfig } from '../services/calendarStorage';
 
 interface BookingFormData {
   service: string;
@@ -33,6 +34,7 @@ export const BookingPage = () => {
   const [errors, setErrors] = useState<Partial<Record<keyof BookingFormData, string>>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [bookingId, setBookingId] = useState<string | null>(null);
+  const [availabilityError, setAvailabilityError] = useState<string | null>(null);
 
   const services = [
     { id: 'safari', name: t('step1.services.safari'), icon: <Compass className="w-full h-full" /> },
@@ -65,6 +67,27 @@ export const BookingPage = () => {
     if (step === 3) {
       if (!formData.date) newErrors.date = t('step3.errors.selectDateTime');
       if (!formData.time) newErrors.time = t('step3.errors.selectDateTime');
+
+      // Validate availability when both date and time are selected
+      if (formData.date && formData.time) {
+        const dateStr = formData.date.toISOString().split('T')[0];
+
+        // Check if date is available
+        if (!isDateAvailable(dateStr)) {
+          const config = getDayConfig(dateStr);
+          setAvailabilityError(config?.blockReason || t('step3.errors.dateNotAvailable'));
+          newErrors.date = t('step3.errors.dateNotAvailable');
+        } else {
+          // Check if the specific time slot is available
+          const availableSlots = getAvailableSlots(dateStr);
+          if (availableSlots.length > 0 && !availableSlots.includes(formData.time)) {
+            setAvailabilityError(t('step3.errors.timeNotAvailable'));
+            newErrors.time = t('step3.errors.timeNotAvailable');
+          } else {
+            setAvailabilityError(null);
+          }
+        }
+      }
     }
 
     setErrors(newErrors);
@@ -334,6 +357,11 @@ export const BookingPage = () => {
                     {(errors.date || errors.time) && (
                       <p className="text-red-400 text-sm font-sans">
                         {t('step3.errors.selectDateTime')}
+                      </p>
+                    )}
+                    {availabilityError && !errors.date && !errors.time && (
+                      <p className="text-red-400 text-sm font-sans">
+                        {availabilityError}
                       </p>
                     )}
                   </div>
