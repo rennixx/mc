@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Users } from 'lucide-react';
 import { getAllBookings, type Booking } from '../../services/bookingStorage';
 import { StatusBadge } from '../../components/admin/StatusBadge';
@@ -6,6 +6,7 @@ import { StatusBadge } from '../../components/admin/StatusBadge';
 export const CalendarPage = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [bookings, setBookings] = useState(getAllBookings());
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -15,7 +16,12 @@ export const CalendarPage = () => {
   const daysInMonth = lastDayOfMonth.getDate();
   const startDayOfWeek = firstDayOfMonth.getDay(); // 0 = Sunday
 
-  const bookings = getAllBookings();
+  // Auto-refresh when bookings change
+  useEffect(() => {
+    const handleUpdate = () => setBookings(getAllBookings());
+    window.addEventListener('bookingsUpdated', handleUpdate);
+    return () => window.removeEventListener('bookingsUpdated', handleUpdate);
+  }, []);
 
   // Create a map of bookings by date
   const bookingsByDate = useMemo(() => {

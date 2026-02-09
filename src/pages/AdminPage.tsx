@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AdminSidebar } from '../components/layout/AdminSidebar';
@@ -16,8 +16,17 @@ if (typeof window !== 'undefined') {
 export const AdminPage = () => {
   const { t } = useTranslation('admin');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [refresh, setRefresh] = useState(0);
+
   const stats = getBookingStats();
   const recentBookings = getAllBookings().slice(0, 5);
+
+  // Auto-refresh when bookings change
+  useEffect(() => {
+    const handleUpdate = () => setRefresh(prev => prev + 1);
+    window.addEventListener('bookingsUpdated', handleUpdate);
+    return () => window.removeEventListener('bookingsUpdated', handleUpdate);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-forest-900 to-forest-800 flex">

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Search, Download, Trash2, Edit, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
 import { getAllBookings, updateBookingStatus, deleteBooking, type BookingStatus, type ServiceType } from '../../services/bookingStorage';
 
@@ -14,6 +14,13 @@ export const BookingList = ({ onEdit, onView }: BookingListProps) => {
   const [serviceFilter, setServiceFilter] = useState<ServiceType | 'all'>('all');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+
+  // Auto-refresh when bookings change
+  useEffect(() => {
+    const handleUpdate = () => setBookings(getAllBookings());
+    window.addEventListener('bookingsUpdated', handleUpdate);
+    return () => window.removeEventListener('bookingsUpdated', handleUpdate);
+  }, []);
 
   // Filter and search bookings
   const filteredBookings = useMemo(() => {
