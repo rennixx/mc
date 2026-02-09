@@ -18,13 +18,13 @@ export const AdminPage = () => {
   const recentBookings = getAllBookings().slice(0, 5);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-forest-900 to-forest-800">
+    <div className="min-h-screen bg-gradient-to-br from-forest-900 to-forest-800 flex">
       <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      <div className="lg:ml-64">
+      <div className="flex-1 flex flex-col">
         <AdminHeader onMenuClick={() => setSidebarOpen(true)} />
 
-        <main className="p-4 lg:p-8">
+        <main className="flex-1 p-4 lg:p-8 overflow-y-auto">
           {/* Stats Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <StatCard
