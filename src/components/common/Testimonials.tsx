@@ -1,16 +1,7 @@
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-
-interface Testimonial {
-  id: number;
-  name: string;
-  role: string;
-  image?: string;
-  rating: number;
-  text: string;
-  date: string;
-}
+import { fetchGoogleReviews, getGoogleMapsUrl, FALLBACK_TESTIMONIALS, type Testimonial } from '../../services/googlePlaces';
 
 interface TestimonialsProps {
   title: string;
@@ -20,57 +11,31 @@ interface TestimonialsProps {
 export const Testimonials = ({ title, subtitle }: TestimonialsProps) => {
   const { t } = useTranslation('components');
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const testimonials: Testimonial[] = [
-    {
-      id: 1,
-      name: 'Sarah Ahmed',
-      role: 'Academy Student',
-      rating: 5,
-      text: 'MAM Center transformed my daughter from nervous to confident! The instructors are patient, professional, and truly care about each student. Highly recommend for kids!',
-      date: 'December 2025'
-    },
-    {
-      id: 2,
-      name: 'Omar Hassan',
-      role: 'Safari Experience',
-      rating: 5,
-      text: 'The mountain safari was breathtaking! Our guide was knowledgeable, the horses were well-trained, and the scenery was unforgettable. Perfect for photographers!',
-      date: 'November 2025'
-    },
-    {
-      id: 3,
-      name: 'Layla Kareem',
-      role: 'Coffee Shop Regular',
-      rating: 5,
-      text: 'Baran Coffee is my go-to spot for work. Amazing views, great coffee, and peaceful atmosphere. The lavender latte is a must-try!',
-      date: 'December 2025'
-    },
-    {
-      id: 4,
-      name: 'Kamal Ibrahim',
-      role: 'Event Host',
-      rating: 5,
-      text: 'Hosted our corporate event here. The facilities are top-notch, staff is professional, and our guests loved the unique equestrian experience!',
-      date: 'October 2025'
-    },
-    {
-      id: 5,
-      name: 'Nadia Youssef',
-      role: 'Private Lessons',
-      rating: 5,
-      text: 'As an adult beginner, I was hesitant. But the private lessons gave me confidence. Now I ride weekly! The instructors make it fun and safe.',
-      date: 'November 2025'
-    },
-    {
-      id: 6,
-      name: 'Ranya Mahmoud',
-      role: 'Family Safari',
-      rating: 5,
-      text: 'Took my whole family on the safari. From age 8 to 65, everyone had a blast! Well-organized and accommodating for different skill levels.',
-      date: 'September 2025'
-    }
-  ];
+  // Fetch reviews from Google Places API on mount
+  useEffect(() => {
+    const loadReviews = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      const reviews = await fetchGoogleReviews();
+
+      if (reviews.length === 0) {
+        // Use fallback if no reviews returned
+        setTestimonials(FALLBACK_TESTIMONIALS);
+        setError('Using default testimonials');
+      } else {
+        setTestimonials(reviews);
+      }
+
+      setIsLoading(false);
+    };
+
+    loadReviews();
+  }, []);
 
   const nextTestimonial = () => {
     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
@@ -86,6 +51,38 @@ export const Testimonials = ({ title, subtitle }: TestimonialsProps) => {
     testimonials[(currentIndex + 2) % testimonials.length]
   ];
 
+  // Loading state
+  if (isLoading) {
+    return (
+      <section className="py-20 bg-gradient-to-b from-transparent to-forest-800/30">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-serif font-bold text-cream-100 mb-4">
+              {title}
+            </h2>
+            {subtitle && (
+              <p className="text-lg text-cream-200 font-sans max-w-2xl mx-auto">
+                {subtitle}
+              </p>
+            )}
+          </div>
+          <div className="flex justify-center items-center py-12">
+            <div className="animate-pulse flex space-x-4">
+              <div className="rounded-full bg-cream-400/20 h-12 w-12"></div>
+              <div className="rounded-full bg-cream-400/20 h-12 w-12"></div>
+              <div className="rounded-full bg-cream-400/20 h-12 w-12"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Empty state
+  if (testimonials.length === 0) {
+    return null;
+  }
+
   return (
     <section className="py-20 bg-gradient-to-b from-transparent to-forest-800/30">
       <div className="max-w-7xl mx-auto px-4">
@@ -98,6 +95,10 @@ export const Testimonials = ({ title, subtitle }: TestimonialsProps) => {
             <p className="text-lg text-cream-200 font-sans max-w-2xl mx-auto">
               {subtitle}
             </p>
+          )}
+          {/* Debug info - remove in production */}
+          {error && import.meta.env.DEV && (
+            <p className="text-sm text-gold-400/60 mt-2">{error}</p>
           )}
         </div>
 
@@ -120,8 +121,8 @@ export const Testimonials = ({ title, subtitle }: TestimonialsProps) => {
             <ChevronRight className="w-6 h-6 text-cream-100" />
           </button>
 
-          {/* Testimonials Grid */}
-          <div className="grid md:grid-cols-3 gap-6">
+          {/* Testimonials Grid - Desktop */}
+          <div className="hidden md:grid md:grid-cols-3 gap-6">
             {visibleTestimonials.map((testimonial, index) => (
               <div
                 key={testimonial.id}
@@ -150,9 +151,17 @@ export const Testimonials = ({ title, subtitle }: TestimonialsProps) => {
 
                 {/* Author Info */}
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center text-forest-900 font-bold text-lg">
-                    {testimonial.name.charAt(0)}
-                  </div>
+                  {testimonial.profilePhotoUrl ? (
+                    <img
+                      src={testimonial.profilePhotoUrl}
+                      alt={testimonial.name}
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center text-forest-900 font-bold text-lg">
+                      {testimonial.name.charAt(0)}
+                    </div>
+                  )}
                   <div>
                     <h4 className="font-sans font-bold text-cream-100">
                       {testimonial.name}
@@ -169,6 +178,19 @@ export const Testimonials = ({ title, subtitle }: TestimonialsProps) => {
                     {testimonial.date}
                   </p>
                 </div>
+
+                {/* Google Review Link */}
+                {testimonial.authorUrl && (
+                  <a
+                    href={testimonial.authorUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-flex items-center gap-1 text-xs text-gold-400 hover:text-gold-300 transition-colors"
+                  >
+                    <Star className="w-3 h-3 fill-gold-400" />
+                    View on Google Maps
+                  </a>
+                )}
               </div>
             ))}
           </div>
@@ -197,9 +219,17 @@ export const Testimonials = ({ title, subtitle }: TestimonialsProps) => {
 
               {/* Author Info */}
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center text-forest-900 font-bold text-lg">
-                  {testimonials[currentIndex].name.charAt(0)}
-                </div>
+                {testimonials[currentIndex].profilePhotoUrl ? (
+                  <img
+                    src={testimonials[currentIndex].profilePhotoUrl}
+                    alt={testimonials[currentIndex].name}
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-12 h-12 bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center text-forest-900 font-bold text-lg">
+                    {testimonials[currentIndex].name.charAt(0)}
+                  </div>
+                )}
                 <div>
                   <h4 className="font-sans font-bold text-cream-100">
                     {testimonials[currentIndex].name}
@@ -216,6 +246,19 @@ export const Testimonials = ({ title, subtitle }: TestimonialsProps) => {
                   {testimonials[currentIndex].date}
                 </p>
               </div>
+
+              {/* Google Review Link */}
+              {testimonials[currentIndex].authorUrl && (
+                <a
+                  href={testimonials[currentIndex].authorUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-1 text-xs text-gold-400 hover:text-gold-300 transition-colors"
+                >
+                  <Star className="w-3 h-3 fill-gold-400" />
+                  View on Google Maps
+                </a>
+              )}
             </div>
           </div>
 
@@ -237,16 +280,16 @@ export const Testimonials = ({ title, subtitle }: TestimonialsProps) => {
         {/* CTA */}
         <div className="text-center mt-12">
           <p className="text-cream-200 font-sans mb-4">
-            {t('testimonials.joinSatisfied')}
+            {t('testimonials.joinSatisfied', 'Join our satisfied customers')}
           </p>
           <a
-            href="https://www.google.com/maps/place/MAM+Center"
+            href={getGoogleMapsUrl()}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 glass-card text-cream-100 font-sans font-semibold hover:bg-white/10 transition-colors"
           >
             <Star className="w-5 h-5 text-gold-400 fill-gold-400" />
-            {t('testimonials.readMoreReviews')}
+            {t('testimonials.readMoreReviews', 'Read More Reviews on Google')}
           </a>
         </div>
       </div>

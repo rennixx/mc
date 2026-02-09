@@ -25,6 +25,11 @@ dist-ssr
 *.sln
 *.sw?
 
+# Environment variables (API keys, secrets)
+.env
+.env.local
+.env.*.local
+
 # Large media files (exceed GitHub's 100MB limit - host videos externally)
 src/assets/videos/*.mp4
 src/assets/videos/*.mov
