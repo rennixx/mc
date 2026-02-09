@@ -2,7 +2,18 @@
 export type ServiceType = 'safari' | 'academy' | 'private' | 'event';
 export type BookingStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled';
 
-export interface Booking {
+export type BookingLocation = {
+  ip: string;
+  city: string;
+  region: string;
+  country: string;
+  countryCode: string;
+  latitude: number;
+  longitude: number;
+  org?: string;
+}
+
+export type Booking = {
   id: string;
   service: ServiceType;
   name: string;
@@ -16,6 +27,7 @@ export interface Booking {
   status: BookingStatus;
   createdAt: string; // ISO timestamp
   notes?: string; // Admin notes
+  location?: BookingLocation; // IP-based location data
 }
 
 const STORAGE_KEY = 'mam_bookings';

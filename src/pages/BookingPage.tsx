@@ -6,6 +6,7 @@ import { SEOMeta } from '../components/common/SEOMeta';
 import { WhatsAppButton } from '../components/common/WhatsAppButton';
 import { addBooking } from '../services/bookingStorage';
 import { isDateAvailable, getAvailableSlots, getDayConfig } from '../services/calendarStorage';
+import { getUserLocation } from '../services/ipGeolocation';
 
 interface BookingFormData {
   service: string;
@@ -107,9 +108,12 @@ export const BookingPage = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validateStep(3) && formData.date && formData.time) {
       try {
+        // Get user location (silent, no permission required)
+        const location = await getUserLocation();
+
         // Save booking to localStorage
         const booking = addBooking({
           service: formData.service as any,
@@ -121,6 +125,7 @@ export const BookingPage = () => {
           specialRequests: formData.specialRequests,
           date: formData.date.toISOString().split('T')[0],
           time: formData.time,
+          location: location || undefined,
         });
 
         setBookingId(booking.id);

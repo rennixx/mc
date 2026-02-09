@@ -1,8 +1,22 @@
-import { BookingList } from '../../components/admin';
+import { BookingList, BookingDetailModal } from '../../components/admin';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
+import { type Booking } from '../../services';
 
 export const BookingsPage = () => {
   const { t } = useTranslation('admin');
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+
+  const handleViewBooking = (booking: Booking) => {
+    setSelectedBooking(booking);
+    setIsDetailModalOpen(true);
+  };
+
+  const handleCloseDetailModal = () => {
+    setIsDetailModalOpen(false);
+    setSelectedBooking(null);
+  };
 
   return (
     <div>
@@ -15,7 +29,15 @@ export const BookingsPage = () => {
         </p>
       </div>
 
-      <BookingList />
+      <BookingList onView={handleViewBooking} />
+
+      {/* Booking Detail Modal */}
+      <BookingDetailModal
+        booking={selectedBooking}
+        isOpen={isDetailModalOpen}
+        onClose={handleCloseDetailModal}
+      />
     </div>
   );
 };
+

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { BookingCalendar } from './BookingCalendar';
 import { addBooking } from '../../services/bookingStorage';
 import { isDateAvailable, getAvailableSlots, getDayConfig } from '../../services/calendarStorage';
+import { getUserLocation } from '../../services/ipGeolocation';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -105,9 +106,12 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
     setErrors({});
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validateStep(3) && formData.date && formData.time) {
       try {
+        // Get user location (silent, no permission required)
+        const location = await getUserLocation();
+
         // Save booking to localStorage
         addBooking({
           service: formData.service as any,
@@ -119,6 +123,7 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
           specialRequests: formData.specialRequests,
           date: formData.date.toISOString().split('T')[0],
           time: formData.time,
+          location: location || undefined,
         });
 
         setIsSubmitted(true);
