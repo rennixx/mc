@@ -40,81 +40,80 @@ export interface Testimonial {
   profilePhotoUrl?: string;
 }
 
-const API_KEY = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
 const PLACE_ID = import.meta.env.VITE_GOOGLE_PLACE_ID;
 
 /**
  * Fetches reviews from Google Places API
- * @returns Array of testimonials or empty array if fetch fails
+ * Note: Google Places API doesn't support direct browser calls due to CORS.
+ * This function uses hardcoded real reviews from your Google Maps listing.
+ * @returns Array of testimonials from real Google reviews
  */
 export async function fetchGoogleReviews(): Promise<Testimonial[]> {
-  // Check if API key and place ID are configured
-  if (!API_KEY || !PLACE_ID) {
-    console.warn('Google Places API key or Place ID not configured');
-    return [];
-  }
-
-  try {
-    const response = await fetch(
-      `https://maps.googleapis.com/maps/api/place/details/json?place_id=${PLACE_ID}&fields=reviews,rating,user_ratings_total&key=${API_KEY}`
-    );
-
-    const data: PlaceDetailsResponse = await response.json();
-
-    if (data.status !== 'OK') {
-      console.error('Google Places API error:', data.error_message || data.status);
-      return [];
-    }
-
-    // Transform Google reviews to our testimonial format
-    const testimonials: Testimonial[] = data.result.reviews.map((review, index) => ({
-      id: index + 1,
-      name: review.author_name,
+  // Real reviews fetched from MAM Center's Google Maps listing
+  // Place ID: ChIJjUJNQ1UjB0AR3Xr7mLsLg28
+  // Rating: 4.2/5 from 50 total reviews
+  const realGoogleReviews: Testimonial[] = [
+    {
+      id: 1,
+      name: 'Yasır Hawrami',
       role: 'Google Reviewer',
-      image: review.profile_photo_url,
-      rating: review.rating,
-      text: review.text,
-      date: formatTimestamp(review.time),
-      authorUrl: review.author_url,
-      profilePhotoUrl: review.profile_photo_url,
-    }));
-
-    return testimonials;
-  } catch (error) {
-    console.error('Error fetching Google reviews:', error);
-    return [];
-  }
-}
-
-/**
- * Converts Unix timestamp to readable date string
- */
-function formatTimestamp(timestamp: number): string {
-  const date = new Date(timestamp * 1000);
-  const now = new Date();
-  const diffInMs = now.getTime() - date.getTime();
-  const diffInMonths = Math.floor(diffInMs / (1000 * 60 * 60 * 24 * 30));
-
-  if (diffInMonths < 1) {
-    return 'This month';
-  } else if (diffInMonths === 1) {
-    return 'Last month';
-  } else if (diffInMonths < 12) {
-    return `${diffInMonths} months ago`;
-  } else {
-    const diffInYears = Math.floor(diffInMonths / 12);
-    if (diffInYears === 1) {
-      return 'Last year';
+      rating: 3,
+      text: 'Made for kids, you should ride slowly, not suitable for youths and older ages. Anyhow well done for having such kind of playground.',
+      date: '7 months ago',
+      authorUrl: 'https://www.google.com/maps/contrib/115247439940951861129/reviews',
+      profilePhotoUrl: 'https://lh3.googleusercontent.com/a-/ALV-UjXlZVOWGGig5_zudzKtIDNF4rfcfmVh-M7Wn7TCn01gsYahQp5uxA=s128-c0x00000000-cc-rp-mo-ba7'
+    },
+    {
+      id: 2,
+      name: 'Ahmed Al Rufaiee',
+      role: 'Google Reviewer',
+      rating: 5,
+      text: 'Nice place to enjoy horse riding, located at park Sami Abdul Rahman English village gate.',
+      date: '4 years ago',
+      authorUrl: 'https://www.google.com/maps/contrib/113986231277164939000/reviews',
+      profilePhotoUrl: 'https://lh3.googleusercontent.com/a-/ALV-UjV1O_MIkI15B3bFEMhwd-mar9waN53DUoV4f02CSIrY44Z3lQ=s128-c0x00000000-cc-rp-mo-ba6'
+    },
+    {
+      id: 3,
+      name: 'Viyan Rashad',
+      role: 'Google Reviewer',
+      rating: 4,
+      text: 'Nice but small',
+      date: '2 months ago',
+      authorUrl: 'https://www.google.com/maps/contrib/115594582798137138723/reviews',
+      profilePhotoUrl: 'https://lh3.googleusercontent.com/a-/ALV-UjUdvETMYejSHXuLqOlypu2YPMNe2isvqy5QEg6rW8P5rrUy2YLp=s128-c0x00000000-cc-rp-mo-ba4'
+    },
+    {
+      id: 4,
+      name: 'Michael Klein Breteler',
+      role: 'Google Reviewer',
+      rating: 5,
+      text: 'Great place for horse riding in Erbil.',
+      date: '2 years ago',
+      authorUrl: 'https://www.google.com/maps/contrib/100597211317167485790/reviews',
+      profilePhotoUrl: 'https://lh3.googleusercontent.com/a/ACg8ocJf_kYzWK3WrZ0uTSyUK7McMgabDy_x9RUZmfPN80j6ZZqFFg=s128-c0x00000000-cc-rp-mo-ba4'
+    },
+    {
+      id: 5,
+      name: 'Meltem Avcı',
+      role: 'Google Reviewer',
+      rating: 1,
+      text: "I've seen the staff being hurtful or mean to these poor horses. I warned them twice, once I caught one guy slapping a horse on the face and the horse stepped away and wouldn't let that guy touch him. Poor souls!",
+      date: '2 years ago',
+      authorUrl: 'https://www.google.com/maps/contrib/114208589900716784883/reviews',
+      profilePhotoUrl: 'https://lh3.googleusercontent.com/a-/ALV-UjW5Q9fKB9bqwZq_wspvd5wf9c_XF5QvZkv3T_2bCiS8mjHQCHIe=s128-c0x00000000-cc-rp-mo-ba4'
     }
-    return `${diffInYears} years ago`;
-  }
+  ];
+
+  // Return real Google reviews
+  return realGoogleReviews;
 }
 
 /**
  * Gets the Google Maps URL for the place
  */
 export function getGoogleMapsUrl(): string {
-  return `https://www.google.com/maps/place/?q=place_id:${PLACE_ID}`;
+  return `https://www.google.com/maps/place/?q=place_id:${PLACE_ID || 'ChIJjUJNQ1UjB0AR3Xr7mLsLg28'}`;
 }
 
 /**
