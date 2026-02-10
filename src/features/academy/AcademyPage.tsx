@@ -197,6 +197,8 @@ export const AcademyPage = () => {
             selectedTime={selectedTime}
             onDateSelect={setSelectedDate}
             onTimeSelect={setSelectedTime}
+            allowTimeSelection={false}
+            showSummary={false}
           />
         </div>
       </div>

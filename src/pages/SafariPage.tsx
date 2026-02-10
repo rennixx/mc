@@ -157,6 +157,8 @@ export const SafariPage = () => {
             selectedTime={selectedTime}
             onDateSelect={setSelectedDate}
             onTimeSelect={setSelectedTime}
+            allowTimeSelection={false}
+            showSummary={false}
           />
         </div>
       </div>

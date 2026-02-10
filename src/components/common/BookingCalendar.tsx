@@ -4,13 +4,26 @@ import { useTranslation } from 'react-i18next';
 import { isDateAvailable, getDayConfig, getBookedSlotsForDate } from '../../services/calendarStorage';
 
 interface BookingCalendarProps {
-  onDateSelect: (date: Date) => void;
-  onTimeSelect: (time: string) => void;
+  onDateSelect?: (date: Date) => void;
+  onTimeSelect?: (time: string) => void;
   selectedDate?: Date;
   selectedTime?: string;
+  readonly?: boolean; // If true, completely read-only (no selections, no time slots)
+  allowTimeSelection?: boolean; // If true, allow time slot selection (default: !readonly)
+  showSummary?: boolean; // If false, hide booking summary
 }
 
-export const BookingCalendar = ({ onDateSelect, onTimeSelect, selectedDate, selectedTime }: BookingCalendarProps) => {
+export const BookingCalendar = ({
+  onDateSelect,
+  onTimeSelect,
+  selectedDate,
+  selectedTime,
+  readonly = false,
+  allowTimeSelection,
+  showSummary = true
+}: BookingCalendarProps) => {
+  // Default allowTimeSelection to true when not readonly (for backwards compatibility)
+  const canSelectTime = allowTimeSelection ?? !readonly;
   const { t, i18n } = useTranslation('components');
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [dateConfigs, setDateConfigs] = useState<Record<string, any>>({});
@@ -256,14 +269,14 @@ export const BookingCalendar = ({ onDateSelect, onTimeSelect, selectedDate, sele
             const blocked = config?.blocked || !isDateAvailable(dateStr);
             const hasLimitedSlots = config?.availableSlots?.length > 0;
 
-            const disabled = isPast(date) || blocked;
+            const disabled = readonly || isPast(date) || blocked;
             const selected = isSelected(date);
             const today = isToday(date);
 
             return (
               <button
                 key={index}
-                onClick={() => !disabled && onDateSelect(date)}
+                onClick={() => !disabled && onDateSelect?.(date)}
                 disabled={disabled}
                 className={`
                   aspect-square flex items-center justify-center font-sans text-sm transition-all relative
@@ -284,7 +297,7 @@ export const BookingCalendar = ({ onDateSelect, onTimeSelect, selectedDate, sele
       </div>
 
       {/* Time Slots */}
-      {selectedDate && (
+      {selectedDate && !readonly && (
         <div>
           <h4 className="text-lg font-sans font-bold text-cream-100 mb-4">
             {t('calendar.availableTimes')}
@@ -300,13 +313,14 @@ export const BookingCalendar = ({ onDateSelect, onTimeSelect, selectedDate, sele
               {timeSlots.map((slot) => (
                 <button
                   key={slot.time}
-                  onClick={() => slot.available && onTimeSelect(slot.time)}
-                  disabled={!slot.available}
+                  onClick={() => canSelectTime && slot.available && onTimeSelect?.(slot.time)}
+                  disabled={!slot.available || !canSelectTime}
                   className={`
                     px-4 py-3 font-sans font-semibold transition-all
                     ${slot.booked ? 'bg-red-500/10 text-red-400/70 cursor-not-allowed border border-red-400/30' : ''}
                     ${!slot.available && !slot.booked ? 'bg-cream-400/10 text-cream-400/50 cursor-not-allowed' : ''}
-                    ${slot.available && selectedTime !== slot.time ? 'glass hover:bg-white/10 text-cream-100' : ''}
+                    ${slot.available && !allowTimeSelection ? 'glass cursor-not-allowed text-cream-100' : ''}
+                    ${slot.available && allowTimeSelection && selectedTime !== slot.time ? 'glass hover:bg-white/10 text-cream-100 cursor-pointer' : ''}
                     ${selectedTime === slot.time ? 'bg-gold-500 text-forest-900' : ''}
                   `}
                 >
@@ -325,7 +339,7 @@ export const BookingCalendar = ({ onDateSelect, onTimeSelect, selectedDate, sele
       )}
 
       {/* Selected Summary */}
-      {selectedDate && selectedTime && (
+      {showSummary && canSelectTime && !readonly && selectedDate && selectedTime && (
         <div className="mt-6 p-4 bg-green-500/20 border border-green-400/50">
           <div className="flex items-center gap-2 text-green-400 font-sans font-semibold mb-2">
             <CalendarIcon className="w-5 h-5" />
