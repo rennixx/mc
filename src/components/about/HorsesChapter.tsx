@@ -18,6 +18,7 @@ export const HorsesChapter = ({ chapter, title, subtitle, horses }: HorsesChapte
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isInView, setIsInView] = useState(false);
+  const [containerWidth, setContainerWidth] = useState(0);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -33,27 +34,58 @@ export const HorsesChapter = ({ chapter, title, subtitle, horses }: HorsesChapte
 
     if (containerRef.current) {
       observer.observe(containerRef.current);
+      setContainerWidth(containerRef.current.offsetWidth);
     }
 
     return () => observer.disconnect();
   }, []);
 
-  const scroll = (direction: 'left' | 'right') => {
+  // Update container width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.offsetWidth);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Get card width based on container width
+  const getCardWidth = () => {
+    if (containerWidth < 640) return 300;
+    if (containerWidth < 768) return 320;
+    return 380;
+  };
+
+  const gap = 24;
+  const cardWidth = getCardWidth();
+
+  // Navigate to a specific card
+  const goToCard = (index: number) => {
     if (containerRef.current) {
-      const scrollAmount = containerRef.current.offsetWidth * 0.8;
-      containerRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
+      const scrollPos = (index * (cardWidth + gap)) - (containerWidth - cardWidth) / 2;
+      containerRef.current.scrollTo({
+        left: Math.max(0, scrollPos),
         behavior: 'smooth',
       });
     }
   };
 
+  // Scroll to next/previous card
+  const scroll = (direction: 'left' | 'right') => {
+    const newIndex = direction === 'left'
+      ? Math.max(0, activeIndex - 1)
+      : Math.min(horses.length - 1, activeIndex + 1);
+    goToCard(newIndex);
+  };
+
   const handleScroll = () => {
     if (containerRef.current) {
       const scrollLeft = containerRef.current.scrollLeft;
-      const cardWidth = containerRef.current.offsetWidth;
-      const newIndex = Math.round(scrollLeft / cardWidth);
-      setActiveIndex(newIndex);
+      const totalCardWidth = cardWidth + gap;
+      const newIndex = Math.round((scrollLeft - (containerWidth - cardWidth) / 2) / totalCardWidth);
+      setActiveIndex(Math.max(0, Math.min(newIndex, horses.length - 1)));
     }
   };
 
@@ -86,7 +118,8 @@ export const HorsesChapter = ({ chapter, title, subtitle, horses }: HorsesChapte
           {/* Navigation Arrows - Desktop */}
           <button
             onClick={() => scroll('left')}
-            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 items-center justify-center rounded-full bg-gold-400/20 hover:bg-gold-400/40 text-gold-300 backdrop-blur-sm border border-gold-400/30 transition-all -ml-6"
+            disabled={activeIndex === 0}
+            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 items-center justify-center rounded-full bg-gold-400/20 hover:bg-gold-400/40 hover:scale-110 disabled:opacity-30 disabled:hover:scale-100 text-gold-300 backdrop-blur-sm border border-gold-400/30 transition-all cursor-pointer -ml-6"
             aria-label="Previous horse"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -95,7 +128,8 @@ export const HorsesChapter = ({ chapter, title, subtitle, horses }: HorsesChapte
           </button>
           <button
             onClick={() => scroll('right')}
-            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 items-center justify-center rounded-full bg-gold-400/20 hover:bg-gold-400/40 text-gold-300 backdrop-blur-sm border border-gold-400/30 transition-all -mr-6"
+            disabled={activeIndex === horses.length - 1}
+            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 items-center justify-center rounded-full bg-gold-400/20 hover:bg-gold-400/40 hover:scale-110 disabled:opacity-30 disabled:hover:scale-100 text-gold-300 backdrop-blur-sm border border-gold-400/30 transition-all cursor-pointer -mr-6"
             aria-label="Next horse"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -103,17 +137,22 @@ export const HorsesChapter = ({ chapter, title, subtitle, horses }: HorsesChapte
             </svg>
           </button>
 
-          {/* Cards Container */}
+          {/* Cards Container - with initial padding for centering */}
           <div
             ref={containerRef}
             onScroll={handleScroll}
-            className="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 py-8 -mx-4"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            className="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory py-8"
+            style={{
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+              paddingLeft: `${Math.max(16, (containerWidth - cardWidth) / 2)}px`,
+              paddingRight: `${Math.max(16, (containerWidth - cardWidth) / 2)}px`
+            }}
           >
             {horses.map((horse, index) => (
               <div
                 key={horse.name}
-                className={`flex-shrink-0 w-[320px] md:w-[380px] transition-all duration-500 snap-center ${
+                className={`flex-shrink-0 w-[300px] sm:w-[320px] md:w-[380px] transition-all duration-500 snap-center cursor-pointer group ${
                   isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                 }`}
                 style={{
@@ -121,11 +160,11 @@ export const HorsesChapter = ({ chapter, title, subtitle, horses }: HorsesChapte
                 }}
               >
                 {/* Horse Card */}
-                <div className="relative h-[420px] md:h-[480px]">
+                <div className="relative h-[380px] sm:h-[400px] md:h-[480px]">
                   {/* Front Side */}
-                  <div className="absolute inset-0 glass-card rounded-3xl p-6 flex flex-col overflow-hidden">
+                  <div className="absolute inset-0 glass-card rounded-xl p-6 flex flex-col overflow-hidden group-hover:border-gold-400/40 transition-all duration-300">
                     {/* Horse Avatar */}
-                    <div className="w-20 h-20 md:w-24 md:h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-gold-400/30 to-gold-400/10 flex items-center justify-center border-2 border-gold-400/30 shadow-luxury flex-shrink-0">
+                    <div className="w-20 h-20 md:w-24 md:h-24 mx-auto mb-4 rounded-xl bg-gradient-to-br from-gold-400/30 to-gold-400/10 flex items-center justify-center border-2 border-gold-400/30 shadow-luxury flex-shrink-0">
                       <span className="text-4xl md:text-5xl">🐴</span>
                     </div>
 
@@ -136,7 +175,7 @@ export const HorsesChapter = ({ chapter, title, subtitle, horses }: HorsesChapte
 
                     {/* Personality Badge */}
                     <div className="flex items-center justify-center gap-2 mb-3">
-                      <span className="px-3 py-1 bg-gold-400/20 text-gold-300 rounded-full text-xs md:text-sm font-sans font-semibold border border-gold-400/30 truncate max-w-full">
+                      <span className="px-3 py-1 bg-gold-400/20 text-gold-300 rounded-lg text-xs md:text-sm font-sans font-semibold border border-gold-400/30 truncate max-w-full">
                         {horse.personality}
                       </span>
                     </div>
@@ -155,7 +194,7 @@ export const HorsesChapter = ({ chapter, title, subtitle, horses }: HorsesChapte
                   </div>
 
                   {/* Fun Fact Badge - Floating */}
-                  <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-10 px-3 py-1.5 bg-gold-400 text-forest-900 rounded-full text-xs md:text-sm font-sans font-bold shadow-luxury whitespace-nowrap max-w-[85%] text-center truncate">
+                  <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-10 px-3 py-1.5 bg-gold-400 text-forest-900 rounded-lg text-xs md:text-sm font-sans font-bold shadow-luxury whitespace-nowrap max-w-[85%] text-center truncate">
                     ✨ {horse.funFact}
                   </div>
                 </div>
@@ -165,23 +204,16 @@ export const HorsesChapter = ({ chapter, title, subtitle, horses }: HorsesChapte
 
           {/* Scroll Indicators */}
           <div className="flex justify-center gap-2 mt-6">
-            {horses.map((_, index) => (
+            {horses.map((horse, index) => (
               <button
                 key={index}
-                onClick={() => {
-                  if (containerRef.current) {
-                    containerRef.current.scrollTo({
-                      left: index * containerRef.current.offsetWidth,
-                      behavior: 'smooth',
-                    });
-                  }
-                }}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                onClick={() => goToCard(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 cursor-pointer ${
                   activeIndex === index
-                    ? 'w-8 bg-gold-400'
-                    : 'bg-cream-400/40 hover:bg-cream-400/60'
+                    ? 'w-8 bg-gold-400 shadow-[0_0_10px_rgba(250,204,21,0.5)]'
+                    : 'bg-cream-400/40 hover:bg-cream-400/60 hover:w-3'
                 }`}
-                aria-label={`Go to ${horses[index].name}`}
+                aria-label={`Go to ${horse.name}`}
               />
             ))}
           </div>
