@@ -57,6 +57,10 @@ export const Header = () => {
               {t('gallery', { ns: 'nav' })}
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold-400 group-hover:w-full transition-all duration-300"></span>
             </Link>
+            <Link to="/horses" className="font-sans font-medium text-sm text-cream-100 hover:text-gold-400 transition-colors relative group">
+              {t('horses', { ns: 'nav' })}
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold-400 group-hover:w-full transition-all duration-300"></span>
+            </Link>
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -157,12 +161,19 @@ export const Header = () => {
               >
                 {t('coffee', { ns: 'nav' })}
               </Link>
-              <Link 
-                to="/gallery" 
+              <Link
+                to="/gallery"
                 className="font-sans font-bold text-2xl text-cream-100 hover:text-gold-400 transition-colors py-3 border-b border-cream-100/10"
                 onClick={closeMobileMenu}
               >
                 {t('gallery', { ns: 'nav' })}
+              </Link>
+              <Link
+                to="/horses"
+                className="font-sans font-bold text-2xl text-cream-100 hover:text-gold-400 transition-colors py-3 border-b border-cream-100/10"
+                onClick={closeMobileMenu}
+              >
+                {t('horses', { ns: 'nav' })}
               </Link>
             </nav>
 

@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Ban } from 'lucide-react';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { isDateAvailable, getAvailableSlots, getDayConfig, getBookedSlotsForDate } from '../../services/calendarStorage';
+import { isDateAvailable, getDayConfig, getBookedSlotsForDate } from '../../services/calendarStorage';
 
 interface BookingCalendarProps {
   onDateSelect: (date: Date) => void;

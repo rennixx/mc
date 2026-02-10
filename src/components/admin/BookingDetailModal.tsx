@@ -1,4 +1,4 @@
-import { X, MapPin, Mail, Phone, Calendar, Clock, Users, FileText, Globe } from 'lucide-react';
+import { X, MapPin, Mail, Phone, Calendar, Clock, FileText, Globe } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import * as L from 'leaflet';
 import { type Booking } from '../../services';

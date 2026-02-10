@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Ban, Clock, Users } from 'lucide-react';
-import { getDayConfig, blockDate, unblockDate, setAvailableSlots, setCapacity, isDateAvailable, type DayConfig } from '../../services/calendarStorage';
+import { ChevronLeft, ChevronRight, Ban, Clock } from 'lucide-react';
+import { getDayConfig, type DayConfig } from '../../services/calendarStorage';
 
 interface AvailabilityCalendarProps {
   onDateSelect?: (date: string) => void;

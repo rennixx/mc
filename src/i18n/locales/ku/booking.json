@@ -9,11 +9,27 @@
     "subtitle": "نۆرەکەت بە چەند هەنگاوێکی سادە تەواو بکە"
   },
   "progress": {
-    "step1": "خزمەتگوزاری",
-    "step2": "وردەکاری",
-    "step3": "ڕێکەوت و کات"
+    "step0": "ئەسپەکان",
+    "step1": "ڕێکەوت و کات",
+    "step2": "خزمەتگوزاری",
+    "step3": "وردەکاری"
+  },
+  "step0": {
+    "title": "ئەسپەکانت هەڵبژێرە",
+    "riderCount": "چەند سوارچاکێک؟",
+    "errors": {
+      "selectHorses": "تکایە ئەسپێک بۆ هەموو سوارچاکەکان هەڵبژێرە"
+    }
   },
   "step1": {
+    "title": "ڕێکەوت و کاتەکەت هەڵبژێرە",
+    "errors": {
+      "selectDateTime": "تکایە هەردووکی ڕێکەوت و کات هەڵبژێرە بۆ بەردەوامبوون",
+      "dateNotAvailable": "ئەم ڕێکەوتە بۆ نۆرەکردن بوونی نییە",
+      "timeNotAvailable": "ئەم کاتە بوونی نییە"
+    }
+  },
+  "step2": {
     "title": "چیت دەوێت نۆرە بکەیت؟",
     "services": {
       "safari": "سەفەری سواری ئەسپ",
@@ -25,23 +41,21 @@
       "selectService": "تکایە خزمەتگوزارییەک هەڵبژێرە"
     }
   },
-  "step2": {
+  "step3": {
     "title": "زانیاریەکانی تۆ",
+    "selectedHorses": "ئەسپە ھەڵبژێردراوەکان",
     "fields": {
       "name": {
         "label": "ناوی تەواو",
-        "placeholder": "ناوی تەواوت بنووسە",
-        "required": true
+        "placeholder": "ناوی تەواوت بنووسە"
       },
       "email": {
         "label": "ئیمەیڵ",
-        "placeholder": "your.email@example.com",
-        "required": true
+        "placeholder": "your.email@example.com"
       },
       "phone": {
         "label": "ژمارەی تەلەفۆن",
-        "placeholder": "+964 750 123 4567",
-        "required": true
+        "placeholder": "+964 750 123 4567"
       },
       "experienceLevel": {
         "label": "ئاستی ئەزموون",
@@ -51,11 +65,6 @@
           "intermediate": "مامناوەند (ئاسایی)",
           "advanced": "پێشکەوتوو (شارەزا)"
         }
-      },
-      "groupSize": {
-        "label": "ژمارەی کەسەکان",
-        "person": "کەس",
-        "people": "کەس"
       },
       "specialRequests": {
         "label": "داواکاری تایبەت (ئارەزوومەندانە)",
@@ -69,14 +78,6 @@
       "phoneRequired": "ژمارەی تەلەفۆن پێویستە"
     }
   },
-  "step3": {
-    "title": "ڕێکەوت و کاتەکەت هەڵبژێرە",
-    "errors": {
-      "selectDateTime": "تکایە هەردووکی ڕێکەوت و کات هەڵبژێرە بۆ بەردەوامبوون",
-      "dateNotAvailable": "ئەم ڕێکەوتە بۆ نۆرەکردن بوونی نییە",
-      "timeNotAvailable": "ئەم کاتە بوونی نییە"
-    }
-  },
   "actions": {
     "back": "گەڕانەوە",
     "continue": "بەردەوامبوون",
@@ -85,6 +86,7 @@
   "success": {
     "title": "نۆرە پشتڕاستکرایەوە!",
     "message": "سوپاس، {{name}}! داواکاری نۆرەکەت وەرگیرا.",
+    "reference": "سەرچاوە: {{id}}",
     "contact": "پەیوەندیت پێوە دەکەین لە {{phone}} بۆ پشتڕاستکردنەوەی نۆرەکەت."
   }
 }

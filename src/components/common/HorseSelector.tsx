@@ -1,0 +1,99 @@
+import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { getAvailableHorses } from '../../services';
+import { HorseCard } from './HorseCard';
+import type { ExperienceLevel } from '../../services';
+
+interface HorseSelectorProps {
+  riderCount: number;
+  selectedHorses: string[]; // Array of horse IDs, one per rider
+  onHorseSelect: (riderIndex: number, horseId: string) => void;
+  showWarningFor?: ExperienceLevel;
+}
+
+export const HorseSelector = ({ riderCount, selectedHorses, onHorseSelect, showWarningFor }: HorseSelectorProps) => {
+  const { t } = useTranslation('components');
+  const [horses, setHorses] = useState(getAvailableHorses());
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      setHorses(getAvailableHorses());
+    };
+    window.addEventListener('horsesUpdated', handleUpdate);
+    return () => window.removeEventListener('horsesUpdated', handleUpdate);
+  }, []);
+
+  // Generate array of rider indices
+  const riders = Array.from({ length: riderCount }, (_, i) => i);
+
+  return (
+    <div className="space-y-8">
+      {riders.map((riderIndex) => {
+        const selectedHorseId = selectedHorses[riderIndex];
+
+        return (
+          <div key={riderIndex} className="space-y-4">
+            {/* Rider Header */}
+            <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center w-10 h-10 bg-gold-400 text-forest-900 font-sans font-bold rounded-full">
+                {riderIndex + 1}
+              </div>
+              <h4 className="text-lg font-sans font-bold text-cream-100">
+                {riderIndex === 0
+                  ? t('horses.yourHorse', 'Your Horse')
+                  : t('horses.riderHorse', `Rider ${riderIndex + 1}'s Horse`)
+                }
+              </h4>
+              {selectedHorseId && (
+                <span className="ml-auto px-3 py-1 bg-green-500/20 text-green-400 text-sm font-sans rounded-full">
+                  ✓ {t('horses.selected')}
+                </span>
+              )}
+            </div>
+
+            {/* Horse Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {horses.map((horse) => (
+                <HorseCard
+                  key={horse.id}
+                  horse={horse}
+                  selected={selectedHorseId === horse.id}
+                  selectable={true}
+                  onClick={() => onHorseSelect(riderIndex, horse.id)}
+                  showWarningFor={showWarningFor}
+                />
+              ))}
+            </div>
+
+            {/* No Horses Available */}
+            {horses.length === 0 && (
+              <div className="p-6 bg-yellow-500/10 border border-yellow-400/30 rounded-lg text-center">
+                <p className="text-yellow-400 font-sans">
+                  {t('horses.noHorsesAvailable', 'No horses are currently available. Please try again later.')}
+                </p>
+              </div>
+            )}
+          </div>
+        );
+      })}
+
+      {/* Summary */}
+      {selectedHorses.filter(Boolean).length === riderCount && (
+        <div className="p-4 bg-green-500/20 border border-green-400/50 rounded-lg">
+          <p className="text-green-400 font-sans font-semibold text-center">
+            {t('horses.allSelected', 'All horses selected! You can continue to the next step.')}
+          </p>
+        </div>
+      )}
+
+      {/* Partial Selection Warning */}
+      {selectedHorses.filter(Boolean).length > 0 && selectedHorses.filter(Boolean).length < riderCount && (
+        <div className="p-4 bg-yellow-500/10 border border-yellow-400/30 rounded-lg">
+          <p className="text-yellow-400 font-sans text-sm text-center">
+            {t('horses.partialSelection', `Selected ${selectedHorses.filter(Boolean).length} of ${riderCount} horses. Please select a horse for each rider.`)}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};

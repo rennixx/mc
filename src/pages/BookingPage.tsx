@@ -1,12 +1,15 @@
-import { Calendar, Users, Mail, Phone, User, MessageSquare, ChevronRight, ChevronLeft, Check, Compass, GraduationCap, UserCircle, PartyPopper } from 'lucide-react';
-import { useState } from 'react';
+import { Calendar, Mail, Phone, User, MessageSquare, ChevronRight, ChevronLeft, Check, Compass, GraduationCap, UserCircle, PartyPopper } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BookingCalendar } from '../components/common/BookingCalendar';
+import { HorseSelector } from '../components/common/HorseSelector';
 import { SEOMeta } from '../components/common/SEOMeta';
 import { WhatsAppButton } from '../components/common/WhatsAppButton';
 import { addBooking } from '../services/bookingStorage';
 import { isDateAvailable, getAvailableSlots, getDayConfig } from '../services/calendarStorage';
 import { getUserLocation } from '../services/ipGeolocation';
+import { getHorseById } from '../services';
+import type { ExperienceLevel } from '../services';
 
 interface BookingFormData {
   service: string;
@@ -14,25 +17,28 @@ interface BookingFormData {
   email: string;
   phone: string;
   experienceLevel: string;
-  groupSize: string;
+  groupSize: number;
   specialRequests: string;
   date?: Date;
   time?: string;
+  horseIds: string[]; // NEW: Array of selected horse IDs
 }
 
 export const BookingPage = () => {
   const { t } = useTranslation('booking');
   const [currentStep, setCurrentStep] = useState(1);
+  const [riderCount, setRiderCount] = useState(1);
   const [formData, setFormData] = useState<BookingFormData>({
     service: '',
     name: '',
     email: '',
     phone: '',
     experienceLevel: 'beginner',
-    groupSize: '1',
+    groupSize: 1,
     specialRequests: '',
+    horseIds: [],
   });
-  const [errors, setErrors] = useState<Partial<Record<keyof BookingFormData, string>>>({});
+  const [errors, setErrors] = useState<Partial<Record<string, string>>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [bookingId, setBookingId] = useState<string | null>(null);
   const [availabilityError, setAvailabilityError] = useState<string | null>(null);
@@ -51,29 +57,42 @@ export const BookingPage = () => {
     { id: 'advanced', name: t('step2.fields.experienceLevel.options.advanced') },
   ];
 
+  // Update rider count when group size changes
+  useEffect(() => {
+    setRiderCount(formData.groupSize);
+    // Ensure horseIds array matches rider count
+    setFormData(prev => ({
+      ...prev,
+      horseIds: prev.horseIds.slice(0, formData.groupSize),
+    }));
+  }, [formData.groupSize]);
+
   const validateStep = (step: number): boolean => {
-    const newErrors: Partial<Record<keyof BookingFormData, string>> = {};
+    const newErrors: Partial<Record<string, string>> = {};
 
     if (step === 1) {
-      // Date & Time validation (was Step 3)
-      if (!formData.date) newErrors.date = t('step3.errors.selectDateTime');
-      if (!formData.time) newErrors.time = t('step3.errors.selectDateTime');
+      // Horse Selection validation (NEW)
+      if (formData.horseIds.length !== formData.groupSize) {
+        newErrors.horses = t('step0.errors.selectHorses', 'Please select a horse for each rider');
+      }
+    }
 
-      // Validate availability when both date and time are selected
+    if (step === 2) {
+      // Date & Time validation
+      if (!formData.date) newErrors.date = t('step1.errors.selectDateTime');
+      if (!formData.time) newErrors.time = t('step1.errors.selectDateTime');
+
       if (formData.date && formData.time) {
         const dateStr = formData.date.toISOString().split('T')[0];
-
-        // Check if date is available
         if (!isDateAvailable(dateStr)) {
           const config = getDayConfig(dateStr);
-          setAvailabilityError(config?.blockReason || t('step3.errors.dateNotAvailable'));
-          newErrors.date = t('step3.errors.dateNotAvailable');
+          setAvailabilityError(config?.blockReason || t('step1.errors.dateNotAvailable'));
+          newErrors.date = t('step1.errors.dateNotAvailable');
         } else {
-          // Check if the specific time slot is available
           const availableSlots = getAvailableSlots(dateStr);
           if (availableSlots.length > 0 && !availableSlots.includes(formData.time)) {
-            setAvailabilityError(t('step3.errors.timeNotAvailable'));
-            newErrors.time = t('step3.errors.timeNotAvailable');
+            setAvailabilityError(t('step1.errors.timeNotAvailable'));
+            newErrors.time = t('step1.errors.timeNotAvailable');
           } else {
             setAvailabilityError(null);
           }
@@ -81,17 +100,17 @@ export const BookingPage = () => {
       }
     }
 
-    if (step === 2) {
-      // Service validation (was Step 1)
-      if (!formData.service) newErrors.service = t('step1.errors.selectService');
+    if (step === 3) {
+      // Service validation
+      if (!formData.service) newErrors.service = t('step2.errors.selectService');
     }
 
-    if (step === 3) {
-      // Personal Details validation (was Step 2)
-      if (!formData.name.trim()) newErrors.name = t('step2.errors.nameRequired');
-      if (!formData.email.trim()) newErrors.email = t('step2.errors.emailRequired');
-      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = t('step2.errors.emailInvalid');
-      if (!formData.phone.trim()) newErrors.phone = t('step2.errors.phoneRequired');
+    if (step === 4) {
+      // Personal Details validation
+      if (!formData.name.trim()) newErrors.name = t('step3.errors.nameRequired');
+      if (!formData.email.trim()) newErrors.email = t('step3.errors.emailRequired');
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = t('step3.errors.emailInvalid');
+      if (!formData.phone.trim()) newErrors.phone = t('step3.errors.phoneRequired');
     }
 
     setErrors(newErrors);
@@ -111,23 +130,33 @@ export const BookingPage = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleHorseSelect = (riderIndex: number, horseId: string) => {
+    setFormData(prev => {
+      const newHorseIds = [...prev.horseIds];
+      newHorseIds[riderIndex] = horseId;
+      return { ...prev, horseIds: newHorseIds };
+    });
+    if (errors.horses) {
+      setErrors({ ...errors, horses: undefined });
+    }
+  };
+
   const handleSubmit = async () => {
-    if (validateStep(3) && formData.date && formData.time) {
+    if (validateStep(4) && formData.date && formData.time) {
       try {
-        // Get user location (silent, no permission required)
         const location = await getUserLocation();
 
-        // Save booking to localStorage
         const booking = addBooking({
           service: formData.service as any,
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
           experienceLevel: formData.experienceLevel,
-          groupSize: parseInt(formData.groupSize),
+          groupSize: formData.groupSize,
           specialRequests: formData.specialRequests,
           date: formData.date.toISOString().split('T')[0],
           time: formData.time,
+          horseIds: formData.horseIds,
           location: location || undefined,
         });
 
@@ -136,14 +165,13 @@ export const BookingPage = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } catch (error) {
         console.error('Error saving booking:', error);
-        // Still show success even if storage fails
         setIsSubmitted(true);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
   };
 
-  const updateFormData = (field: keyof BookingFormData, value: string | Date) => {
+  const updateFormData = (field: keyof BookingFormData, value: any) => {
     setFormData({ ...formData, [field]: value });
     if (errors[field]) {
       setErrors({ ...errors, [field]: undefined });
@@ -169,11 +197,11 @@ export const BookingPage = () => {
               {t('header.subtitle')}
             </p>
 
-            {/* Progress Indicator */}
-            <div className="mt-8 max-w-2xl mx-auto">
+            {/* Progress Indicator - 4 Steps */}
+            <div className="mt-8 max-w-3xl mx-auto">
               <div className="flex items-center justify-between">
-                {[1, 2, 3].map((step) => (
-                  <div key={step} className="flex items-center" style={{ flex: step < 3 ? '1 1 0%' : '0 0 auto' }}>
+                {[1, 2, 3, 4].map((step) => (
+                  <div key={step} className="flex items-center" style={{ flex: step < 4 ? '1 1 0%' : '0 0 auto' }}>
                     <div className="flex flex-col items-center">
                       <div
                         className={`flex items-center justify-center w-12 h-12 font-sans font-bold transition-colors ${
@@ -185,12 +213,12 @@ export const BookingPage = () => {
                         {currentStep > step ? <Check className="w-6 h-6" /> : step}
                       </div>
                       <span className={`mt-3 text-sm font-sans whitespace-nowrap ${currentStep === step ? 'text-gold-400 font-semibold' : 'text-cream-300'}`}>
-                        {step === 1 ? t('progress.step3') : step === 2 ? t('progress.step1') : t('progress.step2')}
+                        {step === 1 ? t('progress.step0') : step === 2 ? t('progress.step1') : step === 3 ? t('progress.step2') : t('progress.step3')}
                       </span>
                     </div>
-                    {step < 3 && (
+                    {step < 4 && (
                       <div
-                        className={`flex-1 h-1 mx-4 ${
+                        className={`flex-1 h-1 mx-2 md:mx-4 ${
                           currentStep > step ? 'bg-gold-400' : 'bg-cream-400/20'
                         }`}
                       />
@@ -205,11 +233,54 @@ export const BookingPage = () => {
           <div className="glass-card p-8 md:p-12">
             {!isSubmitted ? (
               <>
-                {/* Step 1: Date & Time */}
+                {/* Step 1: Horse Selection */}
                 {currentStep === 1 && (
                   <div className="space-y-6">
                     <h2 className="text-2xl font-sans font-bold text-cream-100 mb-6">
-                      {t('step3.title')}
+                      {t('step0.title')}
+                    </h2>
+
+                    {/* Rider Count Selector */}
+                    <div className="mb-6">
+                      <label className="block text-cream-200 font-sans font-semibold mb-3">
+                        {t('step0.riderCount')}
+                      </label>
+                      <div className="flex flex-wrap gap-2">
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                          <button
+                            key={num}
+                            onClick={() => updateFormData('groupSize', num)}
+                            className={`px-4 py-2 font-sans font-semibold transition-colors ${
+                              formData.groupSize === num
+                                ? 'bg-gold-400 text-forest-900'
+                                : 'glass text-cream-100 hover:bg-white/10'
+                            }`}
+                          >
+                            {num}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Horse Selector */}
+                    <HorseSelector
+                      riderCount={riderCount}
+                      selectedHorses={formData.horseIds}
+                      onHorseSelect={handleHorseSelect}
+                      showWarningFor={formData.experienceLevel as ExperienceLevel}
+                    />
+
+                    {errors.horses && (
+                      <p className="text-red-400 text-sm font-sans mt-2">{errors.horses}</p>
+                    )}
+                  </div>
+                )}
+
+                {/* Step 2: Date & Time */}
+                {currentStep === 2 && (
+                  <div className="space-y-6">
+                    <h2 className="text-2xl font-sans font-bold text-cream-100 mb-6">
+                      {t('step1.title')}
                     </h2>
                     <BookingCalendar
                       selectedDate={formData.date}
@@ -219,7 +290,7 @@ export const BookingPage = () => {
                     />
                     {(errors.date || errors.time) && (
                       <p className="text-red-400 text-sm font-sans">
-                        {t('step3.errors.selectDateTime')}
+                        {t('step1.errors.selectDateTime')}
                       </p>
                     )}
                     {availabilityError && !errors.date && !errors.time && (
@@ -230,11 +301,11 @@ export const BookingPage = () => {
                   </div>
                 )}
 
-                {/* Step 2: Service Selection */}
-                {currentStep === 2 && (
+                {/* Step 3: Service Selection */}
+                {currentStep === 3 && (
                   <div className="space-y-6">
                     <h2 className="text-2xl font-sans font-bold text-cream-100 mb-6">
-                      {t('step1.title')}
+                      {t('step2.title')}
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {services.map((service) => (
@@ -258,73 +329,67 @@ export const BookingPage = () => {
                   </div>
                 )}
 
-                {/* Step 3: Personal Details */}
-                {currentStep === 3 && (
+                {/* Step 4: Personal Details */}
+                {currentStep === 4 && (
                   <div className="space-y-6">
                     <h2 className="text-2xl font-sans font-bold text-cream-100 mb-6">
-                      {t('step2.title')}
+                      {t('step3.title')}
                     </h2>
 
                     {/* Name */}
                     <div>
                       <label className="flex items-center gap-2 text-cream-200 font-sans font-semibold mb-2">
                         <User className="w-4 h-4" />
-                        {t('step2.fields.name.label')} *
+                        {t('step3.fields.name.label')} *
                       </label>
                       <input
                         type="text"
                         value={formData.name}
                         onChange={(e) => updateFormData('name', e.target.value)}
                         className="w-full px-4 py-3 bg-cream-400/10 border border-cream-400/20 text-cream-100 font-sans focus:outline-none focus:border-gold-400"
-                        placeholder={t('step2.fields.name.placeholder')}
+                        placeholder={t('step3.fields.name.placeholder')}
                       />
-                      {errors.name && (
-                        <p className="text-red-400 text-sm font-sans mt-1">{errors.name}</p>
-                      )}
+                      {errors.name && <p className="text-red-400 text-sm font-sans mt-1">{errors.name}</p>}
                     </div>
 
                     {/* Email */}
                     <div>
                       <label className="flex items-center gap-2 text-cream-200 font-sans font-semibold mb-2">
                         <Mail className="w-4 h-4" />
-                        {t('step2.fields.email.label')} *
+                        {t('step3.fields.email.label')} *
                       </label>
                       <input
                         type="email"
                         value={formData.email}
                         onChange={(e) => updateFormData('email', e.target.value)}
                         className="w-full px-4 py-3 bg-cream-400/10 border border-cream-400/20 text-cream-100 font-sans focus:outline-none focus:border-gold-400"
-                        placeholder={t('step2.fields.email.placeholder')}
+                        placeholder={t('step3.fields.email.placeholder')}
                         dir="ltr"
                       />
-                      {errors.email && (
-                        <p className="text-red-400 text-sm font-sans mt-1">{errors.email}</p>
-                      )}
+                      {errors.email && <p className="text-red-400 text-sm font-sans mt-1">{errors.email}</p>}
                     </div>
 
                     {/* Phone */}
                     <div>
                       <label className="flex items-center gap-2 text-cream-200 font-sans font-semibold mb-2">
                         <Phone className="w-4 h-4" />
-                        {t('step2.fields.phone.label')} *
+                        {t('step3.fields.phone.label')} *
                       </label>
                       <input
                         type="tel"
                         value={formData.phone}
                         onChange={(e) => updateFormData('phone', e.target.value)}
                         className="w-full px-4 py-3 bg-cream-400/10 border border-cream-400/20 text-cream-100 font-sans focus:outline-none focus:border-gold-400"
-                        placeholder={t('step2.fields.phone.placeholder')}
+                        placeholder={t('step3.fields.phone.placeholder')}
                         dir="ltr"
                       />
-                      {errors.phone && (
-                        <p className="text-red-400 text-sm font-sans mt-1">{errors.phone}</p>
-                      )}
+                      {errors.phone && <p className="text-red-400 text-sm font-sans mt-1">{errors.phone}</p>}
                     </div>
 
                     {/* Experience Level */}
                     <div>
                       <label className="flex items-center gap-2 text-cream-200 font-sans font-semibold mb-2">
-                        {t('step2.fields.experienceLevel.label')}
+                        {t('step3.fields.experienceLevel.label')}
                       </label>
                       <select
                         value={formData.experienceLevel}
@@ -339,44 +404,41 @@ export const BookingPage = () => {
                       </select>
                     </div>
 
-                    {/* Group Size */}
-                    <div>
-                      <label className="flex items-center gap-2 text-cream-200 font-sans font-semibold mb-2">
-                        <Users className="w-4 h-4" />
-                        {t('step2.fields.groupSize.label')}
-                      </label>
-                      <select
-                        value={formData.groupSize}
-                        onChange={(e) => updateFormData('groupSize', e.target.value)}
-                        className="w-full px-4 py-3 bg-cream-400/10 border border-cream-400/20 text-cream-100 font-sans focus:outline-none focus:border-gold-400"
-                      >
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                          <option key={num} value={num} className="bg-forest-900">
-                            {num} {num === 1 ? t('step2.fields.groupSize.person') : t('step2.fields.groupSize.people')}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
                     {/* Special Requests */}
                     <div>
                       <label className="flex items-center gap-2 text-cream-200 font-sans font-semibold mb-2">
                         <MessageSquare className="w-4 h-4" />
-                        {t('step2.fields.specialRequests.label')}
+                        {t('step3.fields.specialRequests.label')}
                       </label>
                       <textarea
                         value={formData.specialRequests}
                         onChange={(e) => updateFormData('specialRequests', e.target.value)}
                         rows={4}
                         className="w-full px-4 py-3 bg-cream-400/10 border border-cream-400/20 text-cream-100 font-sans focus:outline-none focus:border-gold-400 resize-none"
-                        placeholder={t('step2.fields.specialRequests.placeholder')}
+                        placeholder={t('step3.fields.specialRequests.placeholder')}
                       />
                     </div>
+
+                    {/* Selected Horses Summary */}
+                    {formData.horseIds.length > 0 && (
+                      <div className="p-4 bg-gold-400/10 border border-gold-400/30 rounded-lg">
+                        <p className="text-gold-400 font-sans font-semibold mb-2">{t('step3.selectedHorses')}:</p>
+                        <div className="flex flex-wrap gap-2">
+                          {formData.horseIds.map((horseId, i) => {
+                            const horse = getHorseById(horseId);
+                            return horse ? (
+                              <span key={i} className="px-3 py-1 bg-gold-400/20 text-gold-300 font-sans text-sm rounded-full">
+                                {i + 1}. {horse.name}
+                              </span>
+                            ) : null;
+                          })}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </>
             ) : (
-              /* Success Message */
               <div className="text-center py-12">
                 <div className="inline-flex items-center justify-center w-20 h-20 bg-green-500/20 mb-6">
                   <Check className="w-12 h-12 text-green-400" />
@@ -414,7 +476,7 @@ export const BookingPage = () => {
 
               <div className="flex-1" />
 
-              {currentStep < 3 ? (
+              {currentStep < 4 ? (
                 <button
                   onClick={handleNext}
                   className="flex items-center gap-2 px-6 py-3 bg-gold-400 hover:bg-gold-500 text-forest-900 font-sans font-bold transition-colors"

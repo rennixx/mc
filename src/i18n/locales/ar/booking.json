@@ -9,11 +9,27 @@
     "subtitle": "أكمل حجزك في بضع خطوات بسيطة"
   },
   "progress": {
-    "step1": "الخدمة",
-    "step2": "التفاصيل",
-    "step3": "التاريخ والوقت"
+    "step0": "الخيول",
+    "step1": "التاريخ والوقت",
+    "step2": "الخدمة",
+    "step3": "التفاصيل"
+  },
+  "step0": {
+    "title": "اختر خيولك",
+    "riderCount": "كم عدد الفرسان؟",
+    "errors": {
+      "selectHorses": "الرجاء اختيار حصان لكل فارس"
+    }
   },
   "step1": {
+    "title": "اختر التاريخ والوقت",
+    "errors": {
+      "selectDateTime": "الرجاء اختيار كل من التاريخ والوقت للمتابعة",
+      "dateNotAvailable": "هذا التاريخ غير متاح للحجز",
+      "timeNotAvailable": "هذا الموعد غير متاح"
+    }
+  },
+  "step2": {
     "title": "ماذا تريد أن تحجز؟",
     "services": {
       "safari": "رحلة سفاري لركوب الخيل",
@@ -25,23 +41,21 @@
       "selectService": "الرجاء اختيار خدمة"
     }
   },
-  "step2": {
+  "step3": {
     "title": "معلوماتك",
+    "selectedHorses": "الخيول المحددة",
     "fields": {
       "name": {
         "label": "الاسم الكامل",
-        "placeholder": "أدخل اسمك الكامل",
-        "required": true
+        "placeholder": "أدخل اسمك الكامل"
       },
       "email": {
         "label": "عنوان البريد الإلكتروني",
-        "placeholder": "your.email@example.com",
-        "required": true
+        "placeholder": "your.email@example.com"
       },
       "phone": {
         "label": "رقم الهاتف",
-        "placeholder": "+964 750 123 4567",
-        "required": true
+        "placeholder": "+964 750 123 4567"
       },
       "experienceLevel": {
         "label": "مستوى الخبرة",
@@ -51,11 +65,6 @@
           "intermediate": "متوسط (مرتاح)",
           "advanced": "متقدم (راكب خبير)"
         }
-      },
-      "groupSize": {
-        "label": "عدد الأشخاص",
-        "person": "شخص",
-        "people": "أشخاص"
       },
       "specialRequests": {
         "label": "طلبات خاصة (اختياري)",
@@ -69,14 +78,6 @@
       "phoneRequired": "رقم الهاتف مطلوب"
     }
   },
-  "step3": {
-    "title": "اختر التاريخ والوقت",
-    "errors": {
-      "selectDateTime": "الرجاء اختيار كل من التاريخ والوقت للمتابعة",
-      "dateNotAvailable": "هذا التاريخ غير متاح للحجز",
-      "timeNotAvailable": "هذا الموعد غير متاح"
-    }
-  },
   "actions": {
     "back": "رجوع",
     "continue": "متابعة",
@@ -85,6 +86,7 @@
   "success": {
     "title": "تم تأكيد الحجز!",
     "message": "شكراً لك، {{name}}! تم استلام طلب الحجز الخاص بك.",
+    "reference": "المرجع: {{id}}",
     "contact": "سنتصل بك على {{phone}} لتأكيد حجزك."
   }
 }

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { AdminSidebar } from '../components/layout/AdminSidebar';
 import { AdminHeader } from '../components/layout/AdminHeader';
 import { getBookingStats, initializeSampleData, getAllBookings } from '../services/bookingStorage';
-import { BookingsPage, CalendarPage, NewBookingPage, CalendarManagementPage } from './admin';
+import { BookingsPage, CalendarPage, NewBookingPage, CalendarManagementPage, HorsesPage } from './admin';
 import { FileText, Clock, CheckCircle2, Calendar, Users } from 'lucide-react';
 import { StatusBadge } from '../components/admin';
 
@@ -16,14 +16,14 @@ if (typeof window !== 'undefined') {
 export const AdminPage = () => {
   const { t } = useTranslation('admin');
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [refresh, setRefresh] = useState(0);
+  const [, forceUpdate] = useState({});
 
   const stats = getBookingStats();
   const recentBookings = getAllBookings().slice(0, 5);
 
   // Auto-refresh when bookings change (same-tab and cross-tab)
   useEffect(() => {
-    const handleUpdate = () => setRefresh(prev => prev + 1);
+    const handleUpdate = () => forceUpdate({});
 
     // Listen for custom event (same-tab updates)
     window.addEventListener('bookingsUpdated', handleUpdate);
@@ -140,6 +140,7 @@ export const AdminPage = () => {
             <Route path="bookings" element={<BookingsPage />} />
             <Route path="calendar" element={<CalendarPage />} />
             <Route path="calendar-management" element={<CalendarManagementPage />} />
+            <Route path="horses" element={<HorsesPage />} />
             <Route path="new" element={<NewBookingPage />} />
             <Route path="*" element={<Navigate to="/admin" replace />} />
           </Routes>

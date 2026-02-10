@@ -28,6 +28,7 @@ export type Booking = {
   createdAt: string; // ISO timestamp
   notes?: string; // Admin notes
   location?: BookingLocation; // IP-based location data
+  horseIds?: string[]; // Selected horse IDs for this booking
 }
 
 const STORAGE_KEY = 'mam_bookings';

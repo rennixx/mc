@@ -12,6 +12,7 @@
     "bookings": "Bookings",
     "calendar": "Calendar",
     "calendarManagement": "Availability",
+    "horses": "Horses",
     "newBooking": "New Booking",
     "backToSite": "Back to Website"
   },
@@ -105,5 +106,66 @@
     "status": "Status",
     "notes": "Admin Notes (Internal)",
     "submit": "Create Booking"
+  },
+  "horses": {
+    "title": "Manage Horses",
+    "subtitle": "Manage your horses, availability, and details",
+    "addHorse": "Add Horse",
+    "editHorse": "Edit Horse",
+    "deleteHorse": "Delete Horse",
+    "confirmDelete": "Are you sure you want to delete {{name}}?",
+    "stats": {
+      "total": "Total Horses",
+      "available": "Available",
+      "unavailable": "Unavailable"
+    },
+    "form": {
+      "name": "Horse Name",
+      "breed": "Breed",
+      "age": "Age",
+      "gender": "Gender",
+      "color": "Color",
+      "image": "Image URL",
+      "description": "Description",
+      "maxWeight": "Maximum Weight (kg)",
+      "available": "Available for booking",
+      "unavailableReason": "Reason for unavailability",
+      "suitableFor": "Suitable For",
+      "submit": "Save Horse",
+      "cancel": "Cancel",
+      "edit": "Edit Horse",
+      "add": "Add Horse"
+    },
+    "genders": {
+      "mare": "Mare",
+      "stallion": "Stallion",
+      "gelding": "Gelding"
+    },
+    "levels": {
+      "beginner": "Beginner",
+      "novice": "Novice",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "actions": {
+      "makeAvailable": "Make Available",
+      "makeUnavailable": "Make Unavailable",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "table": {
+      "name": "Name",
+      "breed": "Breed",
+      "age": "Age",
+      "gender": "Gender",
+      "status": "Status",
+      "suitableFor": "Suitable For",
+      "actions": "Actions"
+    },
+    "success": {
+      "added": "Horse added successfully!",
+      "updated": "Horse updated successfully!",
+      "deleted": "Horse deleted successfully!"
+    }
   }
 }

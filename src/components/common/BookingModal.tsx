@@ -1,9 +1,12 @@
-import { X, Calendar, Users, Mail, Phone, User, MessageSquare, ChevronRight, ChevronLeft, Check } from 'lucide-react';
-import { useState } from 'react';
+import { X, Calendar, Mail, Phone, User, MessageSquare, ChevronRight, ChevronLeft, Check } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { BookingCalendar } from './BookingCalendar';
+import { HorseSelector } from './HorseSelector';
 import { addBooking } from '../../services/bookingStorage';
 import { isDateAvailable, getAvailableSlots, getDayConfig } from '../../services/calendarStorage';
 import { getUserLocation } from '../../services/ipGeolocation';
+import { getHorseById } from '../../services';
+import type { ExperienceLevel } from '../../services';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -16,24 +19,27 @@ interface BookingFormData {
   email: string;
   phone: string;
   experienceLevel: string;
-  groupSize: string;
+  groupSize: number;
   specialRequests: string;
   date?: Date;
   time?: string;
+  horseIds: string[];
 }
 
 export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [riderCount, setRiderCount] = useState(1);
   const [formData, setFormData] = useState<BookingFormData>({
     service: '',
     name: '',
     email: '',
     phone: '',
     experienceLevel: 'beginner',
-    groupSize: '1',
+    groupSize: 1,
     specialRequests: '',
+    horseIds: [],
   });
-  const [errors, setErrors] = useState<Partial<Record<keyof BookingFormData, string>>>({});
+  const [errors, setErrors] = useState<Partial<Record<string, string>>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [availabilityError, setAvailabilityError] = useState<string | null>(null);
 
@@ -51,25 +57,34 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
     { id: 'advanced', name: 'Advanced (Expert rider)' },
   ];
 
+  useEffect(() => {
+    setRiderCount(formData.groupSize);
+    setFormData(prev => ({
+      ...prev,
+      horseIds: prev.horseIds.slice(0, formData.groupSize),
+    }));
+  }, [formData.groupSize]);
+
   const validateStep = (step: number): boolean => {
-    const newErrors: Partial<Record<keyof BookingFormData, string>> = {};
+    const newErrors: Partial<Record<string, string>> = {};
 
     if (step === 1) {
-      // Date & Time validation (was Step 3)
+      if (formData.horseIds.length !== formData.groupSize) {
+        newErrors.horses = 'Please select a horse for each rider';
+      }
+    }
+
+    if (step === 2) {
       if (!formData.date) newErrors.date = 'Please select a date';
       if (!formData.time) newErrors.time = 'Please select a time';
 
-      // Validate availability when both date and time are selected
       if (formData.date && formData.time) {
         const dateStr = formData.date.toISOString().split('T')[0];
-
-        // Check if date is available
         if (!isDateAvailable(dateStr)) {
           const config = getDayConfig(dateStr);
           setAvailabilityError(config?.blockReason || 'This date is not available for booking');
           newErrors.date = 'This date is not available for booking';
         } else {
-          // Check if the specific time slot is available
           const availableSlots = getAvailableSlots(dateStr);
           if (availableSlots.length > 0 && !availableSlots.includes(formData.time)) {
             setAvailabilityError('This time slot is not available');
@@ -81,13 +96,11 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
       }
     }
 
-    if (step === 2) {
-      // Service validation (was Step 1)
+    if (step === 3) {
       if (!formData.service) newErrors.service = 'Please select a service';
     }
 
-    if (step === 3) {
-      // Personal Details validation (was Step 2)
+    if (step === 4) {
       if (!formData.name.trim()) newErrors.name = 'Name is required';
       if (!formData.email.trim()) newErrors.email = 'Email is required';
       else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Invalid email format';
@@ -109,37 +122,40 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
     setErrors({});
   };
 
-  const handleSubmit = async () => {
-    if (validateStep(3) && formData.date && formData.time) {
-      try {
-        // Get user location (silent, no permission required)
-        const location = await getUserLocation();
+  const handleHorseSelect = (riderIndex: number, horseId: string) => {
+    setFormData(prev => {
+      const newHorseIds = [...prev.horseIds];
+      newHorseIds[riderIndex] = horseId;
+      return { ...prev, horseIds: newHorseIds };
+    });
+    if (errors.horses) {
+      setErrors({ ...errors, horses: undefined });
+    }
+  };
 
-        // Save booking to localStorage
+  const handleSubmit = async () => {
+    if (validateStep(4) && formData.date && formData.time) {
+      try {
+        const location = await getUserLocation();
         addBooking({
           service: formData.service as any,
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
           experienceLevel: formData.experienceLevel,
-          groupSize: parseInt(formData.groupSize),
+          groupSize: formData.groupSize,
           specialRequests: formData.specialRequests,
           date: formData.date.toISOString().split('T')[0],
           time: formData.time,
+          horseIds: formData.horseIds,
           location: location || undefined,
         });
-
         setIsSubmitted(true);
-        setTimeout(() => {
-          handleClose();
-        }, 3000);
+        setTimeout(() => handleClose(), 3000);
       } catch (error) {
         console.error('Error saving booking:', error);
-        // Still close the modal even if storage fails
         setIsSubmitted(true);
-        setTimeout(() => {
-          handleClose();
-        }, 3000);
+        setTimeout(() => handleClose(), 3000);
       }
     }
   };
@@ -152,8 +168,9 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
       email: '',
       phone: '',
       experienceLevel: 'beginner',
-      groupSize: '1',
+      groupSize: 1,
       specialRequests: '',
+      horseIds: [],
     });
     setErrors({});
     setAvailabilityError(null);
@@ -161,7 +178,7 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
     onClose();
   };
 
-  const updateFormData = (field: keyof BookingFormData, value: string | Date) => {
+  const updateFormData = (field: keyof BookingFormData, value: any) => {
     setFormData({ ...formData, [field]: value });
     if (errors[field]) {
       setErrors({ ...errors, [field]: undefined });
@@ -191,9 +208,9 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
             Complete your booking in a few simple steps
           </p>
 
-          {/* Progress Indicator */}
+          {/* Progress Indicator - 4 Steps */}
           <div className="flex items-center gap-2 mt-6">
-            {[1, 2, 3].map((step) => (
+            {[1, 2, 3, 4].map((step) => (
               <div key={step} className="flex items-center flex-1">
                 <div
                   className={`flex items-center justify-center w-8 h-8 font-sans font-bold transition-colors ${
@@ -204,7 +221,7 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
                 >
                   {currentStep > step ? <Check className="w-5 h-5" /> : step}
                 </div>
-                {step < 3 && (
+                {step < 4 && (
                   <div
                     className={`flex-1 h-1 mx-2 ${
                       currentStep > step ? 'bg-gold-400' : 'bg-cream-400/20'
@@ -216,9 +233,10 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
           </div>
 
           <div className="flex justify-between mt-2 text-sm font-sans text-cream-300">
-            <span className={currentStep === 1 ? 'text-gold-400 font-semibold' : ''}>Date & Time</span>
-            <span className={currentStep === 2 ? 'text-gold-400 font-semibold' : ''}>Service</span>
-            <span className={currentStep === 3 ? 'text-gold-400 font-semibold' : ''}>Details</span>
+            <span className={currentStep === 1 ? 'text-gold-400 font-semibold' : ''}>Horses</span>
+            <span className={currentStep === 2 ? 'text-gold-400 font-semibold' : ''}>Date & Time</span>
+            <span className={currentStep === 3 ? 'text-gold-400 font-semibold' : ''}>Service</span>
+            <span className={currentStep === 4 ? 'text-gold-400 font-semibold' : ''}>Details</span>
           </div>
         </div>
 
@@ -226,8 +244,47 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
         <div className="p-8">
           {!isSubmitted ? (
             <>
-              {/* Step 1: Date & Time */}
+              {/* Step 1: Horse Selection */}
               {currentStep === 1 && (
+                <div className="space-y-6">
+                  <h3 className="text-xl font-sans font-bold text-cream-100 mb-4">
+                    Choose Your Horses
+                  </h3>
+
+                  <div className="mb-6">
+                    <label className="block text-cream-200 font-sans font-semibold mb-3">
+                      How many riders?
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                        <button
+                          key={num}
+                          onClick={() => updateFormData('groupSize', num)}
+                          className={`px-4 py-2 font-sans font-semibold transition-colors ${
+                            formData.groupSize === num
+                              ? 'bg-gold-400 text-forest-900'
+                              : 'glass text-cream-100 hover:bg-white/10'
+                          }`}
+                        >
+                          {num}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <HorseSelector
+                    riderCount={riderCount}
+                    selectedHorses={formData.horseIds}
+                    onHorseSelect={handleHorseSelect}
+                    showWarningFor={formData.experienceLevel as ExperienceLevel}
+                  />
+
+                  {errors.horses && <p className="text-red-400 text-sm font-sans">{errors.horses}</p>}
+                </div>
+              )}
+
+              {/* Step 2: Date & Time */}
+              {currentStep === 2 && (
                 <div className="space-y-6">
                   <h3 className="text-xl font-sans font-bold text-cream-100 mb-4">
                     Choose Your Date & Time
@@ -251,8 +308,8 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
                 </div>
               )}
 
-              {/* Step 2: Service Selection */}
-              {currentStep === 2 && (
+              {/* Step 3: Service Selection */}
+              {currentStep === 3 && (
                 <div className="space-y-6">
                   <h3 className="text-xl font-sans font-bold text-cream-100 mb-4">
                     What would you like to book?
@@ -273,20 +330,17 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
                       </button>
                     ))}
                   </div>
-                  {errors.service && (
-                    <p className="text-red-400 text-sm font-sans">{errors.service}</p>
-                  )}
+                  {errors.service && <p className="text-red-400 text-sm font-sans">{errors.service}</p>}
                 </div>
               )}
 
-              {/* Step 3: Personal Details */}
-              {currentStep === 3 && (
+              {/* Step 4: Personal Details */}
+              {currentStep === 4 && (
                 <div className="space-y-6">
                   <h3 className="text-xl font-sans font-bold text-cream-100 mb-4">
                     Your Information
                   </h3>
 
-                  {/* Name */}
                   <div>
                     <label className="flex items-center gap-2 text-cream-200 font-sans font-semibold mb-2">
                       <User className="w-4 h-4" />
@@ -299,12 +353,9 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
                       className="w-full px-4 py-3 bg-cream-400/10 border border-cream-400/20 text-cream-100 font-sans focus:outline-none focus:border-gold-400"
                       placeholder="Enter your full name"
                     />
-                    {errors.name && (
-                      <p className="text-red-400 text-sm font-sans mt-1">{errors.name}</p>
-                    )}
+                    {errors.name && <p className="text-red-400 text-sm font-sans mt-1">{errors.name}</p>}
                   </div>
 
-                  {/* Email */}
                   <div>
                     <label className="flex items-center gap-2 text-cream-200 font-sans font-semibold mb-2">
                       <Mail className="w-4 h-4" />
@@ -318,12 +369,9 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
                       placeholder="your.email@example.com"
                       dir="ltr"
                     />
-                    {errors.email && (
-                      <p className="text-red-400 text-sm font-sans mt-1">{errors.email}</p>
-                    )}
+                    {errors.email && <p className="text-red-400 text-sm font-sans mt-1">{errors.email}</p>}
                   </div>
 
-                  {/* Phone */}
                   <div>
                     <label className="flex items-center gap-2 text-cream-200 font-sans font-semibold mb-2">
                       <Phone className="w-4 h-4" />
@@ -337,12 +385,9 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
                       placeholder="+964 750 123 4567"
                       dir="ltr"
                     />
-                    {errors.phone && (
-                      <p className="text-red-400 text-sm font-sans mt-1">{errors.phone}</p>
-                    )}
+                    {errors.phone && <p className="text-red-400 text-sm font-sans mt-1">{errors.phone}</p>}
                   </div>
 
-                  {/* Experience Level */}
                   <div>
                     <label className="flex items-center gap-2 text-cream-200 font-sans font-semibold mb-2">
                       Experience Level
@@ -360,26 +405,6 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
                     </select>
                   </div>
 
-                  {/* Group Size */}
-                  <div>
-                    <label className="flex items-center gap-2 text-cream-200 font-sans font-semibold mb-2">
-                      <Users className="w-4 h-4" />
-                      Number of People
-                    </label>
-                    <select
-                      value={formData.groupSize}
-                      onChange={(e) => updateFormData('groupSize', e.target.value)}
-                      className="w-full px-4 py-3 bg-cream-400/10 border border-cream-400/20 text-cream-100 font-sans focus:outline-none focus:border-gold-400"
-                    >
-                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                        <option key={num} value={num} className="bg-forest-900">
-                          {num} {num === 1 ? 'Person' : 'People'}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Special Requests */}
                   <div>
                     <label className="flex items-center gap-2 text-cream-200 font-sans font-semibold mb-2">
                       <MessageSquare className="w-4 h-4" />
@@ -393,11 +418,26 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
                       placeholder="Any dietary restrictions, accessibility needs, or special occasions?"
                     />
                   </div>
+
+                  {formData.horseIds.length > 0 && (
+                    <div className="p-4 bg-gold-400/10 border border-gold-400/30 rounded-lg">
+                      <p className="text-gold-400 font-sans font-semibold mb-2">Selected Horses:</p>
+                      <div className="flex flex-wrap gap-2">
+                        {formData.horseIds.map((horseId, i) => {
+                          const horse = getHorseById(horseId);
+                          return horse ? (
+                            <span key={i} className="px-3 py-1 bg-gold-400/20 text-gold-300 font-sans text-sm rounded-full">
+                              {i + 1}. {horse.name}
+                            </span>
+                          ) : null;
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </>
           ) : (
-            /* Success Message */
             <div className="text-center py-12">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-green-500/20 mb-6">
                 <Check className="w-10 h-10 text-green-400" />
@@ -430,7 +470,7 @@ export const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
 
             <div className="flex-1" />
 
-            {currentStep < 3 ? (
+            {currentStep < 4 ? (
               <button
                 onClick={handleNext}
                 className="flex items-center gap-2 px-6 py-3 bg-gold-400 hover:bg-gold-500 text-forest-900 font-sans font-bold transition-colors"

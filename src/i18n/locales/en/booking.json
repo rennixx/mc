@@ -9,11 +9,27 @@
     "subtitle": "Complete your booking in a few simple steps"
   },
   "progress": {
-    "step1": "Service",
-    "step2": "Details",
-    "step3": "Date & Time"
+    "step0": "Horses",
+    "step1": "Date & Time",
+    "step2": "Service",
+    "step3": "Details"
+  },
+  "step0": {
+    "title": "Choose Your Horses",
+    "riderCount": "How many riders?",
+    "errors": {
+      "selectHorses": "Please select a horse for each rider"
+    }
   },
   "step1": {
+    "title": "Choose Your Date & Time",
+    "errors": {
+      "selectDateTime": "Please select both a date and time to continue",
+      "dateNotAvailable": "This date is not available for booking",
+      "timeNotAvailable": "This time slot is not available"
+    }
+  },
+  "step2": {
     "title": "What would you like to book?",
     "services": {
       "safari": "Horse Riding Safari",
@@ -25,23 +41,21 @@
       "selectService": "Please select a service"
     }
   },
-  "step2": {
+  "step3": {
     "title": "Your Information",
+    "selectedHorses": "Selected Horses",
     "fields": {
       "name": {
         "label": "Full Name",
-        "placeholder": "Enter your full name",
-        "required": true
+        "placeholder": "Enter your full name"
       },
       "email": {
         "label": "Email Address",
-        "placeholder": "your.email@example.com",
-        "required": true
+        "placeholder": "your.email@example.com"
       },
       "phone": {
         "label": "Phone Number",
-        "placeholder": "+964 750 123 4567",
-        "required": true
+        "placeholder": "+964 750 123 4567"
       },
       "experienceLevel": {
         "label": "Experience Level",
@@ -51,11 +65,6 @@
           "intermediate": "Intermediate (Comfortable)",
           "advanced": "Advanced (Expert rider)"
         }
-      },
-      "groupSize": {
-        "label": "Number of People",
-        "person": "Person",
-        "people": "People"
       },
       "specialRequests": {
         "label": "Special Requests (Optional)",
@@ -69,14 +78,6 @@
       "phoneRequired": "Phone number is required"
     }
   },
-  "step3": {
-    "title": "Choose Your Date & Time",
-    "errors": {
-      "selectDateTime": "Please select both a date and time to continue",
-      "dateNotAvailable": "This date is not available for booking",
-      "timeNotAvailable": "This time slot is not available"
-    }
-  },
   "actions": {
     "back": "Back",
     "continue": "Continue",
@@ -85,6 +86,7 @@
   "success": {
     "title": "Booking Confirmed!",
     "message": "Thank you, {{name}}! Your booking request has been received.",
+    "reference": "Reference: {{id}}",
     "contact": "We'll contact you at {{phone}} to confirm your booking."
   }
 }

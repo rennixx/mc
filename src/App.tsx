@@ -14,6 +14,7 @@ const GalleryPage = lazy(() => import('./features/gallery/GalleryPage').then(m =
 const CoffeePage = lazy(() => import('./pages/CoffeePage').then(m => ({ default: m.CoffeePage })));
 const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })));
 const BookingPage = lazy(() => import('./pages/BookingPage').then(m => ({ default: m.BookingPage })));
+const HorsesPage = lazy(() => import('./pages/HorsesPage').then(m => ({ default: m.HorsesPage })));
 
 // Admin routes (no Header/Footer)
 const AdminPage = lazy(() => import('./pages/AdminPage').then(m => ({ default: m.AdminPage })));
@@ -48,6 +49,7 @@ function App() {
                     <Route path="/coffee" element={<CoffeePage />} />
                     <Route path="/contact" element={<ContactPage />} />
                     <Route path="/booking" element={<BookingPage />} />
+                    <Route path="/horses" element={<HorsesPage />} />
                   </Routes>
                 </main>
                 <Footer />
