@@ -319,9 +319,9 @@ export const BookingCalendar = ({
                     px-4 py-3 font-sans font-semibold transition-all
                     ${slot.booked ? 'bg-red-500/10 text-red-400/70 cursor-not-allowed border border-red-400/30' : ''}
                     ${!slot.available && !slot.booked ? 'bg-cream-400/10 text-cream-400/50 cursor-not-allowed' : ''}
-                    ${slot.available && !allowTimeSelection ? 'glass cursor-not-allowed text-cream-100' : ''}
-                    ${slot.available && allowTimeSelection && selectedTime !== slot.time ? 'glass hover:bg-white/10 text-cream-100 cursor-pointer' : ''}
-                    ${selectedTime === slot.time ? 'bg-gold-500 text-forest-900' : ''}
+                    ${selectedTime === slot.time ? 'bg-gold-500 text-forest-900 cursor-default' : ''}
+                    ${slot.available && selectedTime !== slot.time && !canSelectTime ? 'glass cursor-not-allowed text-cream-100' : ''}
+                    ${slot.available && selectedTime !== slot.time && canSelectTime ? 'glass hover:bg-white/10 text-cream-100 cursor-pointer' : ''}
                   `}
                 >
                   {slot.label}
