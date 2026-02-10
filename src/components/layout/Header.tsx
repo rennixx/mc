@@ -45,6 +45,14 @@ export const Header = () => {
               {t('safari', { ns: 'nav' })}
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold-400 group-hover:w-full transition-all duration-300"></span>
             </Link>
+            <Link to="/horses" className="font-sans font-medium text-sm text-cream-100 hover:text-gold-400 transition-colors relative group">
+              {t('horses', { ns: 'nav' })}
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold-400 group-hover:w-full transition-all duration-300"></span>
+            </Link>
+            <Link to="/about" className="font-sans font-medium text-sm text-cream-100 hover:text-gold-400 transition-colors relative group">
+              {t('about', { ns: 'nav' })}
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold-400 group-hover:w-full transition-all duration-300"></span>
+            </Link>
             <Link to="/contact" className="font-sans font-medium text-sm text-cream-100 hover:text-gold-400 transition-colors relative group">
               {t('contact', { ns: 'nav' })}
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold-400 group-hover:w-full transition-all duration-300"></span>
@@ -55,10 +63,6 @@ export const Header = () => {
             </Link>
             <Link to="/gallery" className="font-sans font-medium text-sm text-cream-100 hover:text-gold-400 transition-colors relative group">
               {t('gallery', { ns: 'nav' })}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold-400 group-hover:w-full transition-all duration-300"></span>
-            </Link>
-            <Link to="/horses" className="font-sans font-medium text-sm text-cream-100 hover:text-gold-400 transition-colors relative group">
-              {t('horses', { ns: 'nav' })}
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold-400 group-hover:w-full transition-all duration-300"></span>
             </Link>
           </div>
@@ -133,29 +137,43 @@ export const Header = () => {
           <div className="h-full flex flex-col justify-center items-center px-6 pt-20 pb-8">
             {/* Mobile Navigation Links */}
             <nav className={`flex flex-col gap-6 mb-12 w-full max-w-sm ${isRTL ? 'text-right' : 'text-left'}`}>
-              <Link 
-                to="/academy" 
+              <Link
+                to="/academy"
                 className="font-sans font-bold text-2xl text-cream-100 hover:text-gold-400 transition-colors py-3 border-b border-cream-100/10"
                 onClick={closeMobileMenu}
               >
                 {t('academy', { ns: 'nav' })}
               </Link>
-              <Link 
-                to="/safari" 
+              <Link
+                to="/safari"
                 className="font-sans font-bold text-2xl text-cream-100 hover:text-gold-400 transition-colors py-3 border-b border-cream-100/10"
                 onClick={closeMobileMenu}
               >
                 {t('safari', { ns: 'nav' })}
               </Link>
-              <Link 
-                to="/contact" 
+              <Link
+                to="/horses"
+                className="font-sans font-bold text-2xl text-cream-100 hover:text-gold-400 transition-colors py-3 border-b border-cream-100/10"
+                onClick={closeMobileMenu}
+              >
+                {t('horses', { ns: 'nav' })}
+              </Link>
+              <Link
+                to="/about"
+                className="font-sans font-bold text-2xl text-cream-100 hover:text-gold-400 transition-colors py-3 border-b border-cream-100/10"
+                onClick={closeMobileMenu}
+              >
+                {t('about', { ns: 'nav' })}
+              </Link>
+              <Link
+                to="/contact"
                 className="font-sans font-bold text-2xl text-cream-100 hover:text-gold-400 transition-colors py-3 border-b border-cream-100/10"
                 onClick={closeMobileMenu}
               >
                 {t('contact', { ns: 'nav' })}
               </Link>
-              <Link 
-                to="/coffee" 
+              <Link
+                to="/coffee"
                 className="font-sans font-bold text-2xl text-cream-100 hover:text-gold-400 transition-colors py-3 border-b border-cream-100/10"
                 onClick={closeMobileMenu}
               >
@@ -167,13 +185,6 @@ export const Header = () => {
                 onClick={closeMobileMenu}
               >
                 {t('gallery', { ns: 'nav' })}
-              </Link>
-              <Link
-                to="/horses"
-                className="font-sans font-bold text-2xl text-cream-100 hover:text-gold-400 transition-colors py-3 border-b border-cream-100/10"
-                onClick={closeMobileMenu}
-              >
-                {t('horses', { ns: 'nav' })}
               </Link>
             </nav>
 

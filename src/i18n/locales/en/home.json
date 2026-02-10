@@ -57,5 +57,10 @@
         "cta": "Learn More"
       }
     }
+  },
+  "ourStory": {
+    "title": "Our Story",
+    "subtitle": "From a dream to Kurdistan's premier equestrian center",
+    "cta": "Discover Our Journey →"
   }
 }

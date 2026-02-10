@@ -184,6 +184,21 @@ export const HomePage = () => {
         </div>
       </section>
 
+      {/* Our Story Teaser */}
+      <section className="py-16 bg-gradient-to-b from-transparent to-gold-400/5">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4 text-cream-100">{t('ourStory.title', 'Our Story')}</h2>
+          <p className="text-cream-200 mb-6 max-w-2xl mx-auto font-sans">
+            {t('ourStory.subtitle', 'From a dream to Kurdistan\'s premier equestrian center')}
+          </p>
+          <Link to="/about">
+            <button className="px-8 py-3 bg-gold-400 hover:bg-gold-500 text-forest-900 font-sans font-bold transition-colors rounded-lg">
+              {t('ourStory.cta', 'Discover Our Journey →')}
+            </button>
+          </Link>
+        </div>
+      </section>
+
       {/* Testimonials Section */}
       <Testimonials
         title={t('components:testimonials.title', 'What Our Clients Say')}
