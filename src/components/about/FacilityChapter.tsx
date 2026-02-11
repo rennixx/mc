@@ -62,7 +62,7 @@ export const FacilityChapter = ({ chapter, title, subtitle }: FacilityChapterPro
             isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
-          <span className="inline-block px-4 py-2 bg-gold-400/20 text-gold-300 rounded-full text-sm font-sans font-semibold mb-4">
+          <span className="inline-block px-4 py-2 bg-gold-400/20 text-gold-300 rounded-lg text-sm font-sans font-semibold mb-4">
             {chapter}
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-cream-100 mb-4">
@@ -84,7 +84,7 @@ export const FacilityChapter = ({ chapter, title, subtitle }: FacilityChapterPro
                 <div
                   key={facility.key}
                   className={`
-                    glass-card rounded-xl md:rounded-2xl overflow-hidden cursor-pointer group transition-all duration-500
+                    glass-card rounded-lg overflow-hidden cursor-pointer group transition-all duration-500
                     ${isLarge ? 'md:row-span-2 md:col-span-2' : facility.colSpan === 2 ? 'md:col-span-2' : ''}
                     ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
                   `}
@@ -109,7 +109,7 @@ export const FacilityChapter = ({ chapter, title, subtitle }: FacilityChapterPro
                   <div className="relative h-full p-4 md:p-6 flex flex-col">
                     {/* Header */}
                     <div className="flex items-start justify-between mb-2 md:mb-4">
-                      <div className={`w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-xl bg-gradient-to-br from-gold-400/20 to-gold-400/5 flex items-center justify-center border border-gold-400/20 flex-shrink-0 ${
+                      <div className={`w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-lg bg-gradient-to-br from-gold-400/20 to-gold-400/5 flex items-center justify-center border border-gold-400/20 flex-shrink-0 ${
                         isLarge ? 'w-14 h-14 md:w-16 md:h-16' : ''
                       }`}>
                         <Icon className="w-5 h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 text-gold-400" />
@@ -161,7 +161,7 @@ export const FacilityChapter = ({ chapter, title, subtitle }: FacilityChapterPro
 
                   {/* Animated Border on Hover */}
                   <div
-                    className={`absolute inset-0 rounded-2xl border-2 border-gold-400/0 group-hover:border-gold-400/30 transition-all duration-300 ${
+                    className={`absolute inset-0 rounded-lg border-2 border-gold-400/0 group-hover:border-gold-400/30 transition-all duration-300 ${
                       hoveredFacility === facility.key ? 'border-gold-400/50 shadow-[0_0_30px_rgba(250,204,21,0.2)]' : ''
                     }`}
                   />
@@ -173,8 +173,8 @@ export const FacilityChapter = ({ chapter, title, subtitle }: FacilityChapterPro
       </div>
 
       {/* Decorative Elements */}
-      <div className="absolute top-20 right-20 w-64 h-64 bg-gold-400/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-20 left-20 w-64 h-64 bg-forest-600/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-20 right-20 w-64 h-64 bg-gold-400/5 rounded-lg blur-3xl pointer-events-none" />
+      <div className="absolute bottom-20 left-20 w-64 h-64 bg-forest-600/10 rounded-lg blur-3xl pointer-events-none" />
     </section>
   );
 };

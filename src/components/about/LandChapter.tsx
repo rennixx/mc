@@ -88,7 +88,7 @@ export const LandChapter = ({ chapter, title, subtitle, description }: LandChapt
         )}
 
         {/* Sun/Moon */}
-        <div className={`absolute top-20 right-20 w-32 h-32 rounded-full transition-all duration-1000 ${
+        <div className={`absolute top-20 right-20 w-32 h-32 rounded-lg transition-all duration-1000 ${
           season === 'summer'
             ? 'bg-gradient-to-br from-yellow-300 to-orange-400 shadow-[0_0_80px_rgba(251,191,36,0.5)]'
             : 'bg-gradient-to-br from-slate-200 to-slate-300 shadow-[0_0_60px_rgba(226,232,240,0.4)]'
@@ -104,7 +104,7 @@ export const LandChapter = ({ chapter, title, subtitle, description }: LandChapt
               isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
             }`}
           >
-            <span className="inline-block px-3 py-1.5 bg-gold-400/20 text-gold-300 rounded-full text-xs md:text-sm font-sans font-semibold mb-4 md:mb-6">
+            <span className="inline-block px-3 py-1.5 bg-gold-400/20 text-gold-300 rounded-lg text-xs md:text-sm font-sans font-semibold mb-4 md:mb-6">
               {chapter}
             </span>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-cream-100 mb-3 md:mb-4">
@@ -119,10 +119,10 @@ export const LandChapter = ({ chapter, title, subtitle, description }: LandChapt
             </p>
 
             {/* Season Toggle */}
-            <div className="flex items-center gap-2 md:gap-4 p-2 glass-card rounded-full w-fit max-w-full">
+            <div className="flex items-center gap-2 md:gap-4 p-2 glass-card rounded-lg w-fit max-w-full">
               <button
                 onClick={() => setSeason('summer')}
-                className={`px-4 md:px-6 py-2 md:py-3 rounded-full font-sans font-semibold text-xs md:text-sm transition-all duration-300 ${
+                className={`px-4 md:px-6 py-2 md:py-3 rounded-lg font-sans font-semibold text-xs md:text-sm transition-all duration-300 ${
                   season === 'summer'
                     ? 'bg-gold-400 text-forest-900 shadow-luxury scale-105'
                     : 'text-cream-200 hover:text-gold-300'
@@ -132,7 +132,7 @@ export const LandChapter = ({ chapter, title, subtitle, description }: LandChapt
               </button>
               <button
                 onClick={() => setSeason('winter')}
-                className={`px-4 md:px-6 py-2 md:py-3 rounded-full font-sans font-semibold text-xs md:text-sm transition-all duration-300 ${
+                className={`px-4 md:px-6 py-2 md:py-3 rounded-lg font-sans font-semibold text-xs md:text-sm transition-all duration-300 ${
                   season === 'winter'
                     ? 'bg-blue-400 text-forest-900 shadow-luxury scale-105'
                     : 'text-cream-200 hover:text-blue-300'
@@ -143,7 +143,7 @@ export const LandChapter = ({ chapter, title, subtitle, description }: LandChapt
             </div>
 
             {/* Season Description */}
-            <div className="mt-6 md:mt-8 p-4 md:p-6 glass-card rounded-2xl">
+            <div className="mt-6 md:mt-8 p-4 md:p-6 glass-card rounded-lg">
               <p className="text-sm md:text-base text-cream-200 font-sans leading-relaxed">
                 {season === 'summer'
                   ? t('theLand.seasons.summer.description')
@@ -159,7 +159,7 @@ export const LandChapter = ({ chapter, title, subtitle, description }: LandChapt
             }`}
           >
             {/* Main Card */}
-            <div className="relative aspect-square md:aspect-square max-h-[350px] md:max-h-[400px] rounded-3xl overflow-hidden glass-card border-2 border-gold-400/20">
+            <div className="relative aspect-square md:aspect-square max-h-[350px] md:max-h-[400px] rounded-lg overflow-hidden glass-card border-2 border-gold-400/20">
               {/* Seasonal Content */}
               <div className="absolute inset-0 flex items-center justify-center p-4">
                 {season === 'summer' ? (
@@ -180,7 +180,7 @@ export const LandChapter = ({ chapter, title, subtitle, description }: LandChapt
               </div>
 
               {/* Decorative Elements */}
-              <div className={`absolute top-4 right-4 px-2 md:px-3 py-1 rounded-full text-xs font-sans font-bold transition-all duration-500 ${
+              <div className={`absolute top-4 right-4 px-2 md:px-3 py-1 rounded-lg text-xs font-sans font-bold transition-all duration-500 ${
                 season === 'summer'
                   ? 'bg-orange-400/20 text-orange-300'
                   : 'bg-blue-400/20 text-blue-300'
@@ -194,7 +194,7 @@ export const LandChapter = ({ chapter, title, subtitle, description }: LandChapt
                   {Array.from({ length: 20 }).map((_, i) => (
                     <div
                       key={i}
-                      className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
+                      className="absolute w-1 h-1 bg-white rounded-sm animate-pulse"
                       style={{
                         left: `${Math.random() * 100}%`,
                         animationDelay: `${Math.random() * 3}s`,
@@ -207,7 +207,7 @@ export const LandChapter = ({ chapter, title, subtitle, description }: LandChapt
             </div>
 
             {/* Decorative Circle */}
-            <div className={`absolute -z-10 -bottom-4 md:-bottom-8 -right-4 md:-right-8 w-32 h-32 md:w-48 md:h-48 rounded-full transition-all duration-1000 ${
+            <div className={`absolute -z-10 -bottom-4 md:-bottom-8 -right-4 md:-right-8 w-32 h-32 md:w-48 md:h-48 rounded-lg transition-all duration-1000 ${
               season === 'summer'
                 ? 'bg-gold-400/20'
                 : 'bg-blue-400/20'

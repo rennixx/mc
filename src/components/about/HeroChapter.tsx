@@ -85,7 +85,7 @@ export const HeroChapter = ({ chapter, title, subtitle, story, scrollPrompt }: H
         {Array.from({ length: 20 }).map((_, i) => (
           <div
             key={i}
-            className="absolute w-1 h-1 bg-gold-400 rounded-full animate-pulse"
+            className="absolute w-1 h-1 bg-gold-400 rounded-sm animate-pulse"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -103,7 +103,7 @@ export const HeroChapter = ({ chapter, title, subtitle, story, scrollPrompt }: H
       >
         {/* Chapter Badge */}
         <span
-          className="inline-block px-4 py-2 bg-gold-400/20 text-gold-300 rounded-full text-sm font-sans font-semibold mb-6 backdrop-blur-sm border border-gold-400/30"
+          className="inline-block px-4 py-2 bg-gold-400/20 text-gold-300 rounded-lg text-sm font-sans font-semibold mb-6 backdrop-blur-sm border border-gold-400/30"
           style={{ opacity: Math.max(0, 1 - scrollY / 300) }}
         >
           {chapter}

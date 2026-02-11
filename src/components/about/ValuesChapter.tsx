@@ -70,7 +70,7 @@ export const ValuesChapter = ({ chapter, title, subtitle }: ValuesChapterProps) 
             isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
-          <span className="inline-block px-4 py-2 bg-gold-400/20 text-gold-300 rounded-full text-sm font-sans font-semibold mb-4">
+          <span className="inline-block px-4 py-2 bg-gold-400/20 text-gold-300 rounded-lg text-sm font-sans font-semibold mb-4">
             {chapter}
           </span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-cream-100 mb-4">
@@ -88,7 +88,7 @@ export const ValuesChapter = ({ chapter, title, subtitle }: ValuesChapterProps) 
             {/* Central Hub - MAM Emblem */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
               <div
-                className={`relative w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-gold-400/30 to-gold-400/10 backdrop-blur-sm border-4 border-gold-400/40 shadow-luxury flex items-center justify-center transition-all duration-500 ${
+                className={`relative w-32 h-32 md:w-40 md:h-40 rounded-lg bg-gradient-to-br from-gold-400/30 to-gold-400/10 backdrop-blur-sm border-4 border-gold-400/40 shadow-luxury flex items-center justify-center transition-all duration-500 ${
                   hoveredValue ? 'scale-90 opacity-50' : 'scale-100 opacity-100'
                 }`}
               >
@@ -97,7 +97,7 @@ export const ValuesChapter = ({ chapter, title, subtitle }: ValuesChapterProps) 
                 </div>
 
                 {/* Rotating ring */}
-                <div className="absolute inset-0 rounded-full border-2 border-dashed border-gold-400/30 animate-spin" style={{ animationDuration: '20s' }} />
+                <div className="absolute inset-0 rounded-lg border-2 border-dashed border-gold-400/30 animate-spin" style={{ animationDuration: '20s' }} />
               </div>
             </div>
 
@@ -139,7 +139,7 @@ export const ValuesChapter = ({ chapter, title, subtitle }: ValuesChapterProps) 
                     >
                       {/* Icon Circle */}
                       <div
-                        className={`w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-forest-900 to-saddle-900 flex items-center justify-center border-2 ${
+                        className={`w-14 h-14 md:w-16 md:h-16 rounded-lg bg-gradient-to-br from-forest-900 to-saddle-900 flex items-center justify-center border-2 ${
                           hoveredValue === value.key
                             ? 'border-gold-400 shadow-[0_0_30px_rgba(250,204,21,0.4)]'
                             : 'border-cream-400/20 group-hover:border-gold-400/50'
@@ -159,7 +159,7 @@ export const ValuesChapter = ({ chapter, title, subtitle }: ValuesChapterProps) 
                       {/* Expanded Card on Hover - centered to avoid overflow */}
                       {hoveredValue === value.key && (
                         <div
-                          className="absolute z-40 w-48 md:w-56 p-3 md:p-4 glass-card rounded-xl animate-in fade-in zoom-in-95 duration-300 top-full left-1/2 -translate-x-1/2 mt-2 md:mt-3 pointer-events-none"
+                          className="absolute z-40 w-48 md:w-56 p-3 md:p-4 glass-card rounded-lg animate-in fade-in zoom-in-95 duration-300 top-full left-1/2 -translate-x-1/2 mt-2 md:mt-3 pointer-events-none"
                         >
                           <h3 className={`text-sm md:text-base font-serif font-bold ${value.color} mb-1 text-center`}>
                             {t(`values.items.${value.key}.title`)}
@@ -229,7 +229,7 @@ export const ValuesChapter = ({ chapter, title, subtitle }: ValuesChapterProps) 
                 key={value.key}
                 className="glass-card p-3 text-center overflow-hidden"
               >
-                <div className={`w-10 h-10 mx-auto mb-2 rounded-full bg-white/5 flex items-center justify-center ${value.color}`}>
+                <div className={`w-10 h-10 mx-auto mb-2 rounded-lg bg-white/5 flex items-center justify-center ${value.color}`}>
                   <Icon className="w-5 h-5" />
                 </div>
                 <h3 className="text-xs font-serif font-bold text-cream-100 mb-1 truncate px-1">
